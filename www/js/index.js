@@ -60,20 +60,22 @@ var app = {
 
     repeatRefresh: function() {
         clearTimeout(tid);
+        app.refreshDeviceList();
         tid = setTimeout(repeatRefresh, 10000); 
     },
     
     abortScanner: function() { 
         clearTimeout(tid);
+        tid = -1;
     },
 
     switchScanner:  function() {
-        if( tid ){
-            this.abortScanner();
-            $("#scanButton").text("Start scanning...");
+        if( tid > 0 ){
+            app.abortScanner();
+            $("#refreshButton").text("Start scanning...");
         } else {
-            this.repeatRefresh();
-            $("#scanButton").text("Stop scanning...");
+            app.repeatRefresh();
+            $("#refreshButton").text("Stop scanning...");
         }
     },
 
@@ -86,21 +88,21 @@ var app = {
         refreshButton.addEventListener('touchstart', this.switchScanner, false);
         sendButton.addEventListener('click', this.sendData, false);
         disconnectButton.addEventListener('touchstart', this.disconnect, false);
-        deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
+        //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
     },
     onDeviceReady: function() {
         app.refreshDeviceList();
         app.repeatRefresh();
     },
     refreshDeviceList: function() {
-        deviceList.innerHTML = ''; // empties the list
-        $("#scanButton").text("Abort scanning...");
+        deviceList.innerHTML = '';
+        $("#refreshButton").text("Abort scanning...");
         discovered = [];
-        if (cordova.platformId === 'android') { // Android filtering is broken
-            ble.scan([], 5, app.onDiscoverDevice, app.onError);
-        } else {
-            ble.scan([], 5, app.onDiscoverDevice, app.onError);
-        }
+//        if (cordova.platformId === 'android') { // Android filtering is broken
+        ble.scan([], 5, app.onDiscoverDevice, app.onError);
+//        } else {
+//            ble.scan([alyadevice.serviceUUID], 5, app.onDiscoverDevice, app.onError);
+//        }
     },
     onDiscoverDevice: function(device) {
 
@@ -108,41 +110,52 @@ var app = {
 
         var listItem = document.createElement('div');
         listItem.className = "row";
+ /*       var child1 = document.createElement('div').addClass("col-sm-12");
+        var child2 = document.createElement('div').addClass("chart-wrapper");
+        var child3 = document.createElement('div').addClass("chart-title");
+        child3.innerHTML = device.name;
+        child3.dataset.deviceId = device.id;
+        child3.addEventListener('touchstart', this.connectInList, false); // assume not scrolling
+
+        child2.appendChild(child3);
+        child1.appendChild(child2);
+        listItem.appendChild(child1);
+*/
         var html = '\
-        <div class="col-sm-3">\
-            <div class="chart-wrapper">\
-                <div class="chart-title knob-title">' +
-                    device.name + '\
-                </div>\
-                <div class="chart-stage">\
-                </div>\
-                <div class="chart-notes">' +
-                    device.id + '\
-                </div>\
-            </div>\
-      </div>\
-      <div class="col-sm-9">\
+      <div class="col-sm-12">\
         <div class="chart-wrapper">\
-          <div class="chart-title">' + 
+          <div class="chart-title knob-title">' + 
             device.name + '\
           </div>\
           <div class="chart-stage">\
                   <input type="text" class="users" value="' + device.rssi + '"/>\
           </div>\
-          <div class="chart-notes">\
+          <div id="devNote" class="chart-notes">\
             iBeehive\
           </div>\
         </div>\
-    </div>';
+        </div>\
+        ';
 
-        listItem.dataset.deviceId = device.id;
         listItem.innerHTML = html;
+        listItem.dataset.deviceId = device.id;
+//        devNote.dataset.deviceId = device.id;
         deviceList.appendChild(listItem);
 
 
         }
 
     },
+
+    connectInList: function(e) {
+        var deviceId = e.target.dataset.deviceId,
+            onConnect = function(peripheral) {
+                e.innerHTML = "Connected";
+            };
+
+        ble.connect(deviceId, onConnect, app.onError);
+    },
+
     connect: function(e) {
         var deviceId = e.target.dataset.deviceId,
             onConnect = function(peripheral) {
