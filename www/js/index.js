@@ -34,8 +34,12 @@ function stringToBytes(string) {
 
 // this is Nordic's UART service
 var alyadevice = {
-    serviceUUID: '00002a37-0000-1000-8000-00805f9b34fb',
+    serviceUUID: '94e2ed81-5c2a-4f18-a414-e5393ab997e5',
 //    serviceUUID: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
+
+    nettoVahaUUID: '18c0c807-589e-4b89-8ee3-8c1de9a80248',
+    tempInUUID: '3511d30e-9911-479e-a7be-43d4220ab1b2',
+    tempOutUUID: 'e7e2aec2-5335-49b9-ad90-3aad5eac7eb8',
 
     rxCharacteristic: '6e400002-b5a3-f393-e0a9-e50e24dcca9e', // transmit is from the phone's perspective
     txCharacteristic: '6e400003-b5a3-f393-e0a9-e50e24dcca9e'  // receive is from the phone's perspective
@@ -43,8 +47,8 @@ var alyadevice = {
 
 var discovered = [];
 
-// set timeout
-var tid = -1;
+// scann or not scann
+var scanning = false;
     
 
 function updateDiscoveredCollection ( dev ) {
@@ -56,92 +60,102 @@ function updateDiscoveredCollection ( dev ) {
     }
 }
 
+
 var app = {    
 
-    repeatRefresh: function() {
-        clearTimeout(tid);
-        app.refreshDeviceList();
-        tid = setTimeout(repeatRefresh, 10000); 
+    refreshDeviceList: function() {
+        deviceList.innerHTML = '';
+        discovered = [];
+//        if (cordova.platformId === 'android') { // Android filtering is broken
+        ble.startScan([], app.onDiscoverDevice, app.onError);
+        $("#mainStatus").text('iBeehive radar active...');
+//        } else {
+//            ble.startScan([alyadevice.serviceUUID], app.onDiscoverDevice, app.onError);
+//        }
+    },
+    repeatScan: function() {
+        $("#mainStatus").text('iBeehive radar active...');
+        ble.startScan([], app.onDiscoverDevice, app.onError);
     },
     
-    abortScanner: function() { 
-        clearTimeout(tid);
-        tid = -1;
+    restartScanner: function() { 
+        ble.stopScan( function(){
+                    $("#mainStatus").text('iBeehive radar stopped.');
+                    $("#notFoundInfo").show();
+                    disconnectButton.click();
+                    app.refreshDeviceList();
+        }, function(){
+                    $("#mainStatus").text('Error occured.');
+        } );
+    },
+
+    reScan: function() {
+        app.showMainPage();
+        app.restartScanner();
     },
 
     switchScanner:  function() {
-        if( tid > 0 ){
-            app.abortScanner();
-            $("#refreshButton").text("Start scanning...");
+        if( scanning !== false ){
+            app.restartScanner();
+            scanning = false;
+            refreshButton.title = "Start scanning...";
         } else {
-            app.repeatRefresh();
-            $("#refreshButton").text("Stop scanning...");
+            app.repeatScan();
+            scanning = true;
+            refreshButton.title = "Stop scanning...";
         }
     },
 
     initialize: function() {
         this.bindEvents();
         detailPage.hidden = true;
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+                }, false);
+        }
+        $("#mainStatus").text('');
+
     },
+
+
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        refreshButton.addEventListener('touchstart', this.switchScanner, false);
+        refreshButton.addEventListener('touchstart', this.reScan, false);
         sendButton.addEventListener('click', this.sendData, false);
-        disconnectButton.addEventListener('touchstart', this.disconnect, false);
+        disconnectButton.addEventListener('click', this.disconnect, false);
         //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
     },
     onDeviceReady: function() {
         app.refreshDeviceList();
-        app.repeatRefresh();
-    },
-    refreshDeviceList: function() {
-        deviceList.innerHTML = '';
-        $("#refreshButton").text("Abort scanning...");
-        discovered = [];
-//        if (cordova.platformId === 'android') { // Android filtering is broken
-        ble.scan([], 5, app.onDiscoverDevice, app.onError);
-//        } else {
-//            ble.scan([alyadevice.serviceUUID], 5, app.onDiscoverDevice, app.onError);
-//        }
     },
     onDiscoverDevice: function(device) {
 
-        if( updateDiscoveredCollection( device.name )  ) {
+        console.log(JSON.stringify(device));
 
-        var listItem = document.createElement('div');
-        listItem.className = "row";
- /*       var child1 = document.createElement('div').addClass("col-sm-12");
-        var child2 = document.createElement('div').addClass("chart-wrapper");
-        var child3 = document.createElement('div').addClass("chart-title");
-        child3.innerHTML = device.name;
-        child3.dataset.deviceId = device.id;
-        child3.addEventListener('touchstart', this.connectInList, false); // assume not scrolling
+        if( device.name === undefined ) {
+            return false;
+        }
 
-        child2.appendChild(child3);
-        child1.appendChild(child2);
-        listItem.appendChild(child1);
-*/
-        var html = '\
-      <div class="col-sm-12">\
-        <div class="chart-wrapper">\
-          <div class="chart-title knob-title">' + 
-            device.name + '\
-          </div>\
-          <div class="chart-stage">\
-                  <input type="text" class="users" value="' + device.rssi + '"/>\
-          </div>\
-          <div id="devNote" class="chart-notes">\
-            iBeehive\
-          </div>\
-        </div>\
-        </div>\
-        ';
+        $("#notFoundInfo").hide();
 
-        listItem.innerHTML = html;
-        listItem.dataset.deviceId = device.id;
-//        devNote.dataset.deviceId = device.id;
-        deviceList.appendChild(listItem);
+        if( updateDiscoveredCollection( device.id )  ) {
 
+            var listItem = document.createElement('div');
+            listItem.className = "row";
+            listItem.id = "li_" + device.id.replace(/[^a-zA-Z0-9]/g, "");
+
+            listItem.innerHTML = app.getDeviceListItem( device );
+            deviceList.insertBefore(listItem, deviceList.firstChild);
+
+            var el = document.querySelector('#btn_'+device.id.replace(/[^a-zA-Z0-9]/g, ""));
+            el.dataset.deviceId = device.id;
+            el.addEventListener('touchstart', app.connect, false);
+
+
+        } else {
+            var listItem = document.getElementById( "li_" + device.id.replace(/[^a-zA-Z0-9]/g, "") );
+            listItem.innerHTML = app.getDeviceListItem( device );
 
         }
 
@@ -162,12 +176,19 @@ var app = {
                 app.determineWriteType(peripheral);
 
                 // subscribe for incoming data
-                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onError);
+                ////ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onErrorData);
+                ble.startNotification(deviceId, alyadevice.tempOutUUID, alyadevice.rxCharacteristic, app.onTempOut, app.onErrorTempOut);
+                ble.startNotification(deviceId, alyadevice.tempInUUID, alyadevice.rxCharacteristic, app.onTempIn, app.onErrorTempIn);
+                ble.startNotification(deviceId, alyadevice.nettoVahaUUID, alyadevice.rxCharacteristic, app.onNettoVaha, app.onErrorNettoVaha);
                 sendButton.dataset.deviceId = deviceId;
                 disconnectButton.dataset.deviceId = deviceId;
                 resultDiv.innerHTML = "";
                 app.showDetailPage();
+                $("#detailName").text(deviceId);
             };
+
+        //alert('conn to ' + deviceId );
+
 
         ble.connect(deviceId, onConnect, app.onError);
     },
@@ -190,15 +211,29 @@ var app = {
     },
     onData: function(data) { // data received from Arduino
         console.log(data);
-        resultDiv.innerHTML = resultDiv.innerHTML + "Received: " + bytesToString(data) + "<br/>";
-        resultDiv.scrollTop = resultDiv.scrollHeight;
+        $("#mainStatus").text("Received: " + bytesToString(data));
     },
+    onTempOut: function(data) { // data received from Arduino
+        console.log(data);
+        $("#tempOut").text("External temperature: " + bytesToString(data));
+    },
+    onTempIn: function(data) { // data received from Arduino
+        console.log(data);
+        $("#tempIn").text("Internal temperature: " + bytesToString(data));
+    },
+    onNettoVaha: function(data) { // data received from Arduino
+        console.log(data);
+        $("#nettoVaha").text("Weight: " + bytesToString(data));
+    },
+
     sendData: function(event) { // send data to Arduino
 
         var success = function() {
             console.log("success");
-            resultDiv.innerHTML = resultDiv.innerHTML + "Sent: " + messageInput.value + "<br/>";
-            resultDiv.scrollTop = resultDiv.scrollHeight;
+            $("#mainStatus").text("Sent: " + messageInput.value );
+
+            //resultDiv.innerHTML = resultDiv.innerHTML + "Sent: " + messageInput.value + "<br/>";
+            //resultDiv.scrollTop = resultDiv.scrollHeight;
         };
 
         var failure = function() {
@@ -238,6 +273,71 @@ var app = {
         detailPage.hidden = false;
     },
     onError: function(reason) {
-        alert("ERROR: " + reason); // real apps should use notification.alert
+        alert("DEFAULT ERROR MSG: " + reason); // real apps should use notification.alert
+    },
+    onErrorTempIn: function(reason) {
+        alert("TEMP IN: " + reason); // real apps should use notification.alert
+    },
+    onErrorTempOut: function(reason) {
+        alert("TEMP OUT: " + reason); // real apps should use notification.alert
+    },
+    onErrorNettoVaha: function(reason) {
+        alert("Netto Vaha error: " + reason); // real apps should use notification.alert
+    },
+    onErrorData: function(reason) {
+        alert("Service UUID ERROR: " + reason); // real apps should use notification.alert
+    },
+
+    getDeviceListItem: function( device ) {
+        var sigHtml = '<span class="fa-stack fa-lg">\
+                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.0em; margin-left:0.5em;"></i>\
+                  </span>';
+        if( device.rssi < -85 ){
+            sigHtml = '<span class="fa-stack fa-lg">\
+                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.2em; margin-left:0.5em;"></i>\
+                  </span>';
+        } else if( device.rssi < -70 ){
+            sigHtml = '<span class="fa-stack fa-lg">\
+                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.4em; margin-left:0.5em;"></i>\
+                  </span>';
+        } else if( device.rssi < -55 ){
+            sigHtml = '<span class="fa-stack fa-lg">\
+                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.6em; margin-left:0.5em;"></i>\
+                  </span>';
+        } else if( device.rssi < -85 ){
+            sigHtml = '<span class="fa-stack fa-lg">\
+                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.8em; margin-left:0.5em;"></i>\
+                  </span>';
+        } else if( device.rssi < -40 ){
+            sigHtml = '<span class="fa-stack fa-lg">\
+                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:1.0em; margin-left:0.5em;"></i>\
+                  </span>';
+        } 
+        var html = '\
+          <div class="col-lg-12">\
+              <div class="card text-white bg-primary mb-3">\
+                <div class="card-header d-flex w-100 justify-content-between">'
+                 + sigHtml + '<small>id: ' + device.id + '</small>\
+                </div>\
+                <div class="card-body d-flex w-100 justify-content-between">\
+                  <h2 class="card-title center">' + device.name + '</h2>\
+                  <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '" class="btn btn-secondary my-2 my-sm-0">\
+                  Connect <i class="fa fa-chevron-right"  aria-hidden="true"></i>\
+                  </button>\
+                </div>\
+              </div>\
+        </div>';
+
+        return html;
+
     }
+
+
+
 };
