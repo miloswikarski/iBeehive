@@ -39,6 +39,8 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 'ConnectingServer':'Připájí se na server iBeehive',
                 'OK':'OK',
                 'title': ' iBeehive',
+                'iBeehive radar active...': 'iBeehive radar aktivni...',
+                'scanning': 'Vyhledává se',
 
             }
         },
@@ -49,6 +51,8 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 'ConnectingServer':'Pripája sa na server iBeehive',
                 'OK':'OK',
                 'title': ' iBeehive',
+                'iBeehive radar active...': 'iBeehive radar aktivny...',
+                'scanning': 'Skenujem',
 
             }
         },
@@ -60,6 +64,6 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
         jqueryI18next.init(i18next, $);
         // start localizing, details:
         // https://github.com/i18next/jquery-i18next#usage-of-selector-function
-        $('.nav').localize();
+        $('.container').localize();
     });
 
