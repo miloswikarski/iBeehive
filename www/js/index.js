@@ -68,24 +68,24 @@ var app = {
         discovered = [];
 //        if (cordova.platformId === 'android') { // Android filtering is broken
         ble.startScan([], app.onDiscoverDevice, app.onError);
-        $("#mainStatus").text('iBeehive radar active...');
+        $("#mainStatus").text(i18next.t('iBeehive radar active...'));
 //        } else {
 //            ble.startScan([alyadevice.serviceUUID], app.onDiscoverDevice, app.onError);
 //        }
     },
     repeatScan: function() {
-        $("#mainStatus").text('iBeehive radar active...');
+        $("#mainStatus").text(i18next.t('iBeehive radar active...'));
         ble.startScan([], app.onDiscoverDevice, app.onError);
     },
     
     restartScanner: function() { 
         ble.stopScan( function(){
-                    $("#mainStatus").text('iBeehive radar stopped.');
+                    $("#mainStatus").text(i18next.t('iBeehive radar stopped.'));
                     $("#notFoundInfo").show();
                     disconnectButton.click();
                     app.refreshDeviceList();
         }, function(){
-                    $("#mainStatus").text('Error occured.');
+                    $("#mainStatus").text(i18next.t('Error occured.'));
         } );
     },
 
@@ -98,11 +98,11 @@ var app = {
         if( scanning !== false ){
             app.restartScanner();
             scanning = false;
-            refreshButton.title = "Start scanning...";
+            refreshButton.title = i18next.t("Start scanning...");
         } else {
             app.repeatScan();
             scanning = true;
-            refreshButton.title = "Stop scanning...";
+            refreshButton.title = i18next.t("Stop scanning...");
         }
     },
 
@@ -164,7 +164,7 @@ var app = {
     connectInList: function(e) {
         var deviceId = e.target.dataset.deviceId,
             onConnect = function(peripheral) {
-                e.innerHTML = "Connected";
+                e.innerHTML = i18next.t("Connected");
             };
 
         ble.connect(deviceId, onConnect, app.onError);
@@ -211,34 +211,40 @@ var app = {
     },
     onData: function(data) { // data received from Arduino
         console.log(data);
-        $("#mainStatus").text("Received: " + bytesToString(data));
+        $("#mainStatus").text(i18next.t("Received: ") + bytesToString(data));
     },
     onTempOut: function(data) { // data received from Arduino
         console.log(data);
-        $("#tempOut").text("External temperature: " + bytesToString(data));
+        $("#tempOut").text(i18next.t("External temperature: ") + bytesToString(data));
     },
     onTempIn: function(data) { // data received from Arduino
         console.log(data);
-        $("#tempIn").text("Internal temperature: " + bytesToString(data));
+        $("#tempIn").text(i18next.t("Internal temperature: ") + bytesToString(data));
     },
     onNettoVaha: function(data) { // data received from Arduino
         console.log(data);
-        $("#nettoVaha").text("Weight: " + bytesToString(data));
+        $("#nettoVaha").text(i18next.t("Weight: ") + bytesToString(data));
     },
 
     sendData: function(event) { // send data to Arduino
 
         var success = function() {
             console.log("success");
-            $("#mainStatus").text("Sent: " + messageInput.value );
+            $("#mainStatus").text(i18next.t("Sent: ") + messageInput.value );
 
             //resultDiv.innerHTML = resultDiv.innerHTML + "Sent: " + messageInput.value + "<br/>";
             //resultDiv.scrollTop = resultDiv.scrollHeight;
         };
 
         var failure = function() {
-            alert("Failed writing data to the alyadevice");
+            navigator.notification.alert(
+                i18next.t("Failed writing data"),
+                function(){},
+                i18next.t('BLE core'),
+                i18next.t('OK')
+            );
         };
+
 
         var data = stringToBytes(messageInput.value);
         var deviceId = event.target.dataset.deviceId;
@@ -273,7 +279,13 @@ var app = {
         detailPage.hidden = false;
     },
     onError: function(reason) {
-        alert("DEFAULT ERROR MSG: " + reason); // real apps should use notification.alert
+        navigator.notification.alert(
+                i18next.t("Error occured") + ": " + reason,
+                function(){},
+                i18next.t('BLE core'),
+                i18next.t('OK')
+            );
+
     },
     onErrorTempIn: function(reason) {
         alert("TEMP IN: " + reason); // real apps should use notification.alert
@@ -285,7 +297,12 @@ var app = {
         alert("Netto Vaha error: " + reason); // real apps should use notification.alert
     },
     onErrorData: function(reason) {
-        alert("Service UUID ERROR: " + reason); // real apps should use notification.alert
+        navigator.notification.alert(
+                i18next.t("Service UUID ERROR: ") + reason,
+                function(){},
+                i18next.t('BLE core'),
+                i18next.t('OK')
+            );
     },
 
     getDeviceListItem: function( device ) {
