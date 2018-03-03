@@ -14,11 +14,22 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
         resources: { // evtl. load via xhr https://github.com/i18next/i18next-xhr-backend
           "en": {
             translation: {
+                "BLE core": "BLE core",
                 "iBeehive loading": "iBeehive loading...",
                 'NetworkError':'Loading error occured. Check your network connection.',
                 'ConnectingServer':'Connecting iBeehive server',
                 'OK':'OK',
                 'title': ' iBeehive',
+                'iBeehive radar active...': 'iBeehive radar active...',
+                'scanning': 'scanning',
+                'Weight': 'Weight',
+                'Received': 'Received',
+                'Internal temperature': 'Internal temperature',
+                'External temperature': 'External temperature',
+                'Sent': 'Sent',
+                'Failed writing data': 'Failed writing data',
+                'actual values': 'Actual values',
+                "Scanning BLE devices":"Scanning BLE devices",
 
             }
         },
@@ -46,6 +57,7 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
         },
         "sk": {
             translation: {
+                "BLE core": "BLE systém",
                 "iBeehive loading": "iBeehive nahráva...",
                 'NetworkError':'Nastala chyba siete, skontrolujte pripojenie na internet.',
                 'ConnectingServer':'Pripája sa na server iBeehive',
@@ -53,6 +65,14 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 'title': ' iBeehive',
                 'iBeehive radar active...': 'iBeehive radar aktivny...',
                 'scanning': 'Skenujem',
+                'Weight': 'Hmotnosť',
+                'Received': 'Príjem',
+                'Internal temperature': 'Vnútorná teplota',
+                'External temperature': 'Vonkajšia teplota',
+                'Sent': 'Poslané',
+                'Failed writing data': 'Zápis dát zlyhal',
+                'actual values': 'Aktuálne hodnoty',
+                "Scanning BLE devices":"Vyhľadávam BLE zariadenia",
 
             }
         },
