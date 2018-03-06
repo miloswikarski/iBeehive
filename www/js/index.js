@@ -151,15 +151,15 @@ var app = {
 
     refreshRssi: function() {
         discovered.forEach( function( dev) {
-            console.log(dev);
+            //console.log(dev);
             ble.readRSSI(dev, 
                 function( rssi ){
                     var rssiHtml = app.getRssiIcon( rssi );
                     $("#rssi_" + dev.replace(/[^a-zA-Z0-9]/g, "") ).html(rssiHtml);
-                    console.log('rssi read '+rssi );
+                    //console.log('rssi read '+rssi );
                 },
                 function( err ){
-                    console.log(err);
+                    //console.log(err);
 //                    $("#card_" + dev.replace(/[^a-zA-Z0-9]/g, "") ).remove();
   //                  discovered.splice( $.inArray(dev, discovered), 1 );
     //                console.log('rssi deleted ' +dev);
@@ -207,8 +207,8 @@ var app = {
         refreshButton.addEventListener('touchstart', this.reScan, false);
         sendButton.addEventListener('click', this.sendData, false);
         disconnectButton.addEventListener('click', this.disconnect, false);
-        aboutButton.addEventListener('touchstart', function(){ $("#aboutModal").modal("show"); }, false);
-        settingsButton.addEventListener('touchstart', function(){ $("#settingsModal").modal("show"); }, false);
+        aboutButton.addEventListener('click', function(){ $("#aboutModal").modal("show"); }, false);
+        settingsButton.addEventListener('click', function(){ $("#settingsModal").modal("show"); }, false);
         //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
     },
     onDeviceReady: function() {
@@ -216,7 +216,7 @@ var app = {
     },
     onDiscoverDevice: function(device) {
 
-        console.log(JSON.stringify(device));
+        //console.log(JSON.stringify(device));
 
         if( device.name === undefined ) {
             return false;
@@ -265,12 +265,12 @@ var app = {
     },
 
     connect: function(e) {
-        console.log(e);
-        console.log(e.target.dataset.deviceId);
+        //console.log(e);
+        //console.log(e.target.dataset.deviceId);
         
         var deviceId = e.target.dataset.deviceId,
             onErrorConnect = function(e) {
-                    linked.hidden = true;
+                    //linked.hidden = true;
             },
             onConnect = function(peripheral) {
 
