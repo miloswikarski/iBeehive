@@ -30,6 +30,9 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 'Failed writing data': 'Failed writing data',
                 'actual values': 'Actual values',
                 "Scanning BLE devices":"Scanning BLE devices",
+                "Internal temperature reading error":"Internal temperature reading error",
+                "External temperature reading error":"External temperature reading error",
+                "Weight reading error":"Weight reading error"
 
             }
         },
@@ -73,6 +76,9 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 'Failed writing data': 'Zápis dát zlyhal',
                 'actual values': 'Aktuálne hodnoty',
                 "Scanning BLE devices":"Vyhľadávam BLE zariadenia",
+                "Internal temperature reading error":"Chyba pri čítaní vnútornej teploty",
+                "External temperature reading error":"Chyba pri čítaní vonkajšej teploty",
+                "Weight reading error":"Chyba pri čítaní hmotnosti"
 
             }
         },

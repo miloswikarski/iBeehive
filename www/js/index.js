@@ -132,6 +132,7 @@ var app = {
         ble.stopScan( function(){
                     $("#mainStatus").text(i18next.t('iBeehive radar stopped.'));
                     $("#notFoundInfo").show();
+                    $("#iFound").hide();
                     disconnectButton.click();
                     app.refreshDeviceList();
         }, function(){
@@ -180,7 +181,8 @@ var app = {
 
     initialize: function() {
         this.bindEvents();
-        //detailPage.hidden = true;
+        $("#iFound").hide();
+        detailPage.hidden = true;
         if ('addEventListener' in document) {
             document.addEventListener('DOMContentLoaded', function() {
                 FastClick.attach(document.body);
@@ -219,7 +221,12 @@ var app = {
 
         ////SpinnerPlugin.activityStop();
 
-        $("#notFoundInfo").hide();
+        if( $('#notFoundInfo').is(':visible') ){
+            $("#notFoundInfo").hide();
+            $("#iFound").show();
+        };
+        
+
 
         if( updateDiscoveredCollection( device.id )  ) {
 
@@ -272,6 +279,15 @@ var app = {
 
                 // subscribe for incoming data
 //                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onErrorData);
+
+                $("#tempOutTitle").text("");
+                $("#tempOut").text("");
+                $("#tempOut").append("<div class=\"loader\"></div>");
+                $("#tempInTitle").text("");
+                $("#tempIn").text("");
+                $("#tempIn").append("<div class=\"loader\"></div>");
+                $("#nettoVaha").text("");
+                $("#nettoVaha").append("<div class=\"loader\"></div>");
 
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.onTempOut, app.onErrorTempOut);
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.onTempIn, app.onErrorTempIn);
@@ -348,7 +364,8 @@ var app = {
         app.setWeightChart(chartWeightData.datasets[0].data,bytesToString(data));
         beedb.settings.curW = parseFloat(bytesToString(data))|| 0.0;
         var perc = beedb.settings.curW / ( ( beedb.settings.maxweight - beedb.settings.minweight )/100 )
-        weightProgres.setAttribute("style","width: " + perc + "%")
+        weightProgress.setAttribute("style","width: " + perc + "%")
+        weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';
     },
 
     sendData: function(event) { // send data to Arduino
@@ -400,7 +417,7 @@ var app = {
     },
     showMainPage: function() {
         mainPage.hidden = false;
-        //detailPage.hidden = true;
+        detailPage.hidden = true;
         //SpinnerPlugin.activityStop();
     },
     showDetailPage: function() {
@@ -419,13 +436,28 @@ var app = {
 
     },
     onErrorTempIn: function(reason) {
-        alert("TEMP IN: " + reason); // real apps should use notification.alert
+        navigator.notification.alert(
+                reason.errorMessage,
+                function(){},
+                i18next.t("Internal temperature reading error"),
+                i18next.t('OK')
+            );
     },
     onErrorTempOut: function(reason) {
-        alert("TEMP OUT: " + reason); // real apps should use notification.alert
+        navigator.notification.alert(
+                reason.errorMessage,
+                function(){},
+                i18next.t("External temperature reading error"),
+                i18next.t('OK')
+            );
     },
     onErrorNettoVaha: function(reason) {
-        alert("Netto Vaha error: " + reason); // real apps should use notification.alert
+        navigator.notification.alert(
+                reason.errorMessage,
+                function(){},
+                i18next.t("Weight reading error"),
+                i18next.t('OK')
+            );
     },
     onErrorData: function(reason) {
         navigator.notification.alert(
@@ -479,11 +511,16 @@ var app = {
               <div class="card text-white bg-primary mb-3">\
                 <div class="card-header d-flex w-100 justify-content-between">\
                   <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
-                 + sigHtml + '</span><small>id: ' + device.id + '</small>\
+                 + sigHtml + '</span>\
+                  <span class="fa-stack fa-lg float-right col-sm-1">\
+                        <i class="fa fa-unlink text-danger"></i>\
+                  </span>\
                 </div>\
                 <div class="card-body d-flex w-100 justify-content-between">\
                   <h2 class="card-title center">' + device.name + '</h2>\
-                  <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '" class="btn btn-secondary my-2 my-sm-0">\
+                  <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
+                   '" class="btn btn-secondary my-2 my-sm-0">\
+                   <i class="fa fa-link"></i> \
                   Connect <i class="fa fa-chevron-right"  aria-hidden="true"></i>\
                   </button>\
                 </div>\
