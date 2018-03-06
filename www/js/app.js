@@ -9,10 +9,10 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
       i18next
       .init({
         debug: 'false',
-        lng: window.navigator.userLanguage || window.navigator.language || 'cz',
-        fallbackLng: 'en',
+        lng: window.navigator.userLanguage || window.navigator.language || 'en-US',
+        fallbackLng: 'en-US',
         resources: { // evtl. load via xhr https://github.com/i18next/i18next-xhr-backend
-          "en": {
+          "en-US": {
             translation: {
                 "BLE core": "BLE core",
                 "iBeehive loading": "iBeehive loading...",
@@ -21,6 +21,7 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 'OK':'OK',
                 'title': ' iBeehive',
                 'iBeehive radar active...': 'iBeehive radar active...',
+                'iBeehive radar stopped': 'iBeehive radar stopped',
                 'scanning': 'scanning',
                 'Weight': 'Weight',
                 'Received': 'Received',
@@ -66,7 +67,8 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 'ConnectingServer':'Pripája sa na server iBeehive',
                 'OK':'OK',
                 'title': ' iBeehive',
-                'iBeehive radar active...': 'iBeehive radar aktivny...',
+                'iBeehive radar active...': 'iBeehive radar aktívny...',
+                'iBeehive radar stopped': 'iBeehive radar zastavený...',
                 'scanning': 'Skenujem',
                 'Weight': 'Hmotnosť',
                 'Received': 'Príjem',

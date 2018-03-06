@@ -54,14 +54,14 @@
                 </div>
           </li>
           <li class="text-center">
-                <button id="settingButton" class="btn btn-success" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-cogs"></i> Settings</button>
+                <button id="settingsButton" class="btn btn-success" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-cogs"></i> Settings</button>
           <li>
                 &nbsp;
           </li>
 
           </li>
           <li class="text-center">
-                <button id="aboutButton" class="btn btn-primary" data-toggle="modal" data-target="#aboutModal"><i class="fa fa-info-circle"></i> About iBeehive</button>
+                <button id="aboutButton" class="btn btn-primary" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-info-circle"></i> About iBeehive</button>
           </li>
           <li>
                 &nbsp;
@@ -102,9 +102,6 @@
         <div class="col-sm-10 text-danger" id="detailName"></div>
         <span class="fa-stack fa-lg float-right col-sm-1" id="linked">
         <i class="fa fa-link text-success"></i>
-        </span>
-        <span class="fa-stack fa-lg float-right col-sm-1" id="unlinked">
-        <i class="fa fa-unlink text-danger"></i>
         </span>
       </div>
       <div class="card-body row text-secondary">
@@ -164,7 +161,7 @@
 
       <button id="disconnectButton" class="btn btn-success"><i class="fa fa-unlink"></i> Disconnect</button>
 
-      <button id="saveButton" class="btn btn-primary" data-toggle="modal" data-target="#infoModal"><i class="fa fa-archive"></i> Save data</button>
+      <button id="saveButton" class="btn btn-primary" data-toggle="modal" data-target="#infoModal"><i class="fa fa-archive"></i> Save</button>
 
       <button id="historyButton" class="btn btn-secondary" data-toggle="modal" data-target="#historyModal"><i class="fa fa-history"></i> History</button>
 

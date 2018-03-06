@@ -49,6 +49,7 @@ var discovered = [];
 // scann or not scann
 var scanning = false;
 
+var chartInterval = 1111, chart1, chart2;
 var chartData = {
             labels: ["1","2","3","4","5","6","7"],
             datasets: [{
@@ -206,6 +207,8 @@ var app = {
         refreshButton.addEventListener('touchstart', this.reScan, false);
         sendButton.addEventListener('click', this.sendData, false);
         disconnectButton.addEventListener('click', this.disconnect, false);
+        aboutButton.addEventListener('touchstart', function(){ $("#aboutModal").modal("show"); }, false);
+        settingsButton.addEventListener('touchstart', function(){ $("#settingsModal").modal("show"); }, false);
         //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
     },
     onDeviceReady: function() {
@@ -273,7 +276,7 @@ var app = {
 
 //                        alert('conn to ' + deviceId + ' .. ' + JSON.stringify(peripheral));
 //console.log(JSON.stringify(peripheral));
-                unlinked.hidden = true;
+                //unlinked.hidden = true;
 
                 app.determineWriteType(peripheral);
 
@@ -548,25 +551,29 @@ var app = {
     setChart: function(dataSet, dataValue) {
         dataSet.push(dataValue);
         dataSet.shift();
-
-        var myLineChart = new Chart($("#tempChart"), {
-        type: 'line',
-        data: chartData,
-        options: chartOptions
-        });
+        chartInterval += 1;
+	if( chartInterval > 11 ) {
+	    chartInterval = 0;
+            chart1 = new Chart($("#tempChart"), {
+	    type: 'line',
+    	    data: chartData,
+    	    options: chartOptions
+    	    });
+    	}
 
     },
 
     setWeightChart: function(dataSet, dataValue) {
         dataSet.push(dataValue);
         dataSet.shift();
-
-        var myLineChart = new Chart($("#weightChart"), {
-        type: 'line',
-        data: chartWeightData,
-        options: chartOptions
-        });
-
+	if( chartInterval == 10 || chartInterval == 9 || chartInterval == 8 || chartInterval == 7 ) {
+	    chartInterval = 11;
+            chart2 = new Chart($("#weightChart"), {
+	    type: 'line',
+    	    data: chartWeightData,
+    	    options: chartOptions
+    	    });
+    	}
     },
 
 
