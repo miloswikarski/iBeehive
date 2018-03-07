@@ -65,19 +65,17 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/*
+
 @media (min-width: 576px) {
   .modal-fullscreen .modal-dialog { max-width: none; max-height: none; }
   .modal-fullscreen .modal-content { max-width: none; max-height: none; }
-}
+  .modal-fullscreen .modal-dialog {
+    width: 98%;
+    padding: 0;
+  }
 
-.modal-fullscreen .modal-dialog {
-  width: 98%;
-  padding: 0;
-}
+  .modal-fullscreen .modal-content {
+    width: 99%;
+  }
 
-.modal-fullscreen .modal-content {
-  width: 99%;
 }
-
-*/
