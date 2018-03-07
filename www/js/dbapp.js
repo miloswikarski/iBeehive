@@ -4,24 +4,26 @@
 //init_db
 //
 var dburl = 'https://db.grapph.com/';
-if ( !window.localStorage.getItem('beedb') ){
-  window.localStorage.setItem('beedb','bee' + Math.random().toString(36).substring(2));
+if ( !window.localStorage.getItem('beehavedb') ){
+  window.localStorage.setItem('beehavedb','bee' + Math.random().toString(36).substring(2));
   //create and init remote db
   // 
-  var rdb = new PouchDB( dburl + window.localStorage.getItem('beedb') );
+  var rdb = new PouchDB( dburl + window.localStorage.getItem('beehavedb') );
   //var rdb = new PouchDB( dburl + 'ibeehive' );
   rdb.info();
 }
   //var pdb = new PouchDB(window.localStorage.getItem('beedb'));
 
-var pdb = new PouchDB( window.localStorage.getItem('beedb') );
+var pdb = new PouchDB( window.localStorage.getItem('beehavedb') );
 
 
 var beedb = {
 
   settings: {
-    minweight: 0,
-    maxweight: 300,
+    demo: window.localStorage.getItem('settingsDemo') || 1,
+    graphs: window.localStorage.getItem('settingsDemo') || 0,
+    minweight: window.localStorage.getItem('settingsMinweight') || 0,
+    maxweight: window.localStorage.getItem('settingsMaxweight') || 100,
     curT1: 0,
     curT2: 0,
     curW: 0,
@@ -32,6 +34,15 @@ var beedb = {
     /* Add the event handler */
     saveButton.addEventListener('click', this.savedata, false);
     historyButton.addEventListener('click', this.readAll, false);
+    window.localStorage.setItem('settingsDemo', this.settings.demo);
+    window.localStorage.setItem('settingsMinweight', this.settings.minweight);
+    window.localStorage.setItem('settingsMaxweight', this.settings.maxweight);
+    window.localStorage.setItem('settingsGraphs', this.settings.graphs);
+
+    if( this.settings.graphs == 0 ){
+      weightChart.hidden = true;
+      tempChart.hidden = true;
+    };
 
   },
 
@@ -44,7 +55,7 @@ var beedb = {
           options.skip = 1;
           var display = document.getElementById('historyBody');
           var html = '<table class="table table-bordered table-striped"><thead>\
-          <tr><th>Date</th><th>Weight</th><th>T1</th><th>T2</th></tr>\
+          <tr><th>'+i18next.t('date')+'</th><th>'+i18next.t('weight')+' [kg]</th><th>T1 [°C]</th><th>T2 [°C]</th></tr>\
           </thead>';
           var hDate;
           response.rows.forEach(function(o) {
@@ -82,7 +93,7 @@ var beedb = {
     } else if(response && response.ok) {
       console.log(response);
       
-      pdb.sync(window.localStorage.getItem('beedb'),dburl+'ibeehive',
+      pdb.sync(window.localStorage.getItem('beehavedb'),dburl+'ibeehive',
         {
           live: true,
           retry: true,

@@ -125,20 +125,20 @@ var app = {
 //        }
     },
     repeatScan: function() {
-        $("#mainStatus").text(i18next.t('iBeehive radar active...'));
+        $("#mainStatus").text(i18next.t("iBeehive radar active..."));
         ble.startScan([], app.onDiscoverDevice, app.onError);
     },
     
     restartScanner: function() { 
         ble.stopScan( function(){
-                    $("#mainStatus").text(i18next.t('iBeehive radar stopped.'));
+                    $("#mainStatus").text(i18next.t("iBeehive radar stopped."));
                     $("#notFoundInfo").show();
                     $("#iFound").hide();
                     disconnectButton.click();
                     app.refreshDeviceList();
         }, function(){
                     //SpinnerPlugin.activityStop();
-                    $("#mainStatus").text(i18next.t('Error occured.'));
+                    $("#mainStatus").text(i18next.t("Error occured."));
         } );
     },
 
@@ -305,8 +305,10 @@ var app = {
         ble.connect(deviceId, onConnect, onErrorConnect);
         beedb.settings.curId = deviceId;
 
+        if( beedb.settings.graphs ){
+            app.chartInit();
+        };
 
-        app.chartInit();
     },
     determineWriteType: function(peripheral) {
         //Alya rewrited:
@@ -352,19 +354,25 @@ var app = {
     onTempOut: function(data) { // data received from Arduino
         $("#tempOutTitle").text(i18next.t("External temperature"));
         $("#tempOut").text(bytesToString(data)).append("<sup>°C</sup>");
-        app.setChart(chartData.datasets[1].data,bytesToString(data));
+        if( beedb.settings.graphs == 1 ){
+            app.setChart(chartData.datasets[1].data,bytesToString(data));
+        }
         beedb.settings.curT1 = bytesToString(data);
     },
     onTempIn: function(data) { // data received from Arduino
         $("#tempInTitle").text(i18next.t("Internal temperature") );
         $("#tempIn").text(bytesToString(data)).append("<sup>°C</sup>");
-        app.setChart(chartData.datasets[0].data,bytesToString(data));
+        if( beedb.settings.graphs == 1 ){
+            app.setChart(chartData.datasets[0].data,bytesToString(data));
+        }
         beedb.settings.curT2 = bytesToString(data);
     },
     onNettoVaha: function(data) { // data received from Arduino
         //$("#nettoVahaTitle").text(i18next.t("Weight") );
         $("#nettoVaha").text(bytesToString(data)).append("<small> kg</small>");
-        app.setWeightChart(chartWeightData.datasets[0].data,bytesToString(data));
+        if( beedb.settings.graphs == 1 ){
+            app.setWeightChart(chartWeightData.datasets[0].data,bytesToString(data));
+        }
         beedb.settings.curW = parseFloat(bytesToString(data))|| 0.0;
         var perc = beedb.settings.curW / ( ( beedb.settings.maxweight - beedb.settings.minweight )/100 )
         weightProgress.setAttribute("style","width: " + perc + "%")
@@ -509,26 +517,47 @@ var app = {
 
     getDeviceListItem: function( device ) {
         var sigHtml = app.getRssiIcon( device.rssi );
-        var html = '\
-          <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
-              <div class="card text-white bg-primary mb-3">\
-                <div class="card-header d-flex w-100 justify-content-between">\
-                  <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
-                 + sigHtml + '</span>\
-                  <span class="fa-stack fa-lg float-right col-sm-1">\
-                        <i class="fa fa-unlink text-danger"></i>\
-                  </span>\
-                </div>\
-                <div class="card-body d-flex w-100 justify-content-between">\
-                  <h2 class="card-title center">' + device.name + '</h2>\
-                  <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
-                   '" class="btn btn-secondary my-2 my-sm-0">\
-                   <i class="fa fa-link"></i> \
-                  Connect <i class="fa fa-chevron-right"  aria-hidden="true"></i>\
-                  </button>\
-                </div>\
-              </div>\
-        </div>';
+        if( device.name.substring(0,5) == "ALYA " || device.name.substring(0,11) == "Daniel UART"){
+            var html = '\
+              <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
+                  <div class="card text-white bg-primary mb-3">\
+                    <div class="card-header d-flex w-100 justify-content-between">\
+                      <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
+                     + sigHtml + '</span>\
+                      <span class="fa-stack fa-lg float-right col-sm-1">\
+                            <i class="fa fa-unlink text-danger"></i>\
+                      </span>\
+                    </div>\
+                    <div class="card-body d-flex w-100 justify-content-between">\
+                      <h2 class="card-title center">' + device.name + '</h2>\
+                      <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
+                       '" class="btn btn-secondary my-2 my-sm-0">\
+                       <i class="fa fa-link"></i> ' + i18next.t('Connect') + 
+                      '</button>\
+                    </div>\
+                    <div class="card-footer" >' + i18next.t("iBeehiveBleDevice") + '</div>\
+                  </div>\
+            </div>';
+
+        } else {
+            var html = '\
+              <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
+                  <div class="card text-white bg-secondary mb-3">\
+                    <div class="card-header d-flex w-100 justify-content-between">\
+                      <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
+                     + sigHtml + '</span>\
+                      <span class="fa-stack fa-lg float-right col-sm-1">\
+                            <i class="fa fa-unlink text-danger"></i>\
+                      </span>\
+                    </div>\
+                    <div class="card-body d-flex w-100 justify-content-between">\
+                      <h2 class="card-title center">' + device.name + '</h2>\
+                    </div>\
+                    <div class="card-footer" >' + i18next.t("notiBeehiveBleDevice") + '</div>\
+                  </div>\
+            </div>';
+
+        }
 
         return html;
 

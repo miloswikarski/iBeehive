@@ -41,7 +41,7 @@
         <ul class="navbar-nav mr-auto">
           <li class="text-center">
             <button class="btn btn-warning" data-toggle="collapse" data-target=".navbar-collapse.show"  id="refreshButton" type="button">
-              <i class="fa fa-undo"></i> Rescan...
+              <i class="fa fa-undo"></i> <span data-i18n="rescan">Rescan...</span>
             </button>
           </li>
           <li>
@@ -54,14 +54,14 @@
                 </div>
           </li>
           <li class="text-center">
-                <button id="settingsButton" class="btn btn-success" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-cogs"></i> Settings</button>
+                <button id="settingsButton" class="btn btn-success" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-cogs"></i> <span data-i18n="settings">Settings</span></button>
           <li>
                 &nbsp;
           </li>
 
           </li>
           <li class="text-center">
-                <button id="aboutButton" class="btn btn-primary" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-info-circle"></i> About iBeehive</button>
+                <button id="aboutButton" class="btn btn-primary" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-info-circle"></i> <span data-i18n="aboutIbeehive">About iBeehive</span></button>
           </li>
           <li>
                 &nbsp;
@@ -82,12 +82,12 @@
     <div class="row" id="notFoundInfo">
       <div class="col-lg-12">
         <h2 data-i18n="scanning">Scanning... not found yet</h2>
-        <p>iBeehive app is searching for all smart bluetooth devices around you. If you are near iBeehive device, you will be able to connect to this device and see actual and historical data.</p>
+        <p data-i18n="iBeehiveIntro">iBeehive app is searching for all smart bluetooth devices around you. If you are near iBeehive device, you will be able to connect to this device and see actual and historical data.</p>
       </div>
     </div>
 
     <div id="mainPage">
-      <div class="row col-lg-12"><h4 id="iFound">iBeehive(s) found!</h4></div>
+      <div class="row col-lg-12"><h4 id="iFound" data-i18n="bleFound">Bluetooth device(s) found!</h4></div>
       <div id="deviceList">                    
       </div>
     </div>
@@ -159,11 +159,11 @@
 
       <div class="btn-group" role="group" aria-label="iBeehive actions">
 
-      <button id="disconnectButton" class="btn btn-success"><i class="fa fa-unlink"></i> Disconnect</button>
+      <button id="disconnectButton" class="btn btn-success"><i class="fa fa-unlink"></i> <span data-i18n="disconnect">Disconnect</span></button>
 
-      <button id="saveButton" class="btn btn-primary" data-toggle="modal" data-target="#infoModal"><i class="fa fa-archive"></i> Save</button>
+      <button id="saveButton" class="btn btn-primary" data-toggle="modal" data-target="#infoModal"><i class="fa fa-archive"></i> <span data-i18n="save">Save</span></button>
 
-      <button id="historyButton" class="btn btn-secondary" data-toggle="modal" data-target="#historyModal"><i class="fa fa-history"></i> History</button>
+      <button id="historyButton" class="btn btn-secondary" data-toggle="modal" data-target="#historyModal"><i class="fa fa-history"></i> <span data-i18n="history">History</span></button>
 
       </div>
     </div>
@@ -172,11 +172,11 @@
       <!-- Save alert dialog box -->
 
       <!-- Modal -->
-      <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade modal-fullscreen" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">History values</h5>
+              <h5 class="modal-title" id="exampleModalLabel" data-i18n="historyValues">History values</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -184,7 +184,7 @@
             <div class="modal-body" id="historyBody">
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="close">Close</button>
             </div>
           </div>
         </div>
@@ -195,16 +195,16 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="infoModalLabel">Actual values</h5>
+              <h5 class="modal-title" id="infoModalLabel" data-i18n="actualValues">Actual values</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" data-i18n="valuesSaved">
               Actual values saved
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="close">Close</button>
             </div>
           </div>
         </div>
@@ -212,20 +212,21 @@
 
 
       <!-- Modal ABOUT -->
-      <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="About iBeehive" aria-hidden="true">
+      <div class="modal fade modal-fullscreen" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="About iBeehive" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="aboutTitle">About iBeehive</h5>
+              <h5 class="modal-title" id="aboutTitle" data-i18n="aboutTitle">About iBeehive</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body" id="aboutBody">
-              iBeehive is application used for smart bee weight products by Alya Ltd. You can find more on <a href="https://www.alya.sk">www.alya.sk</a>
+              <span data-i18n="aboutText"> iBeehive is application used for smart bee weight products by Alya Ltd. You can find more on </span>
+               <a href="https://www.alya.sk">www.alya.sk</a>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="close">Close</button>
             </div>
           </div>
         </div>
@@ -233,11 +234,11 @@
 
 
       <!-- Modal SETTINGS -->
-      <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="About iBeehive" aria-hidden="true">
+      <div class="modal fade modal-fullscreen" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="About iBeehive" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="settingsTitle">Settings</h5>
+              <h5 class="modal-title" id="settingsTitle" data-i18n="settings">Settings</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -246,7 +247,7 @@
               All set :)
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="close">Close</button>
             </div>
           </div>
         </div>
