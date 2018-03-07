@@ -182,6 +182,7 @@ var app = {
 
     initialize: function() {
         this.bindEvents();
+        
         $("#iFound").hide();
         detailPage.hidden = true;
         if ('addEventListener' in document) {

@@ -14,9 +14,9 @@ body {
 
 
 
-html {
-  font-size: 3.0vw;
-}
+#html {
+#  font-size: 3.0vw;
+#}
 
 @include media-breakpoint-up(sm) {
   html {
@@ -65,6 +65,7 @@ html {
     100% { transform: rotate(360deg); }
 }
 
+/*
 @media (min-width: 576px) {
   .modal-fullscreen .modal-dialog { max-width: none; max-height: none; }
   .modal-fullscreen .modal-content { max-width: none; max-height: none; }
@@ -79,3 +80,4 @@ html {
   width: 99%;
 }
 
+*/

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>iBeehive</title>
   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <link rel="stylesheet" href="css/bootstrap.css">
 
@@ -244,7 +245,61 @@
               </button>
             </div>
             <div class="modal-body" id="settingsBody">
-              All set :)
+              <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex active" data-unit="switch-light-1">
+                      <svg class="icon-sprite">
+                        <use class="glow" fill="url(#radial-glow)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#glow"></use>
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#bulb-eco"></use>
+                      </svg>
+                      <h5>Kitchen</h5>
+                      <label class="switch ml-auto checked">
+                        <input type="checkbox" id="switch-light-1" checked="">
+                      </label>
+                      <div class="info-holder info-rb" style="right:40px;">
+                        <div data-toggle="popover-all" data-content="Checkbox element using localStorage to remember the last status." data-original-title="Switch ON/OFF" data-container="body" data-placement="top" data-offset="0,-6"></div>
+                      </div>
+                    </li>
+                    <li class="list-group-item d-flex" data-unit="switch-light-2">
+                      <svg class="icon-sprite">
+                        <use class="glow" fill="url(#radial-glow)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#glow"></use>
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#bulb-eco"></use>
+                      </svg>
+                      <h5>Dining room</h5>
+                      <label class="switch ml-auto">
+                        <input type="checkbox" id="switch-light-2">
+                      </label>
+                    </li>
+                    <li class="list-group-item d-flex" data-unit="switch-light-3">
+                      <svg class="icon-sprite">
+                        <use class="glow" fill="url(#radial-glow)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#glow"></use>
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#bulb-eco"></use>
+                      </svg>
+                      <h5>Living room</h5>
+                      <label class="switch ml-auto">
+                        <input type="checkbox" id="switch-light-3">
+                      </label>
+                    </li>
+                    <li class="list-group-item d-flex" data-unit="switch-light-4">
+                      <svg class="icon-sprite">
+                        <use class="glow" fill="url(#radial-glow)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#glow"></use>
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#bulb-eco"></use>
+                      </svg>
+                      <h5>Bedroom</h5>
+                      <label class="switch ml-auto">
+                        <input type="checkbox" id="switch-light-4">
+                      </label>
+                    </li>
+                    <li class="list-group-item d-flex" data-unit="switch-light-5">
+                      <svg class="icon-sprite">
+                        <use class="glow" fill="url(#radial-glow)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#glow"></use>
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/images/icons-sprite.svg#bulb-eco"></use>
+                      </svg>
+                      <h5>Bathroom</h5>
+                      <label class="switch ml-auto">
+                        <input type="checkbox" id="switch-light-5">
+                      </label>
+                    </li>
+                  </ul>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="close">Close</button>
