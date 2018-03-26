@@ -21,7 +21,7 @@ var beedb = {
 
   settings: {
     demo: window.localStorage.getItem('settingsDemo') || 1,
-    graphs: window.localStorage.getItem('settingsDemo') || 0,
+    graphs: window.localStorage.getItem('settingsGraphs') || 0,
     minweight: window.localStorage.getItem('settingsMinweight') || 0,
     maxweight: window.localStorage.getItem('settingsMaxweight') || 100,
     curT1: 0,
@@ -32,17 +32,21 @@ var beedb = {
 
   initialize: function(){
     /* Add the event handler */
-    saveButton.addEventListener('click', this.savedata, false);
-    historyButton.addEventListener('click', this.readAll, false);
+//    saveButton.addEventListener('click', this.savedata, false);
+//    historyButton.addEventListener('click', this.readAll, false);
     window.localStorage.setItem('settingsDemo', this.settings.demo);
     window.localStorage.setItem('settingsMinweight', this.settings.minweight);
     window.localStorage.setItem('settingsMaxweight', this.settings.maxweight);
     window.localStorage.setItem('settingsGraphs', this.settings.graphs);
 
-    if( this.settings.graphs == 0 ){
-      weightChart.hidden = true;
-      tempChart.hidden = true;
-    };
+    if( this.settings.graphs == 0 ) {
+      if ( typeof weightChart !== 'undefined' ) {
+        weightChart.hidden = true;
+      }
+      if ( typeof tempChart !== 'undefined' ) {
+        tempChart.hidden = true; 
+      }      
+    }
 
   },
 

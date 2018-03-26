@@ -112,11 +112,20 @@ function updateDiscoveredCollection ( dev ) {
 }
 
 
-var app = {    
+var app = {
 
-    refreshDeviceList: function() {
+    rescanInterval: 0,    
+
+    refreshDeviceList: function() { /**/
         deviceList.innerHTML = '';
         discovered = [];
+
+        console.log('refreshDeviceList');
+        if( beedb.settings.demo === 1 ){
+            demo.initialize({id: "demo1", name: "DEMO DEVICE - not compatible"} );
+            demo.initialize({id: "demo2", name: "ALYA DEMO DEVICE"} );
+        }
+
 //        if (cordova.platformId === 'android') { // Android filtering is broken
         ble.startScan([], app.onDiscoverDevice, app.onError);
         $("#mainStatus").text(i18next.t('iBeehive radar active...'));
@@ -134,7 +143,6 @@ var app = {
                     $("#mainStatus").text(i18next.t("iBeehive radar stopped."));
                     $("#notFoundInfo").show();
                     $("#iFound").hide();
-                    disconnectButton.click();
                     app.refreshDeviceList();
         }, function(){
                     //SpinnerPlugin.activityStop();
@@ -145,7 +153,6 @@ var app = {
     reScan: function() {
         var options = { dimBackground: true };
         //SpinnerPlugin.activityStart(i18next.t("Scanning BLE devices"), options);
-        app.showMainPage();
         app.restartScanner();
     },
 
@@ -183,17 +190,15 @@ var app = {
     initialize: function() {
         this.bindEvents();
         
-        $("#iFound").hide();
-        detailPage.hidden = true;
+        //detailPage.hidden = true;
         if ('addEventListener' in document) {
             document.addEventListener('DOMContentLoaded', function() {
                 FastClick.attach(document.body);
                 }, false);
         }
-        $("#mainStatus").text('');
 
-
-        var rssiSample = setInterval(function() {
+        clearInterval(app.rescanInterval);
+        app.rescanInterval = setInterval(function() {
             console.log('ide rescan');
             //app.refreshRssi();
             app.reScan();
@@ -205,11 +210,11 @@ var app = {
 
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        refreshButton.addEventListener('touchstart', this.reScan, false);
-        sendButton.addEventListener('click', this.sendData, false);
-        disconnectButton.addEventListener('click', this.disconnect, false);
-        aboutButton.addEventListener('click', function(){ $("#aboutModal").modal("show"); }, false);
-        settingsButton.addEventListener('click', function(){ $("#settingsModal").modal("show"); }, false);
+//        refreshButton.addEventListener('touchstart', this.reScan, false);
+  //      sendButton.addEventListener('click', this.sendData, false);
+  //      disconnectButton.addEventListener('click', this.disconnect, false);
+  //      aboutButton.addEventListener('click', function(){ $("#aboutModal").modal("show"); }, false);
+  //      settingsButton.addEventListener('click', function(){ $("#settingsModal").modal("show"); }, false);
         //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
     },
     onDeviceReady: function() {
@@ -242,10 +247,12 @@ var app = {
             deviceList.insertBefore(listItem, deviceList.firstChild);
 
             var el = document.querySelector('#btn_'+device.id.replace(/[^a-zA-Z0-9]/g, ""));
-            el.dataset.deviceId = device.id;
-            el.dataset.deviceName = device.name;
-            console.log('appconnect on ' + el.dataset.deviceId )
-            el.addEventListener('touchstart', app.connect, false);
+            if( el !== null ){ // only Alya devices has btn
+                el.dataset.deviceId = device.id;
+                el.dataset.deviceName = device.name;
+                console.log('appconnect on ' + el.dataset.deviceId )
+                el.addEventListener('touchstart', app.connect, false);                
+            }
 
 
         } else {
@@ -284,6 +291,9 @@ var app = {
                 // subscribe for incoming data
 //                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onErrorData);
 
+                window.location = window.location.origin + window.location.pathname + '#detailDevice';
+
+
                 $("#tempOutTitle").text("");
                 $("#tempOut").text("");
                 $("#tempOut").append("<div class=\"loader\"></div>");
@@ -296,18 +306,20 @@ var app = {
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.onTempOut, app.onErrorTempOut);
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.onTempIn, app.onErrorTempIn);
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.onErrorNettoVaha);
-                sendButton.dataset.deviceId = deviceId;
-                disconnectButton.dataset.deviceId = deviceId;
-                resultDiv.innerHTML = "";
-                app.showDetailPage();
+                $("#resultDiv").text("");
                 $("#detailName").text(e.target.dataset.deviceName);
             };
 
         ble.connect(deviceId, onConnect, onErrorConnect);
         beedb.settings.curId = deviceId;
 
-        if( beedb.settings.graphs ){
+        if( Number(beedb.settings.graphs) === 1 ){
+            $("#tempChart").show();
+            $("#weightChart").show();
             app.chartInit();
+        } else {
+            $("#tempChart").hide();
+            $("#weightChart").hide();
         };
 
     },
@@ -353,37 +365,68 @@ var app = {
     },
     */
     onTempOut: function(data) { // data received from Arduino
+        if( beedb.settings.curT1 === bytesToString(data) ){
+            return false;
+        }
         $("#tempOutTitle").text(i18next.t("External temperature"));
         $("#tempOut").text(bytesToString(data)).append("<sup>°C</sup>");
-        if( beedb.settings.graphs == 1 ){
+        if( Number(beedb.settings.graphs == 1) ){
+            $("#tempChart").show();
             app.setChart(chartData.datasets[1].data,bytesToString(data));
+        } else {
+                        $("#tempChart").hide();
         }
         beedb.settings.curT1 = bytesToString(data);
     },
     onTempIn: function(data) { // data received from Arduino
+        if( beedb.settings.curT2 === bytesToString(data) ){
+            return false;
+        }
         $("#tempInTitle").text(i18next.t("Internal temperature") );
         $("#tempIn").text(bytesToString(data)).append("<sup>°C</sup>");
-        if( beedb.settings.graphs == 1 ){
+        if( Number(beedb.settings.graphs) === 1 ){
+            $("#tempChart").show();
             app.setChart(chartData.datasets[0].data,bytesToString(data));
+        } else {
+            $("#tempChart").hide();
         }
         beedb.settings.curT2 = bytesToString(data);
     },
     onNettoVaha: function(data) { // data received from Arduino
+        if( beedb.settings.curW === parseFloat(bytesToString(data)) ){
+            return false;
+        }
         //$("#nettoVahaTitle").text(i18next.t("Weight") );
         $("#nettoVaha").text(bytesToString(data)).append("<small> kg</small>");
-        if( beedb.settings.graphs == 1 ){
+        if( Number(beedb.settings.graphs) === 1 ){
+            $("#weightChart").show();
             app.setWeightChart(chartWeightData.datasets[0].data,bytesToString(data));
+        } else {
+            $("#weightChart").hide();
         }
         beedb.settings.curW = parseFloat(bytesToString(data))|| 0.0;
         var perc = beedb.settings.curW / ( ( beedb.settings.maxweight - beedb.settings.minweight )/100 )
-        weightProgress.setAttribute("style","width: " + perc + "%")
-        weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';
+        if( typeof weightProgress !== "undefined") {
+            weightProgress.setAttribute("style","width: " + perc + "%")
+            weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';
+        }
     },
 
     sendData: function(event) { // send data to Arduino
 
+        var data = stringToBytes(messageInput.value);
+        var deviceId = event.target.dataset.deviceId;
+
         var success = function() {
-            console.log("success");
+
+            //read after write, the same char
+            ble.read(deviceId, alyadevice.serviceUUID, alyadevice.txCharacteristic,
+
+                function(event){ alert("read " + JSON.stringify(event));},
+                function(e){
+                    console.log("err " + JSON.stringify(e));
+                });
+
             $("#mainStatus").text(i18next.t("Sent") + ": " + messageInput.value );
 
             //resultDiv.innerHTML = resultDiv.innerHTML + "Sent: " + messageInput.value + "<br/>";
@@ -400,8 +443,6 @@ var app = {
         };
 
 
-        var data = stringToBytes(messageInput.value);
-        var deviceId = event.target.dataset.deviceId;
 
         //if (app.writeWithoutResponse) {
             ble.writeWithoutResponse(
@@ -425,16 +466,21 @@ var app = {
     disconnect: function(event) {
         //SpinnerPlugin.activityStart(i18next.t("Scanning BLE devices"), {});
         var deviceId = event.target.dataset.deviceId;
-        ble.disconnect(deviceId, app.showMainPage, app.onError);
+        if( !deviceId ) {
+            app.showMainPage();
+        } else {
+            ble.disconnect(deviceId, app.showMainPage, app.onError);
+        }
     },
+    disconnectById: function(id) {
+        ble.disconnect(id, app.showMainPage, app.onError);
+    },
+    
+
     showMainPage: function() {
-        mainPage.hidden = false;
-        detailPage.hidden = true;
-        //SpinnerPlugin.activityStop();
-    },
-    showDetailPage: function() {
-        mainPage.hidden = true;
-        detailPage.hidden = false;
+        //mainPage.hidden = false;
+        app.reScan();
+        //detailPage.hidden = true;
         //SpinnerPlugin.activityStop();
     },
     onError: function(reason) {

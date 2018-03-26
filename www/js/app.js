@@ -53,7 +53,8 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 "aboutIbeehive":"About iBeehive",
                 "date":"Date",
                 "weight":"Weight",
-                "valuesSaved":"Actual values saved"
+                "valuesSaved":"Actual values saved",
+                "back":"Back"
 
 
 
@@ -122,7 +123,8 @@ window.localStorage.setItem('mainUrl',"https://iBeehive.grapph.com/");
                 "aboutIbeehive":"O aplikácii iBeehive",
                 "date":"Dátum",
                 "weight":"Hmotnosť",
-                "valuesSaved":"Aktuálne hodnoty uložené v databáze"
+                "valuesSaved":"Aktuálne hodnoty uložené v databáze",
+                "back":"Naspäť"
 
 
 
