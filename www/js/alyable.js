@@ -1,21 +1,4 @@
-// (c) 2014 Don Coleman
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-/* global mainPage, deviceList, refreshButton */
-/* global detailPage, resultDiv, messageInput, sendButton, disconnectButton */
-/* global ble  */
-/* jshint browser: true , devel: true*/
 'use strict';
 
 // ASCII only
@@ -111,7 +94,6 @@ function updateDiscoveredCollection ( dev ) {
     }
 }
 
-
 var app = {
 
     rescanInterval: 0,    
@@ -120,8 +102,7 @@ var app = {
         deviceList.innerHTML = '';
         discovered = [];
 
-        console.log('refreshDeviceList');
-        if( beedb.settings.demo === 1 ){
+       if( Number(beedb.settings.demo) === 1 ){
             demo.initialize({id: "demo1", name: "DEMO DEVICE - not compatible"} );
             demo.initialize({id: "demo2", name: "ALYA DEMO DEVICE"} );
         }
@@ -188,14 +169,8 @@ var app = {
     },
 
     initialize: function() {
-        this.bindEvents();
-        
-        //detailPage.hidden = true;
-        if ('addEventListener' in document) {
-            document.addEventListener('DOMContentLoaded', function() {
-                FastClick.attach(document.body);
-                }, false);
-        }
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+
 
         clearInterval(app.rescanInterval);
         app.rescanInterval = setInterval(function() {
@@ -207,19 +182,11 @@ var app = {
 
     },
 
-
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-//        refreshButton.addEventListener('touchstart', this.reScan, false);
-  //      sendButton.addEventListener('click', this.sendData, false);
-  //      disconnectButton.addEventListener('click', this.disconnect, false);
-  //      aboutButton.addEventListener('click', function(){ $("#aboutModal").modal("show"); }, false);
-  //      settingsButton.addEventListener('click', function(){ $("#settingsModal").modal("show"); }, false);
-        //deviceList.addEventListener('touchstart', this.connect, false); // assume not scrolling
-    },
     onDeviceReady: function() {
+        console.log(ble);
         app.refreshDeviceList();
     },
+
     onDiscoverDevice: function(device) {
 
         //console.log(JSON.stringify(device));
@@ -230,7 +197,7 @@ var app = {
 
         ////SpinnerPlugin.activityStop();
 
-        if( $('#notFoundInfo').is(':visible') ){
+        if ($('#notFoundInfo').css('display') != 'none') {
             $("#notFoundInfo").hide();
             $("#iFound").show();
         };
@@ -250,7 +217,7 @@ var app = {
             if( el !== null ){ // only Alya devices has btn
                 el.dataset.deviceId = device.id;
                 el.dataset.deviceName = device.name;
-                console.log('appconnect on ' + el.dataset.deviceId )
+                console.log('app.connect on ' + el.dataset.deviceId )
                 el.addEventListener('touchstart', app.connect, false);                
             }
 
@@ -290,9 +257,6 @@ var app = {
 
                 // subscribe for incoming data
 //                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onErrorData);
-
-                window.location = window.location.origin + window.location.pathname + '#detailDevice';
-
 
                 $("#tempOutTitle").text("");
                 $("#tempOut").text("");
@@ -577,12 +541,14 @@ var app = {
                     </div>\
                     <div class="card-body d-flex w-100 justify-content-between">\
                       <h2 class="card-title center">' + device.name + '</h2>\
+                      <a href="/devDetail/">\
                       <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
                        '" class="btn btn-secondary my-2 my-sm-0">\
                        <i class="fa fa-link"></i> ' + i18next.t('Connect') + 
                       '</button>\
+                      </a>\
                     </div>\
-                    <div class="card-footer" >' + i18next.t("iBeehiveBleDevice") + '</div>\
+                    <div class="card-footer text-white" >' + i18next.t("iBeehiveBleDevice") + '</div>\
                   </div>\
             </div>';
 
@@ -600,7 +566,7 @@ var app = {
                     <div class="card-body d-flex w-100 justify-content-between">\
                       <h2 class="card-title center">' + device.name + '</h2>\
                     </div>\
-                    <div class="card-footer" >' + i18next.t("notiBeehiveBleDevice") + '</div>\
+                    <div class="card-footer text-white" >' + i18next.t("notiBeehiveBleDevice") + '</div>\
                   </div>\
             </div>';
 

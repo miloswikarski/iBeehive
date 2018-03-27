@@ -73,12 +73,14 @@
         <preference name="StatusBarOverlaysWebview" value="false" />
         <preference name="StatusBarBackgroundColor" value="#0B303A" />
     </platform>
-    <plugin name="cordova-plugin-ble-central" spec="^1.1.4" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.1" />
     <plugin name="cordova-plugin-dialogs" spec="^2.0.1" />
     <plugin name="cordova-plugin-compat" spec="^1.2.0" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <plugin name="cordova-plugin-device" spec="^2.0.1" />
+    <plugin name="cordova-plugin-ble-central" spec="^1.1.4">
+        <variable name="BLUETOOTH_USAGE_DESCRIPTION" value=" " />
+    </plugin>
     <engine name="ios" spec="^4.5.4" />
-    <engine name="android" spec="^7.1.0" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

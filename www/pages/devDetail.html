@@ -1,103 +1,22 @@
-
-const pageMain = `
-   <div id="mainPageAll">
-    <div class="container">
-    <!-- menu -->
-    <nav class="navbar navbar-collapse navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#"><img  style="max-width:50px;" src="css/icon.png"> iBeehive</a>
-
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="navbar-collapse collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-          <li class="text-center">
-            <button class="btn btn-warning" data-toggle="collapse" data-target=".navbar-collapse.show"  id="refreshButton" type="button">
-              <i class="fa fa-undo"></i> <span data-i18n="rescan">Rescan...</span>
-            </button>
-          </li>
-          <li>
-                &nbsp;
-          </li>
-          <li>
-                <div class="card-body d-flex w-100 justify-content-between">
-                <input  id="messageInput" class="form-control mr-sm-2" type="text" placeholder="Data to send..." aria-label="Search">
-                <button id="sendButton" class="btn btn-outline-success my-2 my-sm-0">Send</button>
-                </div>
-          </li>
-          <li class="text-center">
-                <button id="settingsButton" class="btn btn-success" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-cogs"></i> <span data-i18n="settings">Settings</span></button>
-          <li>
-                &nbsp;
-          </li>
-
-          </li>
-          <li class="text-center">
-                <button id="aboutButton" class="btn btn-primary" data-toggle="collapse" data-target=".navbar-collapse.show"><i class="fa fa-info-circle"></i> <span data-i18n="aboutIbeehive">About iBeehive</span></button>
-
-          </li>
-          <li>
-                &nbsp;
-                <a href="#detailDevice">PAGE1</a>
-                <a href="#pageConfig">PAGE2</a>
-          </li>
-
-
-        </ul>
+<div class="page">
+  <div class="navbar">
+    <div class="navbar-inner sliding">
+      <div class="left">
+        <a href="#" class="link back">
+          <i class="icon icon-back"></i>
+          <span class="ios-only">Back</span>
+        </a>
       </div>
-    </nav>
-
-
-    <!-- status info -->
-    <div class="row col-lg-12"><label id="mainStatus"></label></div>
-
-
-    <!-- init scanning page -->
-
-    <div class="row" id="notFoundInfo">
-      <div class="col-lg-12">
-        <h2 data-i18n="scanning">Scanning... not found yet</h2>
-        <p data-i18n="iBeehiveIntro">iBeehive app is searching for all smart bluetooth devices around you. If you are near iBeehive device, you will be able to connect to this device and see actual and historical data.</p>
-      </div>
+      <div class="title">Device</div>
     </div>
-
-    <div id="mainPage">
-      <div class="row col-lg-12"><h4 id="iFound" data-i18n="bleFound"></h4></div>
-      <div id="deviceList">                    
-      </div>
-    </div>
-
-  <script>
-  $("#refreshButton").click(app.reScan);
-  $("#sendButton").click(app.sendData);
-  $("#disconnectButton").click(app.disconnect);
-  $("#aboutButton").click( function(){ $("#aboutModal").modal("show"); } );
-  $("#settingsButton").click(function(){ $("#settingsModal").modal("show"); } );
-  $("#deviceList").on("touchstart",app.connect);  
-  </script>
-
   </div>
-  </div>
+  <div class="page-content bg-dark">
 
-`;
-
-
-const pageDetail = `
 
     <!-- detail -->
     <div id="detailPageAll">   
 
     <div id="detailPage" class="container">
-
-    <!-- menu -->
-    <nav class="navbar navbar-collapse navbar-dark fixed-top bg-dark">
-      <a id="backWithDisconnect" class="btn btn-link btn-xs  d-flex align-items-center" href="#home"><i class="fa fa-angle-left bigicon"></i>&nbsp; {{ back }}</a>
-      <a class="navbar-brand mx-auto" href="#">{{ title }}</a>
-
-
-    </nav>
-
 
       <div id="resultDiv" class="row"></div>
 
@@ -145,14 +64,14 @@ const pageDetail = `
 
       </div>
 
-
-      <div class="card bg-white">
+<!--
+      <div class="card bg-white" aria-hidden="true">
       <div class="card-body row">
       <canvas id="weightChart" class="col-sm-6 mh-150"></canvas>
       <canvas id="tempChart" class="col-sm-6 mh-150"></canvas>
       </div>
       </div>
-
+-->
 
       <!-- SAVE AND DISCONNECT BTNS -->
 
@@ -167,37 +86,45 @@ const pageDetail = `
 
       <button id="saveButton" class="btn btn-primary" data-toggle="modal" data-target="#infoModal"><i class="fa fa-archive"></i> <span data-i18n="save">Save</span></button>
 
-      <button id="historyButton" class="btn btn-secondary" data-toggle="modal" data-target="#historyModal"><i class="fa fa-history"></i> <span data-i18n="history">History</span></button>
+      <button id="historyButton" class="btn btn-secondary button-raised sheet-open" data-sheet="#historyModal" ><i class="fa fa-history"></i> <span data-i18n="history">History</span></button>
+
 
       </div>
     </div>
-    <script>
-    $("#saveButton").click(beedb.savedata);
-    $("#historyButton").click(beedb.readAll);
-    </script>
-
-
 
       <!-- Save alert dialog box -->
 
-      <!-- Modal -->
-      <div class="modal fade modal-fullscreen" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel" data-i18n="historyValues">History values</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body" id="historyBody">
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="close">Close</button>
-            </div>
+<div class="sheet-modal modal-in" style="height: 520px;" id="historyModal" aria-hidden="true">
+      <div class="toolbar">
+        <div class="toolbar-inner">
+          <div class="left"></div>
+          <div class="right">
+            <a class="link sheet-close">Close</a>
           </div>
         </div>
       </div>
+      <div class="sheet-modal-inner">
+        <div class="page-content">
+          <div class="block">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel" data-i18n="historyValues">History values</h5>
+
+            </div>
+            <div class="modal-body" id="historyBody">
+            </div>
+
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
 
       <!-- Modal INFO -->
       <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -323,131 +250,6 @@ const pageDetail = `
 
     </div><!-- detailPageAll -->
 
-`;
 
-
-
-
-const pageConfig = `
-
-    <!-- config -->
-    <div id="configPageAll">   
-
-    <div id="configPage" class="container">
-
-    <!-- menu -->
-    <nav class="navbar navbar-collapse navbar-dark fixed-top bg-dark">
-      <a id="backWithDisconnect" class="btn btn-link btn-xs  d-flex align-items-center" href="#home"><i class="fa fa-angle-left bigicon"></i>&nbsp; {{ back }}</a>
-      <a class="navbar-brand mx-auto" href="#">{{ title }}</a>
-    </nav>
-
-
-    <ul class="list-group">
-      <li class="list-group-item d-flex  w-100 justify-content-between align-items-center">
-      <!-- DEMO switch -->
-        <span class=" d-flex justify-content-start">
-          {{ demo_title }}
-          </span>
-        <span class="switch d-flex justify-content-end">
-          <input type="checkbox" class="switch d-flex justify-content-end" id="switch-demo">
-          <label for="switch-demo" id="switch-demo-label"></label>
-        </span>
-      </li>
-
-      <li class="list-group-item d-flex  w-100 justify-content-between align-items-center">
-      <!-- GRAPH switch -->
-        <span class=" d-flex justify-content-start">
-          {{ graph_title }}
-          </span>
-        <span class="switch d-flex justify-content-end">
-          <input type="checkbox" class="switch d-flex justify-content-end" id="switch-graph">
-          <label for="switch-graph" id="switch-graph-label"></label>
-        </span>
-      </li>
-
-      <li class="list-group-item d-flex  w-100 justify-content-between align-items-center">
-      <!-- MIN WEIGHT -->
-        <span class=" d-flex justify-content-start">
-          {{ minw_title }}
-          </span>
-        <span class="switch d-flex justify-content-end">
-          <select id="minwSelect">
-          </select> &nbsp; kg
-        </span>
-      </li>
-
-      <li class="list-group-item d-flex  w-100 justify-content-between align-items-center">
-      <!-- MAX WEIGHT -->
-        <span class=" d-flex justify-content-start">
-          {{ maxw_title }}
-          </span>
-        <span class="switch d-flex justify-content-end">
-          <select id="maxwSelect">
-          </select> &nbsp; kg
-        </span>
-      </li>
-
-    </ul>
-
-
-  <script>
-
-  if( beedb.settings.demo == 1 ) {
-    $('#switch-demo').trigger('click').attr("checked", "checked"); 
-  }
-  $('#switch-demo').on('change', function () {
-    if( document.querySelector('#switch-demo').checked ){
-      beedb.settings.demo = 1;
-    } else {
-      beedb.settings.demo = 0;
-    }
-    window.localStorage.setItem('settingsDemo', beedb.settings.demo);
-  });
-
-  if( beedb.settings.graphs == 1 ) {
-    $('#switch-graph').trigger('click').attr("checked", "checked"); 
-  }
-  $('#switch-graph').on('change', function () {
-    if( document.querySelector('#switch-graph').checked ){
-      beedb.settings.graphs = 1;
-    } else {
-      beedb.settings.graphs = 0;
-    }
-    window.localStorage.setItem('settingsGraphs', beedb.settings.graphs);
-  });
-
-  for( var i=0; i<100; i++){
-    var j = "";
-    if( Number(beedb.settings.minweight) === i ) {
-      j = "selected";
-    }
-    $('#minwSelect').append('<option value="' + i + '" ' + j + '>' + i + '</option>' );
-  }
-
-    $('#minwSelect').on('change', function () {
-      beedb.settings.minweight = Number($('#minwSelect').val());
-      window.localStorage.setItem('settingsMinweight', beedb.settings.minweight);
-    });
-
-
-  for( var i=5; i<300; i++){
-    var j = "";
-    if( Number(beedb.settings.maxweight) === i ) {
-      j = "selected";
-    }
-    $('#maxwSelect').append('<option value="' + i + '" ' + j + '>' + i + '</option>' );
-  }
-
-    $('#maxwSelect').on('change', function () {
-      beedb.settings.maxweight = Number($('#maxwSelect').val());
-      window.localStorage.setItem('settingsMaxweight', beedb.settings.maxweight);
-    });
-
-
-
-  </script>
-
-  </div>
-  </div>
-
-`;
+</div>
+</div>

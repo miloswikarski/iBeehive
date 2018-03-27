@@ -10,7 +10,7 @@
   "author": "Alya",
   "license": "MIT",
   "dependencies": {
-    "cordova-android": "^7.1.0",
+    "cordova-android": "^7.0.0",
     "cordova-ios": "^4.5.4",
     "cordova-plugin-ble-central": "^1.1.4",
     "cordova-plugin-compat": "^1.2.0",
@@ -23,12 +23,14 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-ble-central": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-compat": {},
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-device": {}
+      "cordova-plugin-device": {},
+      "cordova-plugin-ble-central": {
+        "BLUETOOTH_USAGE_DESCRIPTION": " "
+      }
     },
     "platforms": [
       "ios",

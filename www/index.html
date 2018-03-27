@@ -1,90 +1,144 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>iBeehive</title>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#B58900">
+    <title>iBeehive</title>
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/framework7.min.css">
+    <link rel="stylesheet" href="css/ibeehive.css">
 
-  <link rel="stylesheet" href="css/bootstrap.css">
+  </head>
+  <body  class="color-theme-orange theme-dark">
+    <div id="app">
+      <div class="statusbar"></div>
 
-  <script src="cordova.js"></script>          <!-- "Phantom" cordova.js required for projects that use plugins -->
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="bower_components/i18next/i18next.min.js"></script>
-  <script src="bower_components/jquery-i18next/jquery-i18next.min.js"></script>
-  <script type="text/javascript" src="js/fastclick.js"></script>
-  <script src="js/jquery.knob.min.js" type="text/javascript"></script>
-  <script src="js/pouchdb-6.4.1.min.js" type="text/javascript"></script>
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-left panel-cover theme-dark">
+        <div class="page">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="title">Menu</div>
+            </div>
+          </div>
 
+          <div class="page-content bg-dark">
 
-  <!-- Custom -->
-  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
-  <link rel="stylesheet" type="text/css" href="css/base.css" />
-  <link rel="stylesheet" type="text/css" href="css/pageslider.css" />
-  <link rel="stylesheet" type="text/css" href="css/toggle.css" />
+          <div class="list links-list">
+            <ul>
+              <li>
+                <a href="#" onclick="app.reScan();"  class="panel-close">
+                <span data-i18n="rescan">Search devices</span><i class="fa fa-undo"></i>
+                </a>
+              </li>
+              <li>
+                <a href="/config/" class="panel-close">
+                <span data-i18n="configure">Configure</span>
+                <i class="fa fa-cog"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-
-</head>
-<body>
-
-
-
-  <div id="allPages"><!-- all pages -->
-  </div>
-
-
-
-  <script type="text/javascript" src="js/dbapp.js"></script>
-  <script type="text/javascript" src="js/app.js"></script>
-  <script type="text/javascript">
-    beedb.initialize();
-  </script>
-  <script type="text/javascript" src="js/mustache.min.js"></script>
-  <script type="text/javascript" src="js/pages.js"></script>
-  <script type="text/javascript" src="js/Chart.bundle.min.js"></script>
-  <script type="text/javascript" src="js/pageslider.js"></script>
-  <script type="text/javascript" src="js/index.js"></script>
-  <script type="text/javascript" src="js/demo.js"></script>
-  <script type="text/javascript">
-    app.initialize();
-
-    var slider = new PageSlider($("#allPages"));
-    $(window).on('hashchange', route);
-
-    // Basic page routing
-    function route(event) {
-      var page,
-      hash = window.location.hash;
-      
-      if (hash === "#detailDevice") {
-        page = Mustache.render(pageDetail, {title: "Device x", back: i18next.t("back") });
-        slider.slidePage($(page));
-      } else if (hash === "#pageConfig") {
-        page = Mustache.render(pageConfig, {title: i18next.t("Configuration"), back: i18next.t("back"),
-          demo_title: i18next.t("Show demo devices"),
-          graph_title: i18next.t("Show current graphs"),
-          minw_title: i18next.t("Set minimal beehive weight"),
-          maxw_title: i18next.t("Set maximal beehive weight"),
-
-           });
-        slider.slidePage($(page));
-      } else if (hash === "#home") {
-        page = pageMain;
-        app.disconnectById(beedb.settings.curId);
-        slider.slidePage($(page));
-      } else {
-        page = pageMain;
-        slider.slidePage($(page));
-      }
-
-    }
+          </div>
+        </div>
+      </div>
 
 
-    route();
+
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main bg-dark">
+        <!-- Initial Page, "data-name" contains page name -->
+        <div data-name="home" class="page bg-dark">
+
+          <!-- Top Navbar -->
+          <div class="navbar bg-dark">
+            <div class="navbar-inner">
+<!--              <div class="left">
+                <a class="link icon-only" onclick="app.reScan();">
+                <i class="fa fa-undo"></i>
+              </a>
+              </div>
+                            <div class="right">
+              <a class="link icon-only" href="/config/">
+                <i class="fa fa-cog"></i>
+              </a>
+            </div>
+    -->            
 
 
-</script>
+              <div class="left">
+                <a href="#" class="link nounderline icon-only panel-open" data-panel="left">
+                <i class="icon fa fa-bars md-only"></i>
+              </a>
+            </div>
 
-</body>
+              <div class="title text-center"><img  style="max-width:50px;" src="css/icon.png">iBeehive</div>
+
+
+            </div>
+          </div>
+
+          <!-- Scrollable page content -->
+          <div class="page-content bg-dark container">
+
+            <!-- status info -->
+            <div class="row col-lg-12"><label id="mainStatus"></label></div>
+
+
+            <!-- init scanning page -->
+
+            <div class="row" id="notFoundInfo">
+              <div class="col-lg-12">
+                <h2 data-i18n="scanning">Scanning... not found yet</h2>
+                <p data-i18n="iBeehiveIntro">iBeehive app is searching for all smart bluetooth devices around you. If you are near iBeehive device, you will be able to connect to this device and see actual and historical data.</p>
+              </div>
+            </div>
+
+            <div id="mainPage">
+              <div class="row col-lg-12"><h4 id="iFound" data-i18n="bleFound"></h4></div>
+              <div id="deviceList">                    
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="cordova.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/i18next/i18next.min.js"></script>
+    <script src="bower_components/jquery-i18next/jquery-i18next.min.js"></script>
+    <script src="js/pouchdb-6.4.1.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="js/dbapp.js"></script>
+    <script type="text/javascript" src="js/locales.js"></script>
+    <script type="text/javascript">
+      beedb.initialize();
+    </script>
+    <script type="text/javascript" src="js/alyable.js"></script>
+    <script type="text/javascript" src="js/demo.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <script type="text/javascript" src="js/routes.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script>
+      app.initialize();
+    </script>
+
+    <script>
+          $("#refreshButton").click(app.reScan);
+          $("#sendButton").click(app.sendData);
+          $("#disconnectButton").click(app.disconnect);
+          $("#aboutButton").click( function(){ $("#aboutModal").modal("show"); } );
+          $("#settingsButton").click(function(){ $("#settingsModal").modal("show"); } );
+          $("#deviceList").on("touchstart",app.connect);  
+    </script>
+
+  </body>
 </html>
