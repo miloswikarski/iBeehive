@@ -14,7 +14,7 @@
                 "ConnectingServer":"Connecting iBeehive server",
                 "OK":"OK",
                 "title": " iBeehive",
-                "iBeehive radar active...": "iBeehive radar active...",
+                "iBeehive radar active.": "iBeehive radar active...",
                 "iBeehive radar stopped.": "iBeehive radar stopped.",
                 "Error occured.":"Error occured.",
                 "scanning": "scanning",
@@ -84,7 +84,7 @@
                 "ConnectingServer":"Pripája sa na server iBeehive",
                 "OK":"OK",
                 "title": " iBeehive",
-                "iBeehive radar active...": "iBeehive radar aktívny...",
+                "iBeehive radar active.": "iBeehive radar aktívny...",
                 "iBeehive radar stopped.": "iBeehive radar zastavený...",
                 "Error occured.":"Nastala chyba",
                 "scanning": "Skenujem",
@@ -125,7 +125,8 @@
                 "Set maximal beehive weight": "Maximálna hmotnosť úľa pre graf",
                 "configure": "Konfigurácia",
                 "about": "O aplikácii",
-                "thanksTitle": "Ďakujeme, že používate produkt iBeehive!"
+                "thanksTitle": "Ďakujeme, že používate produkt iBeehive!",
+                "Are you sure you want to exit?": "Skutočne chcete ukončiť aplikáciu?"
 
 
 

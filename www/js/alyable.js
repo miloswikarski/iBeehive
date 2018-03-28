@@ -22,7 +22,7 @@ var alyadevice = {
     nettoVahaUUID: '18c0c807-589e-4b89-8ee3-8c1de9a80248',
     tempInUUID: '3511d30e-9911-479e-a7be-43d4220ab1b2',
     tempOutUUID: 'e7e2aec2-5335-49b9-ad90-3aad5eac7eb8',
-      savedUUID: '07c28844-d666-4a1c-8eff-8cbfb83aadab',
+    savedUUID: '07c28844-d666-4a1c-8eff-8cbfb83aadab',
 
 /*
 SERVICE UUID 94e2ed81-5c2a-4f18-a414-e5393ab997e5
@@ -56,44 +56,44 @@ var scanning = false;
 
 var chartInterval = 1111, chart1, chart2;
 var chartData = {
-            labels: ["1","2","3","4","5","6","7"],
-            datasets: [{
-              label: "Internal",
-              fillColor: "rgba(181,137,0,0.2)",
-              strokeColor: "rgba(181,137,22,1)",
-              pointColor: "rgba(181,137,220,1)",
-              pointStrokeColor: "#fff",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(181,137,11,1)",
-              data: [0,0,0,0,0,0,0]
-          }, {
-              label: "External",
-              fillColor: "rgba(151,187,205,0.2)",
-              strokeColor: "rgba(151,187,205,1)",
-              pointColor: "rgba(151,187,205,1)",
-              pointStrokeColor: "#fff",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(151,187,205,1)",
-              data: [0,0,0,0,0,0,0]
-          }]
-      };
+    labels: ["1","2","3","4","5","6","7"],
+    datasets: [{
+      label: "Internal",
+      fillColor: "rgba(181,137,0,0.2)",
+      strokeColor: "rgba(181,137,22,1)",
+      pointColor: "rgba(181,137,220,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(181,137,11,1)",
+      data: [0,0,0,0,0,0,0]
+  }, {
+      label: "External",
+      fillColor: "rgba(151,187,205,0.2)",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
+      data: [0,0,0,0,0,0,0]
+  }]
+};
 
 var chartWeightData = {
-            labels: ["1","2","3","4","5","6","7"],
-            datasets: [{
-              label: "Weight",
-              fillColor: "rgba(15,187,205,0.2)",
-              strokeColor: "rgba(15,187,205,1)",
-              pointColor: "rgba(15,187,205,1)",
-              pointStrokeColor: "#ddd",
-              pointHighlightFill: "#ddd",
-              pointHighlightStroke: "rgba(15,187,205,1)",
-              data: [0,0,0,0,0,0,0]
-          }]
-      };
+    labels: ["1","2","3","4","5","6","7"],
+    datasets: [{
+      label: "Weight",
+      fillColor: "rgba(15,187,205,0.2)",
+      strokeColor: "rgba(15,187,205,1)",
+      pointColor: "rgba(15,187,205,1)",
+      pointStrokeColor: "#ddd",
+      pointHighlightFill: "#ddd",
+      pointHighlightStroke: "rgba(15,187,205,1)",
+      data: [0,0,0,0,0,0,0]
+  }]
+};
 
 var chartOptions = {
-        animation: false,
+    animation: false,
         //Boolean - If we want to override with a hard coded scale
         scaleOverride: true,
         //** Required if scaleOverride is true **
@@ -107,73 +107,84 @@ var chartOptions = {
 
     
 
-function updateDiscoveredCollection ( dev ) {
-    if (discovered.indexOf(dev) === -1) {
-        discovered.push(dev);
-        return true;
-    } else if (discovered.indexOf(dev) > -1) {
-        return false;
-    }
-}
-
-var app = {
-
-    rescanInterval: 0,    
-
-    refreshDeviceList: function() { /**/
-        deviceList.innerHTML = '';
-        discovered = [];
-
-       if( Number(beedb.settings.demo) === 1 ){
-            demo.initialize({id: "demo1", name: "DEMO DEVICE - not compatible"} );
-            demo.initialize({id: "demo2", name: "ALYA DEMO DEVICE"} );
+    function updateDiscoveredCollection ( dev ) {
+        if (discovered.indexOf(dev) === -1) {
+            discovered.push(dev);
+            return true;
+        } else if (discovered.indexOf(dev) > -1) {
+            return false;
         }
+    }
 
-//        if (cordova.platformId === 'android') { // Android filtering is broken
-        ble.startScan([], app.onDiscoverDevice, app.onError);
-        $("#mainStatus").text(i18next.t('iBeehive radar active...'));
-//        } else {
-//            ble.startScan([alyadevice.serviceUUID], app.onDiscoverDevice, app.onError);
-//        }
-    },
-    repeatScan: function() {
-        $("#mainStatus").text(i18next.t("iBeehive radar active..."));
-        ble.startScan([], app.onDiscoverDevice, app.onError);
-    },
-    
-    restartScanner: function() { 
-        ble.stopScan( function(){
+    var app = {
+
+        rescanInterval: 0,    
+
+        refreshDeviceList: function() { /**/
+            deviceList.innerHTML = '';
+            discovered = [];
+
+            if( Number(beedb.settings.demo) == 1 ){
+                demo.initialize({id: "demo1", name: "DEMO DEVICE - not compatible"} );
+                demo.initialize({id: "demo2", name: "ALYA DEMO DEVICE"} );
+            }
+
+            ble.isConnected( beedb.settings.curId, 
+                function() {
+                    if( app7.views.main.router.url == '/' ){
+                        app7.views.main.router.navigate('/devDetail/');
+                    }
+                },
+                function() {
+                    console.log("Peripheral is *not* connected");
+                }
+                );
+
+            //        if (cordova.platformId === 'android') { // Android filtering is broken
+                ble.startScan([], app.onDiscoverDevice, app.onError);
+                $("#mainStatus").text(i18next.t("iBeehive radar active."));
+            //        } else {
+            //            ble.startScan([alyadevice.serviceUUID], app.onDiscoverDevice, app.onError);
+            //        }
+            },
+            repeatScan: function() {
+                $("#mainStatus").text(i18next.t("iBeehive radar active."));
+                ble.startScan([], app.onDiscoverDevice, app.onError);
+            },
+
+            restartScanner: function() { 
+                ble.stopScan( function(){
                     $("#mainStatus").text(i18next.t("iBeehive radar stopped."));
                     $("#notFoundInfo").show();
                     $("#iFound").hide();
                     app.refreshDeviceList();
-        }, function(){
-                    //SpinnerPlugin.activityStop();
-                    $("#mainStatus").text(i18next.t("Error occured."));
-        } );
-    },
+                }, function(){
+                                //SpinnerPlugin.activityStop();
+                                $("#mainStatus").text(i18next.t("Error occured."));
+                            } );
+            },
 
-    reScan: function() {
-        var options = { dimBackground: true };
-        //SpinnerPlugin.activityStart(i18next.t("Scanning BLE devices"), options);
-        app.restartScanner();
-    },
-
-    refreshRssi: function() {
-        discovered.forEach( function( dev) {
-            //console.log(dev);
-            ble.readRSSI(dev, 
-                function( rssi ){
-                    var rssiHtml = app.getRssiIcon( rssi );
-                    $("#rssi_" + dev.replace(/[^a-zA-Z0-9]/g, "") ).html(rssiHtml);
-                    //console.log('rssi read '+rssi );
+            reScan: function() {
+                var options = { dimBackground: true };
+                    //SpinnerPlugin.activityStart(i18next.t("Scanning BLE devices"), options);
+                    app.restartScanner();
                 },
-                function( err ){
-                    //console.log(err);
-//                    $("#card_" + dev.replace(/[^a-zA-Z0-9]/g, "") ).remove();
-  //                  discovered.splice( $.inArray(dev, discovered), 1 );
-    //                console.log('rssi deleted ' +dev);
-                }
+
+                refreshRssi: function() {
+                    discovered.forEach( function( dev) {
+                        //console.log(dev);
+                        ble.readRSSI(dev, 
+                            function( rssi ){
+                                var rssiHtml = app.getRssiIcon( rssi );
+                                $("#rssi_" + dev.replace(/[^a-zA-Z0-9]/g, "") ).html(rssiHtml);
+                                //console.log('rssi read '+rssi );
+                            },
+                            function( err ){
+                                //console.log(err);
+            //                    $("#card_" + dev.replace(/[^a-zA-Z0-9]/g, "") ).remove();
+              //                  discovered.splice( $.inArray(dev, discovered), 1 );
+                //                console.log('rssi deleted ' +dev);
+            }
             );
         });
     },
@@ -199,7 +210,7 @@ var app = {
             console.log('ide rescan');
             //app.refreshRssi();
             app.reScan();
-            }, 200000);
+        }, 30000);
 
 
     },
@@ -269,12 +280,12 @@ var app = {
         //console.log(e.target.dataset.deviceId);
         
         var deviceId = e.target.dataset.deviceId,
-            onErrorConnect = function(e) {
+        onErrorConnect = function(e) {
                     //linked.hidden = true;
                     console.log('error connect to dev');
                     console.log(e);
-            },
-            onConnect = function(peripheral) {
+                },
+                onConnect = function(peripheral) {
 
 //                        alert('conn to ' + deviceId + ' .. ' + JSON.stringify(peripheral));
 //console.log(JSON.stringify(peripheral));
@@ -285,41 +296,41 @@ var app = {
                 // subscribe for incoming data
 //                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onErrorData);
 
-                $("#tempOutTitle").text("");
-                $("#tempOut").text("");
-                $("#tempOut").append("<div class=\"loader\"></div>");
-                $("#tempInTitle").text("");
-                $("#tempIn").text("");
-                $("#tempIn").append("<div class=\"loader\"></div>");
-                $("#nettoVaha").text("");
-                $("#nettoVaha").append("<div class=\"loader\"></div>");
+$("#tempOutTitle").text("");
+$("#tempOut").text("");
+$("#tempOut").append("<div class=\"loader\"></div>");
+$("#tempInTitle").text("");
+$("#tempIn").text("");
+$("#tempIn").append("<div class=\"loader\"></div>");
+$("#nettoVaha").text("");
+$("#nettoVaha").append("<div class=\"loader\"></div>");
 
 
-                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.onTempOut, app.onErrorTempOut);
-                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.onTempIn, app.onErrorTempIn);
-                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.onErrorNettoVaha);
+ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.onTempOut, app.onErrorTempOut);
+ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.onTempIn, app.onErrorTempIn);
+ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.onErrorNettoVaha);
 
-                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.savedUUID, app.onGetSaved, app.onErrorGetSaved);
+ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.savedUUID, app.onGetSaved, app.onErrorGetSaved);
 
 
-                $("#resultDiv").text("");
-                $("#detailName").text(e.target.dataset.deviceName);
-            };
+$("#resultDiv").text("");
+$("#detailName").text(e.target.dataset.deviceName);
+};
 
-        ble.connect(deviceId, onConnect, onErrorConnect);
-        beedb.settings.curId = deviceId;
+ble.connect(deviceId, onConnect, onErrorConnect);
+beedb.settings.curId = deviceId;
 
-        if( Number(beedb.settings.graphs) === 1 ){
-            $("#tempChart").show();
-            $("#weightChart").show();
-            app.chartInit();
-        } else {
-            $("#tempChart").hide();
-            $("#weightChart").hide();
-        };
+if( Number(beedb.settings.graphs) === 1 ){
+    $("#tempChart").show();
+    $("#weightChart").show();
+    app.chartInit();
+} else {
+    $("#tempChart").hide();
+    $("#weightChart").hide();
+};
 
-    },
-    determineWriteType: function(peripheral) {
+},
+determineWriteType: function(peripheral) {
         //Alya rewrited:
         app.writeWithoutResponse = true;
         
@@ -370,7 +381,7 @@ var app = {
             $("#tempChart").show();
             app.setChart(chartData.datasets[1].data,bytesToString(data));
         } else {
-                        $("#tempChart").hide();
+            $("#tempChart").hide();
         }
         beedb.settings.curT1 = bytesToString(data);
     },
@@ -448,11 +459,11 @@ var app = {
         };
 
         ble.writeWithoutResponse(
-                beedb.settings.curId,
-                alyadevice.serviceUUID,
-                alyadevice.txCharacteristic,
-                data, success, failure
-        );
+            beedb.settings.curId,
+            alyadevice.serviceUUID,
+            alyadevice.txCharacteristic,
+            data, success, failure
+            );
 
     },
 
@@ -484,7 +495,7 @@ var app = {
                 function(){},
                 i18next.t('BLE core'),
                 i18next.t('OK')
-            );
+                );
         };
 
 
@@ -495,7 +506,7 @@ var app = {
                 alyadevice.serviceUUID,
                 alyadevice.txCharacteristic,
                 data, success, failure
-            );
+                );
             /*
         } else {
             ble.write(
@@ -536,43 +547,43 @@ var app = {
     onError: function(reason) {
         //SpinnerPlugin.activityStop();
         navigator.notification.alert(
-                reason.errorMessage,
-                function(){},
-                i18next.t("Error occured"),
-                i18next.t('OK')
+            reason.errorMessage,
+            function(){},
+            i18next.t("Error occured"),
+            i18next.t('OK')
             );
 
     },
     onErrorTempIn: function(reason) {
         navigator.notification.alert(
-                reason.errorMessage,
-                function(){},
-                i18next.t("Internal temperature reading error"),
-                i18next.t('OK')
+            reason.errorMessage,
+            function(){},
+            i18next.t("Internal temperature reading error"),
+            i18next.t('OK')
             );
     },
     onErrorTempOut: function(reason) {
         navigator.notification.alert(
-                reason.errorMessage,
-                function(){},
-                i18next.t("External temperature reading error"),
-                i18next.t('OK')
+            reason.errorMessage,
+            function(){},
+            i18next.t("External temperature reading error"),
+            i18next.t('OK')
             );
     },
     onErrorNettoVaha: function(reason) {
         navigator.notification.alert(
-                reason.errorMessage,
-                function(){},
-                i18next.t("Weight reading error"),
-                i18next.t('OK')
+            reason.errorMessage,
+            function(){},
+            i18next.t("Weight reading error"),
+            i18next.t('OK')
             );
     },
     onErrorData: function(reason) {
         navigator.notification.alert(
-                i18next.t("Service UUID ERROR: ") + reason,
-                function(){},
-                i18next.t('BLE core'),
-                i18next.t('OK')
+            i18next.t("Service UUID ERROR: ") + reason,
+            function(){},
+            i18next.t('BLE core'),
+            i18next.t('OK')
             );
     },
 
@@ -586,135 +597,135 @@ var app = {
                 i18next.t('OK')
             );
             */
-    },
+        },
 
-    getRssiIcon: function( rssiValue ) {
-        var rssi = Number(rssiValue);
-        var sigHtml = '<span class="fa-stack fa-lg">\
-                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
-                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.0em; margin-left:0.5em;"></i>\
-                  </span>';
-        if( rssi < -85 ){
-            sigHtml = '<span class="fa-stack fa-lg">\
-                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
-                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.2em; margin-left:0.5em;"></i>\
-                  </span>';
-        } else if( rssi < -70 ){
-            sigHtml = '<span class="fa-stack fa-lg">\
-                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
-                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.4em; margin-left:0.5em;"></i>\
-                  </span>';
-        } else if( rssi < -55 ){
-            sigHtml = '<span class="fa-stack fa-lg">\
-                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
-                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.6em; margin-left:0.5em;"></i>\
-                  </span>';
-        } else if( rssi < -85 ){
-            sigHtml = '<span class="fa-stack fa-lg">\
-                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
-                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.8em; margin-left:0.5em;"></i>\
-                  </span>';
-        } else if( rssi < 0 ){
-            sigHtml = '<span class="fa-stack fa-lg">\
-                    <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
-                    <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:1.0em; margin-left:0.5em;"></i>\
-                  </span>';
-        } 
+        getRssiIcon: function( rssiValue ) {
+            var rssi = Number(rssiValue);
+            var sigHtml = '<span class="fa-stack fa-lg">\
+            <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+            <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.0em; margin-left:0.5em;"></i>\
+            </span>';
+            if( rssi < -85 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.2em; margin-left:0.5em;"></i>\
+                </span>';
+            } else if( rssi < -70 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.4em; margin-left:0.5em;"></i>\
+                </span>';
+            } else if( rssi < -55 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.6em; margin-left:0.5em;"></i>\
+                </span>';
+            } else if( rssi < -85 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:0.8em; margin-left:0.5em;"></i>\
+                </span>';
+            } else if( rssi < 0 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
+                <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:1.0em; margin-left:0.5em;"></i>\
+                </span>';
+            } 
 
-        return sigHtml;
-    },
+            return sigHtml;
+        },
 
-    getDeviceListItem: function( device ) {
-        var sigHtml = app.getRssiIcon( device.rssi );
-        if( device.name.substring(0,5) == "ALYA " || device.name.substring(0,11) == "Daniel UART"){
-            var html = '\
-              <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
-                  <div class="card text-white bg-primary mb-3">\
-                    <div class="card-header d-flex w-100 justify-content-between">\
-                      <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
-                     + sigHtml + '</span>\
-                      <span class="fa-stack fa-lg float-right col-sm-1">\
-                            <i class="fa fa-unlink text-danger"></i>\
-                      </span>\
-                    </div>\
-                    <div class="card-body d-flex w-100 justify-content-between">\
-                      <h2 class="card-title center">' + device.name + '</h2>\
-                      <a href="/devDetail/">\
-                      <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
-                       '" class="btn btn-secondary my-2 my-sm-0">\
-                       <i class="fa fa-link"></i> ' + i18next.t('Connect') + 
-                      '</button>\
-                      </a>\
-                    </div>\
-                    <div class="card-footer text-white" >' + i18next.t("iBeehiveBleDevice") + '</div>\
-                  </div>\
-            </div>';
+        getDeviceListItem: function( device ) {
+            var sigHtml = app.getRssiIcon( device.rssi );
+            if( device.name.substring(0,5) == "ALYA " || device.name.substring(0,11) == "Daniel UART"){
+                var html = '\
+                <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
+                <div class="card text-white bg-primary mb-3">\
+                <div class="card-header d-flex w-100 justify-content-between">\
+                <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
+                + sigHtml + '</span>\
+                <span class="fa-stack fa-lg float-right col-sm-1">\
+                <i class="fa fa-unlink text-danger"></i>\
+                </span>\
+                </div>\
+                <div class="card-body d-flex w-100 justify-content-between">\
+                <h2 class="card-title center">' + device.name + '</h2>\
+                <a href="/devDetail/">\
+                <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
+                '" class="btn btn-secondary my-2 my-sm-0">\
+                <i class="fa fa-link"></i> ' + i18next.t('Connect') + 
+                '</button>\
+                </a>\
+                </div>\
+                <div class="card-footer text-white" >' + i18next.t("iBeehiveBleDevice") + '</div>\
+                </div>\
+                </div>';
 
-        } else {
-            var html = '\
-              <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
-                  <div class="card text-white bg-secondary mb-3">\
-                    <div class="card-header d-flex w-100 justify-content-between">\
-                      <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
-                     + sigHtml + '</span>\
-                      <span class="fa-stack fa-lg float-right col-sm-1">\
-                            <i class="fa fa-unlink text-danger"></i>\
-                      </span>\
-                    </div>\
-                    <div class="card-body d-flex w-100 justify-content-between">\
-                      <h2 class="card-title center">' + device.name + '</h2>\
-                    </div>\
-                    <div class="card-footer text-white" >' + i18next.t("notiBeehiveBleDevice") + '</div>\
-                  </div>\
-            </div>';
+            } else {
+                var html = '\
+                <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
+                <div class="card text-white bg-secondary mb-3">\
+                <div class="card-header d-flex w-100 justify-content-between">\
+                <span id="rssi_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">'
+                + sigHtml + '</span>\
+                <span class="fa-stack fa-lg float-right col-sm-1">\
+                <i class="fa fa-unlink text-danger"></i>\
+                </span>\
+                </div>\
+                <div class="card-body d-flex w-100 justify-content-between">\
+                <h2 class="card-title center">' + device.name + '</h2>\
+                </div>\
+                <div class="card-footer text-white" >' + i18next.t("notiBeehiveBleDevice") + '</div>\
+                </div>\
+                </div>';
 
-        }
+            }
 
-        return html;
+            return html;
 
-    },
+        },
 
-    chartInit: function(){
-        var tLineChart = new Chart($("#tempChart"), {
-            type: 'line',
-            data: chartData,
-            options: chartOptions
-        });
-        var wLineChart = new Chart($("#weightChart"), {
-            type: 'line',
-            data: chartWeightData,
-            options: chartOptions
-        });
+        chartInit: function(){
+            var tLineChart = new Chart($("#tempChart"), {
+                type: 'line',
+                data: chartData,
+                options: chartOptions
+            });
+            var wLineChart = new Chart($("#weightChart"), {
+                type: 'line',
+                data: chartWeightData,
+                options: chartOptions
+            });
 
-    },
+        },
 
-    setChart: function(dataSet, dataValue) {
+        setChart: function(dataSet, dataValue) {
+            dataSet.push(dataValue);
+            dataSet.shift();
+            chartInterval += 1;
+            if( chartInterval > 11 ) {
+               chartInterval = 0;
+               chart1 = new Chart($("#tempChart"), {
+                   type: 'line',
+                   data: chartData,
+                   options: chartOptions
+               });
+           }
+
+       },
+
+       setWeightChart: function(dataSet, dataValue) {
         dataSet.push(dataValue);
         dataSet.shift();
-        chartInterval += 1;
-	if( chartInterval > 11 ) {
-	    chartInterval = 0;
-            chart1 = new Chart($("#tempChart"), {
-	    type: 'line',
-    	    data: chartData,
-    	    options: chartOptions
-    	    });
-    	}
-
-    },
-
-    setWeightChart: function(dataSet, dataValue) {
-        dataSet.push(dataValue);
-        dataSet.shift();
-	if( chartInterval == 10 || chartInterval == 9 || chartInterval == 8 || chartInterval == 7 ) {
-	    chartInterval = 11;
-            chart2 = new Chart($("#weightChart"), {
-	    type: 'line',
-    	    data: chartWeightData,
-    	    options: chartOptions
-    	    });
-    	}
-    },
+        if( chartInterval == 10 || chartInterval == 9 || chartInterval == 8 || chartInterval == 7 ) {
+           chartInterval = 11;
+           chart2 = new Chart($("#weightChart"), {
+               type: 'line',
+               data: chartWeightData,
+               options: chartOptions
+           });
+       }
+   },
 
 
 };
