@@ -17,6 +17,17 @@ var onInitFn = {
   },
 
   devset: function() {
+    $("#setDateTime").click( function(){
+      app.writeData( "X=" + Date.now().toString().slice(0,10) );
+    });
+
+    $("#setTare").click( function(){
+      app.writeData( "t=" );
+    });
+
+    $("#setName").click( function() {
+      app.writeData( "b=" + $("#setNameVal").val().trim().slice(0,255) )
+    });
 
   },
 

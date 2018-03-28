@@ -205,9 +205,12 @@ var app = {
     },
 
     onDeviceReady: function() {
-        console.log(ble);
+        // Register the event listener
+        document.addEventListener("backbutton", app7.methods.onBackKeyDown, false);
+
         app.refreshDeviceList();
     },
+
 
     onDiscoverDevice: function(device) {
 
@@ -420,6 +423,39 @@ var app = {
         beedb.saveHistory(o);
 
     },
+    writeData: function(stringData) { // send data to Arduino
+
+        var data = stringToBytes(stringData);
+
+        var success = function() {
+
+            //read after write, the same char
+            ble.read(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.txCharacteristic,
+
+                function(event){ 
+
+                    app7.dialog.alert(i18next.t("Data sent"),i18next.t("BLE core"));
+
+                },
+                function(e){
+                    console.log("err " + JSON.stringify(e));
+                });
+        };
+
+        var failure = function(e) {
+            app7.dialog.alert(i18next.t("Failed writing data"),i18next.t("BLE core"));
+            console.log("err " + JSON.stringify(e));
+        };
+
+        ble.writeWithoutResponse(
+                beedb.settings.curId,
+                alyadevice.serviceUUID,
+                alyadevice.txCharacteristic,
+                data, success, failure
+        );
+
+    },
+
 
     sendData: function(event) { // send data to Arduino
 
@@ -472,6 +508,8 @@ var app = {
         */
 
     },
+
+
     disconnect: function(event) {
         //SpinnerPlugin.activityStart(i18next.t("Scanning BLE devices"), {});
         var deviceId = event.target.dataset.deviceId;

@@ -76,15 +76,23 @@
       </li>
 
 
-
-      <li class="list-group-item">
-      <!-- DESTROY DB -->
+        <li class="accordion-item list-group-item">
+          <a href="#" class="item-link item-content">
+            <div class="item-inner">
+              <div class="item-title" data-i18n="AdvancedSettings">Advanced settings</div>
+            </div>
+          </a>
+          <div class="accordion-item-content" style="">
             <div class="item-content">
           <span data-i18n="Erase history from this device">Destroy DB of history data</span>
+          <div class="item-after">
           <button class="btn btn-danger" id="eraseDb">
             <i class="fa fa-basket"></i> DESTROY DB
           </button>
-      </li>
+          </div>
+          </div>
+          </div>
+        </li>
 
 
     </ul>
@@ -94,75 +102,3 @@
 
 </div>
 </div>
-
-<script>
-  return {
-    // Lifecycle Hooks
-    beforeCreate() {
-      console.log('componentBeforeCreate', this)
-    },
-    created() {
-      console.log('componentCreated', this)
-    },
-    beforeMount() {
-      console.log('componentBeforeMount', this)
-    },
-    mounted() {
-      console.log('componentMounted', this);
-    },
-    beforeDestroy() {
-      console.log('componentBeforeDestroy', this);
-    },
-    destroyed() {
-      console.log('componentDestroyed', this);
-    },
-    // Component Data
-    data: function () {
-      // Must return an object
-      return {
-        name: 'Jimmy',
-        age: 25,
-        like: ['Tennis', 'Chess', 'Football'],
-      }
-    },
-    // Component Methods
-    methods: {
-      openAlert: function () {
-        var self = this;
-        self.$app.dialog.alert('Hello World');
-      },
-    },
-    // Page Events
-    on: {
-      pageMounted: function(e, page) {
-        console.log('pageMounted', page);
-      },
-      pageInit: function(e, page) {
-        console.log('pageInit', page);
-      },
-      pageBeforeIn: function(e, page) {
-        console.log('pageBeforeIn', page);
-      },
-      pageAfterIn: function(e, page) {
-        console.log('pageAfterIn', page);
-      },
-      pageBeforeOut: function(e, page) {
-        console.log('pageBeforeOut', page);
-      },
-      pageAfterOut: function(e, page) {
-        console.log('pageAfterOut', page);
-      },
-      pageBeforeRemove: function(e, page) {
-        console.log('pageBeforeRemove', page);
-      },
-    }
-  }
-</script>
-
-
-
-  <script>
-
-
-
-  </script>
