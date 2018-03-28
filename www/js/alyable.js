@@ -22,6 +22,28 @@ var alyadevice = {
     nettoVahaUUID: '18c0c807-589e-4b89-8ee3-8c1de9a80248',
     tempInUUID: '3511d30e-9911-479e-a7be-43d4220ab1b2',
     tempOutUUID: 'e7e2aec2-5335-49b9-ad90-3aad5eac7eb8',
+      savedUUID: '07c28844-d666-4a1c-8eff-8cbfb83aadab',
+
+/*
+SERVICE UUID 94e2ed81-5c2a-4f18-a414-e5393ab997e5
+VAHA 18c0c807-589e-4b89-8ee3-8c1de9a80248
+TEPLOTA IN 3511d30e-9911-479e-a7be-43d4220ab1b2
+TEPLOTA OUT e7e2aec2-5335-49b9-ad90-3aad5eac7eb8
+CAS MERANIA 1 cccd6018-ec89-4efe-9b95-677e6986fe0f
+CAS MERANIA 2 73e3c7ee-3fab-468d-9a15-babdc773663d
+CAS MERANIA 3 6fe7d8e6-8e79-4def-9d5d-d7e6cdbeedd3
+CAS MERANIA 4 0ddf34cb-7875-4333-a276-7cdc05015596
+NULOVANIE 7fd6fa82-842f-42cf-a038-c2ae9b69b25f
+CITANIE ULOZENYCH DAT 
+INDEX CITANIA DAT 18957e29-7ec8-4b34-aebb-e4d57f8af6e8
+DATUM CAS 1d1ee309-5e66-46b2-bbfb-c648802f55a8
+PIN 82e3533d-37e1-4ed8-9b1a-5500b93f1e74
+ID VAHY 37070ec0-19c2-49ee-bbf2-a7c1c00121a5
+
+
+TX characteristic f18832d8-8639-49da-becf-4d0f956dc727
+RX characteristic 08a53bd2-0b16-4ece-b3c2-9d27c79967ae 
+*/
 
 //    rxCharacteristic: 'f18832d8-8639-49da-becf-4d0f956dc727', // transmit is from the phone's perspective
     txCharacteristic: '08a53bd2-0b16-4ece-b3c2-9d27c79967ae'  // receive is from the phone's perspective
@@ -229,7 +251,7 @@ var app = {
         }
 
     },
-
+/*
     connectInList: function(e) {
         var deviceId = e.target.dataset.deviceId,
             onConnect = function(peripheral) {
@@ -237,7 +259,7 @@ var app = {
             };
 
         ble.connect(deviceId, onConnect, app.onError);
-    },
+    }, */
 
     connect: function(e) {
         //console.log(e);
@@ -246,6 +268,8 @@ var app = {
         var deviceId = e.target.dataset.deviceId,
             onErrorConnect = function(e) {
                     //linked.hidden = true;
+                    console.log('error connect to dev');
+                    console.log(e);
             },
             onConnect = function(peripheral) {
 
@@ -267,9 +291,14 @@ var app = {
                 $("#nettoVaha").text("");
                 $("#nettoVaha").append("<div class=\"loader\"></div>");
 
+
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.onTempOut, app.onErrorTempOut);
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.onTempIn, app.onErrorTempIn);
                 ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.onErrorNettoVaha);
+
+                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.savedUUID, app.onGetSaved, app.onErrorGetSaved);
+
+
                 $("#resultDiv").text("");
                 $("#detailName").text(e.target.dataset.deviceName);
             };
@@ -376,6 +405,22 @@ var app = {
         }
     },
 
+    onGetSaved: function(data) {
+        var allInfo = bytesToString(data);
+
+        var o = {
+            _id: beedb.settings.curId.toString() + '_' + allInfo.substring(0,10),
+            hwid: beedb.settings.curId,
+            hwtime: Number(allInfo.substring(0,10))*1000,
+            temp1: Number(allInfo.substring(14,17))/10,
+            temp2: Number(allInfo.substring(17,20))/10,
+            weight: Number(allInfo.substring(10,14))/10
+        };
+
+        beedb.saveHistory(o);
+
+    },
+
     sendData: function(event) { // send data to Arduino
 
         var data = stringToBytes(messageInput.value);
@@ -439,6 +484,9 @@ var app = {
     disconnectById: function(id) {
         ble.disconnect(id, app.showMainPage, app.onError);
     },
+    disconnectByGlobalId: function() {
+        ble.disconnect(beedb.settings.curId, app.showMainPage, app.onError);
+    },
     
 
     showMainPage: function() {
@@ -488,6 +536,18 @@ var app = {
                 i18next.t('BLE core'),
                 i18next.t('OK')
             );
+    },
+
+    onErrorGetSaved: function(reason) {
+        console.log(reason);
+        /*
+        navigator.notification.alert(
+                i18next.t("Service UUID ERROR: ") + reason,
+                function(){},
+                i18next.t('BLE core'),
+                i18next.t('OK')
+            );
+            */
     },
 
     getRssiIcon: function( rssiValue ) {

@@ -1,43 +1,61 @@
 var onInitFn = {
 
   devDetail: function() {
-    $("#disconnectButton").click(app.disconnect);
+    $("#disconnectButton").click(app.disconnectByGlobalId);
+    $("#goBack").click(app.disconnectByGlobalId);
     $("#saveButton").click(beedb.savedata);
-    $("#historyButton").click(beedb.readAll);
   },
+
+  historyDb: function() {
+    beedb.readAll();
+  },
+
+  about: function() {
+    cordova.getAppVersion.getVersionNumber().then(function (version) {
+      $("#version").append("<p>Version: " + version + "</p>");
+    });
+  },
+
+  devset: function() {
+
+  },
+
   config: function() {
 
-  if( beedb.settings.demo == 1 ) {
-    jQuery('#switch-demo').trigger('click').attr("checked", "checked"); 
-  }
-  jQuery('#switch-demo').on('change', function () {
-    if( document.querySelector('#switch-demo').checked ){
-      beedb.settings.demo = 1;
-    } else {
-      beedb.settings.demo = 0;
-    }
-    window.localStorage.setItem('settingsDemo', beedb.settings.demo);
-  });
+    $("#eraseDb").click(beedb.eraseDb);
 
-  if( beedb.settings.graphs == 1 ) {
-    jQuery('#switch-graph').trigger('click').attr("checked", "checked"); 
-  }
-  jQuery('#switch-graph').on('change', function () {
-    if( document.querySelector('#switch-graph').checked ){
-      beedb.settings.graphs = 1;
-    } else {
-      beedb.settings.graphs = 0;
-    }
-    window.localStorage.setItem('settingsGraphs', beedb.settings.graphs);
-  });
 
-  for( var i=0; i<100; i++){
-    var j = "";
-    if( Number(beedb.settings.minweight) === i ) {
-      j = "selected";
+    if( beedb.settings.demo == 1 ) {
+      jQuery('#switch-demo').trigger('click').attr("checked", "checked"); 
     }
-    jQuery('#minwSelect').append('<option value="' + i + '" ' + j + '>' + i + '</option>' );
-  }
+    jQuery('#switch-demo').on('change', function () {
+      if( document.querySelector('#switch-demo').checked ){
+        beedb.settings.demo = 1;
+      } else {
+        beedb.settings.demo = 0;
+      }
+      window.localStorage.setItem('settingsDemo', beedb.settings.demo);
+    });
+
+    if( beedb.settings.graphs == 1 ) {
+      jQuery('#switch-graph').trigger('click').attr("checked", "checked"); 
+    }
+    jQuery('#switch-graph').on('change', function () {
+      if( document.querySelector('#switch-graph').checked ){
+        beedb.settings.graphs = 1;
+      } else {
+        beedb.settings.graphs = 0;
+      }
+      window.localStorage.setItem('settingsGraphs', beedb.settings.graphs);
+    });
+
+    for( var i=0; i<100; i++){
+      var j = "";
+      if( Number(beedb.settings.minweight) === i ) {
+        j = "selected";
+      }
+      jQuery('#minwSelect').append('<option value="' + i + '" ' + j + '>' + i + '</option>' );
+    }
 
     jQuery('#minwSelect').on('change', function () {
       beedb.settings.minweight = Number(jQuery('#minwSelect').val());
@@ -45,13 +63,13 @@ var onInitFn = {
     });
 
 
-  for( var i=5; i<300; i++){
-    var j = "";
-    if( Number(beedb.settings.maxweight) === i ) {
-      j = "selected";
+    for( var i=5; i<300; i++){
+      var j = "";
+      if( Number(beedb.settings.maxweight) === i ) {
+        j = "selected";
+      }
+      jQuery('#maxwSelect').append('<option class="bg-orange" value="' + i + '" ' + j + '>' + i + '</option>' );
     }
-    jQuery('#maxwSelect').append('<option class="bg-orange" value="' + i + '" ' + j + '>' + i + '</option>' );
-  }
 
     jQuery('#maxwSelect').on('change', function () {
       beedb.settings.maxweight = Number(jQuery('#maxwSelect').val());
@@ -77,6 +95,11 @@ var routes = [
     path: '/about/',
     url: './pages/about.html',
     name: 'about',
+    on: {
+      pageInit: function (e, page) {
+        onInitFn.about();
+      },
+    }
   },
   // Detail
   {
@@ -84,25 +107,48 @@ var routes = [
     url: './pages/devDetail.html',
     name: 'iBeehive',
     on: {
-        pageInit: function (e, page) {
-          onInitFn.devDetail();
-        },
-      }
+      pageInit: function (e, page) {
+        onInitFn.devDetail();
+      },
+    }
   },
   // Config
   {
     path: '/config/',
     templateUrl: './pages/config.html',
     on: {
-        pageInit: function (e, page) {
-          onInitFn.config();
-        },
-      }
+      pageInit: function (e, page) {
+        onInitFn.config();
+      },
+    }
   },
+
+  // Config of one device
+  {
+    path: '/devset/',
+    templateUrl: './pages/devset.html',
+    on: {
+      pageInit: function (e, page) {
+        onInitFn.devset();
+      },
+    }
+  },
+
+  // tabulka history
+  {
+    path: '/history/',
+    templateUrl: './pages/history.html',
+    on: {
+      pageInit: function (e, page) {
+        onInitFn.historyDb();
+      },
+    }
+  },
+
 
   // Default route (404 page). MUST BE THE LAST
   {
     path: '(.*)',
     url: './pages/404.html',
   },
-];
+  ];

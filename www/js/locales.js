@@ -124,6 +124,8 @@
                 "Set minimal beehive weight": "Minimálna hmotnosť úľa pre graf",
                 "Set maximal beehive weight": "Maximálna hmotnosť úľa pre graf",
                 "configure": "Konfigurácia",
+                "about": "O aplikácii",
+                "thanksTitle": "Ďakujeme, že používate produkt iBeehive!"
 
 
 

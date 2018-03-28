@@ -1,6 +1,6 @@
 
 // Dom7
-var $ = Dom7;
+var $$ = Dom7;
 
 // Theme
 var theme = 'auto';
@@ -25,7 +25,7 @@ var app7 = new Framework7({
   },
   routes: routes,
   on: {
-    pageInit: function (e, page) {
+    pageInit: function (page) {
         console.log(page);
         jQuery('.page').localize();
     }
@@ -37,5 +37,4 @@ var app7 = new Framework7({
 var mainView = app7.views.create('.view-main', {
   url: '/'
 });
-
 
