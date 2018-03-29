@@ -340,6 +340,7 @@ ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.savedUUID, ap
 
 $("#resultDiv").text("");
 $("#detailName").text(e.target.dataset.deviceName);
+$("#devPageTitle").text(e.target.dataset.deviceName);
 };
 
 ble.connect(deviceId, onConnect, onErrorConnect);
@@ -677,7 +678,7 @@ determineWriteType: function(peripheral) {
             if( device.id.substring(0,4) == "demo"){
                 urlDetail = "demoDetail";
             }
-            if( device.name.substring(0,5) == "ALYA " || device.name.substring(0,11) == "Daniel UART"){
+            if( device.name.substring(0,5) == "ALYA " ){
                 var html = '\
                 <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
                 <div class="card text-white bg-primary mb-3">\
