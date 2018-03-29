@@ -1,0 +1,205 @@
+
+
+<div class="page">
+  <div class="navbar">
+
+
+
+    <div class="navbar-inner sliding">
+      <div class="left">
+        <a href="#" class="link back" id="goBack">
+          <i class="icon icon-back"></i>
+          <span class="ios-only">Back</span>
+        </a>
+      </div>
+      <div class="title">DEMO Device</div>
+
+              <div class="right">
+                <a href="#" class="link nounderline icon-only panel-open" data-panel="right">
+                <i class="icon fa fa-bars md-only"></i>
+              </a>
+            </div>
+
+
+    </div>
+
+  </div>
+
+
+
+
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-right panel-cover theme-dark">
+        <div class="page">
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="title">Device Menu</div>
+            </div>
+          </div>
+
+          <div class="page-content bg-dark">
+
+          <div class="list links-list">
+            <ul>
+              <li>
+                <a href="/devset/">
+                <span data-i18n="configure">Configure device</span>
+                <i class="fa fa-cog"></i>
+                </a>
+              </li>
+              <li>
+                <a href="/about/" class="panel-close">
+                <span data-i18n="about">About</span>
+                <i class="fa fa-info-circle"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+<!--
+
+      <div class="list links-list">
+        <ul>
+          <li class="list-group-item">
+            <a href="#" id="disconnectButton"  class="btn-success back">
+              <span data-i18n="disconnect">Disconnect</span>&nbsp;<i class="fa fa-unlink"></i>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="#" id="saveButton" class="btn-primary">
+              <span data-i18n="save">Save</span>&nbsp;
+              <i class="fa fa-archive"></i>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="/history/" id="historyButton" class="btn-secondary">
+              <span data-i18n="history">History</span>&nbsp;
+              <i class="fa fa-history"></i>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="/devset/" id="devsetButton" class="btn-warning">
+              <span data-i18n="devsettings">Settings</span>&nbsp;
+              <i class="fa fa-cog"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+-->
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+  <div class="page-content bg-dark">
+
+
+    <!-- detail -->
+    <div id="detailPageAll">   
+
+      <div id="detailPage" class="container">
+
+        <div id="resultDiv" class="row"></div>
+
+        <div class="card bg-white justify-content-between">
+          <div class="card-header row">
+            <span class="col-sm-12 text-primary" id="detailName"></span>
+<!--        <span class="fa-stack fa-lg float-right col-sm-1" id="linked">
+        <i class="fa fa-link text-success"></i>
+      </span> -->
+    </div>
+    <div class="card-body row text-secondary">
+      <!--        <h2 class="float-left"  id="nettoVahaTitle"></h2> -->
+      <span class="fa-stack fa-1x float-right col-sm-1">
+        <i class="fa fa-balance-scale text-right"></i>
+      </span>
+      <h1 class="text-center col-sm-10 display-3" id="nettoVaha" >
+        <div class="loader"></div>
+      </h1>
+      <div class="progress d-flex w-100">
+        <div id="weightProgress" class="progress-bar progress-bar-striped progress-bar-animated text-success" role="progressbar" aria-valuenow="79" aria-valuemin="0" aria-valuemax="300" style="width: 79%">79% max</div>
+      </div>
+
+    </div>
+    <div class="card-body row">
+      <span class="fa-stack fa-lg col-sm-1 text-primary">
+        <i class="fa fa-thermometer-half"></i>
+      </span>
+      <div class="col-sm-5 text-primary">
+        <span class="float-left"  id="tempInTitle"></span>
+        <H1 class="float-right" id="tempIn">
+          <div class="loader"></div>
+        </H1>
+      </div>
+      <span class="fa-stack fa-lg col-sm-1 text-success">
+        <i class="fa fa-thermometer-full"></i>
+      </span>
+      <div class="col-sm-5 text-success">
+        <span class="float-left"  id="tempOutTitle"></span>
+        <H1 class="float-right text-success" id="tempOut">
+          <div class="loader"></div>
+        </H1>
+      </div>
+    </div>
+
+
+  </div>
+
+<!--
+      <div class="card bg-white" aria-hidden="true">
+      <div class="card-body row">
+      <canvas id="weightChart" class="col-sm-6 mh-150"></canvas>
+      <canvas id="tempChart" class="col-sm-6 mh-150"></canvas>
+      </div>
+      </div>
+    -->
+
+    <!-- SAVE AND DISCONNECT BTNS -->
+
+    <div class="wrapper text-center">
+
+      <div>&nbsp;</div>
+
+
+      <div class="list links-list">
+        <ul>
+          <li class="list-group-item">
+            <a href="#" id="disconnectButton"  class="btn-success back">
+              <span data-i18n="disconnect">Disconnect</span>&nbsp;<i class="fa fa-unlink"></i>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="#" id="saveButton" class="btn-primary">
+              <span data-i18n="save">Save</span>&nbsp;
+              <i class="fa fa-archive"></i>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="/history/" id="historyButton" class="btn-secondary">
+              <span data-i18n="history">History</span>&nbsp;
+              <i class="fa fa-history"></i>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <a href="/devset/" id="devsetButton" class="btn-warning">
+              <span data-i18n="devsettings">Settings</span>&nbsp;
+              <i class="fa fa-cog"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div id="dataDiv">&nbsp;</div>
+  </div>
+
+</div><!-- detailPageAll -->
+
+
+</div>
+</div>

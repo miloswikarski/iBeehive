@@ -121,6 +121,10 @@ var chartOptions = {
         rescanInterval: 0,    
 
         refreshDeviceList: function() { /**/
+            if( deviceList === null ){
+                return;
+            }
+
             deviceList.innerHTML = '';
             discovered = [];
 
@@ -545,6 +549,7 @@ determineWriteType: function(peripheral) {
     disconnect: function(event) {
         //SpinnerPlugin.activityStart(i18next.t("Scanning BLE devices"), {});
         var deviceId = event.target.dataset.deviceId;
+
         if( !deviceId ) {
             app.showMainPage();
         } else {
@@ -668,6 +673,10 @@ determineWriteType: function(peripheral) {
 
         getDeviceListItem: function( device ) {
             var sigHtml = app.getRssiIcon( device.rssi );
+            var urlDetail = "devDetail";
+            if( device.id.substring(0,4) == "demo"){
+                urlDetail = "demoDetail";
+            }
             if( device.name.substring(0,5) == "ALYA " || device.name.substring(0,11) == "Daniel UART"){
                 var html = '\
                 <div class="col-lg-12" id="card_' + device.id.replace(/[^a-zA-Z0-9]/g, "") + '">\
@@ -681,7 +690,7 @@ determineWriteType: function(peripheral) {
                 </div>\
                 <div class="card-body d-flex w-100 justify-content-between">\
                 <h2 class="card-title center">' + device.name + '</h2>\
-                <a href="/devDetail/">\
+                <a href="/' + urlDetail + '/">\
                 <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
                 '" class="btn btn-secondary my-2 my-sm-0">\
                 <i class="fa fa-link"></i> ' + i18next.t('Connect') + 

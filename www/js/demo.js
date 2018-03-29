@@ -15,14 +15,7 @@ var demo = {
 
             listItem.innerHTML = app.getDeviceListItem( device );
    //         deviceList.insertBefore(listItem, deviceList.firstChild);
-
-            var el = document.querySelector('#btn_'+device.id);
-            if( el !== null ) {
-	            //el.dataset.deviceId = device.id;
-    	        //el.dataset.deviceName = device.name;
-                console.log('on demo touchstart');
-        	    el.addEventListener('touchstart', demo.connect, false);
-            }
+            $("#btn_" + device.id).on('click', demo.connect);
 
             deviceList.insertBefore(listItem, deviceList.firstChild);
 
@@ -50,25 +43,23 @@ var demo = {
         weightProgress.setAttribute("style","width: " + perc + "%")
         weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';
 
-    	this.timeoutVar = setTimeout(this.showValues, 2000);
+    	demo.timeoutVar = setTimeout(demo.showValues, 2000);
 
     },
 
-    connect: function(e) {
+    connect: function() {
+        console.log('... demo ccc');
     	$("#tempOutTitle").text("");
-                $("#tempOut").text("");
-                $("#tempOut").append("<div class=\"loader\"></div>");
+        $("#tempOut").text("");
+        $("#tempOut").append("<div class=\"loader\"></div>");
                 $("#tempInTitle").text("");
                 $("#tempIn").text("");
                 $("#tempIn").append("<div class=\"loader\"></div>");
                 $("#nettoVaha").text("");
                 $("#nettoVaha").append("<div class=\"loader\"></div>");
 
-                sendButton.dataset.deviceId = "DEMO";
-                disconnectButton.dataset.deviceId = "DEMO";
                 resultDiv.innerHTML = "";
-                app.showDetailPage();
-                $("#detailName").text("DEMO VALUES");
+                $("#detailName").text("RANDOM VALUES");
 
                 this.showValues();
 

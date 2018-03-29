@@ -5,6 +5,17 @@ var onInitFn = {
     $("#goBack").click(app.disconnectByGlobalId);
     $("#saveButton").click(beedb.savedata);
   },
+  demoDetail: function() {
+    $("#disconnectButton").click(function(){
+      app7.views.main.router.navigate('/');
+    });
+    $("#goBack").click(function(){
+      app7.views.main.router.navigate('/');
+    });
+    $("#saveButton").click(beedb.savedata);
+    console.log('ide demo');
+    demo.connect();
+  },
 
   historyDb: function() {
     beedb.readAll();
@@ -126,6 +137,17 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.devDetail();
+      },
+    }
+  },
+  // Detail
+  {
+    path: '/demoDetail/',
+    url: './pages/demoDetail.html',
+    name: 'iBeehive',
+    on: {
+      pageInit: function (e, page) {
+        onInitFn.demoDetail();
       },
     }
   },
