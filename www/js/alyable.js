@@ -124,9 +124,11 @@ var chartOptions = {
             deviceList.innerHTML = '';
             discovered = [];
 
-            if( Number(beedb.settings.demo) == 1 ){
+            if( Number(beedb.settings.demo) === 1 ){
                 demo.initialize({id: "demo1", name: "DEMO DEVICE - not compatible"} );
                 demo.initialize({id: "demo2", name: "ALYA DEMO DEVICE"} );
+            } else {
+                console.log(beedb.settings);
             }
 
             ble.isConnected( beedb.settings.curId, 
@@ -158,10 +160,7 @@ var chartOptions = {
                     $("#notFoundInfo").show();
                     $("#iFound").hide();
                     app.refreshDeviceList();
-                }, function(){
-                                //SpinnerPlugin.activityStop();
-                                $("#mainStatus").text(i18next.t("Error occured."));
-                            } );
+                }, app.emptyFunction );
             },
 
             reScan: function() {
@@ -219,6 +218,19 @@ var chartOptions = {
         // Register the event listener
         document.addEventListener("backbutton", app7.methods.onBackKeyDown, false);
 
+        ble.isEnabled(
+            function() {
+                console.log("Bluetooth is enabled");
+            },
+            function() {
+                ble.enable(app.emptyFunction, function(){
+                    app7.dialog.alert(i18next.t("Bluetooth is not enabled! Devices not connected."),i18next.t("BLE core"));
+                });
+
+            }
+        );
+
+
         app.refreshDeviceList();
     },
 
@@ -254,13 +266,22 @@ var chartOptions = {
                 el.dataset.deviceId = device.id;
                 el.dataset.deviceName = device.name;
                 console.log('app.connect on ' + el.dataset.deviceId )
-                el.addEventListener('touchstart', app.connect, false);                
+                el.addEventListener('touchstart', app.connect, false);
+
+                beedb.saveDevice({
+                    _id: "GADGET_" + device.id.toString(),
+                    hwid: device.id,
+                    hwname: device.name,
+                    hwtime: Number(Date.now().toString()),
+                });
+
             }
 
 
         } else {
             var listItem = document.getElementById( "li_" + device.id.replace(/[^a-zA-Z0-9]/g, "") );
             listItem.innerHTML = app.getDeviceListItem( device );
+            deviceList.insertBefore(listItem, deviceList.firstChild);
 
         }
 
@@ -534,9 +555,19 @@ determineWriteType: function(peripheral) {
         ble.disconnect(id, app.showMainPage, app.onError);
     },
     disconnectByGlobalId: function() {
+
+        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.emptyFunction, app.emptyFunction);
+        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.emptyFunction, app.emptyFunction);
+        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.emptyFunction);
+
+        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.savedUUID, app.emptyFunction, app.emptyFunction);
+
+
         ble.disconnect(beedb.settings.curId, app.showMainPage, app.onError);
     },
-    
+    emptyFunction: function(){
+
+    },
 
     showMainPage: function() {
         //mainPage.hidden = false;

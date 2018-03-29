@@ -27,7 +27,8 @@ if ( !window.localStorage.getItem('beehavedb') ){
       curT1: 0,
       curT2: 0,
       curW: 0,
-      curId: "0"
+      curId: "0",
+      allDevices: []
     },
 
     initialize: function(){
@@ -163,6 +164,62 @@ saveHistory: function(o) {
 
 },
 
+saveDevice: function(o) {
+  // save list of connected devices... for getting history info
+  pdb.get(o._id).then(function(doc) {
+    return pdb.put({
+      _id: o._id,
+      _rev: doc._rev,
+      hwid: o.hwid,
+      hwname: o.hwname,
+      hwtime: o.hwtime
+    });
+  }).then(function(response) {
+      console.log('updated gadget '+o._id);
+  }).catch(function (err) {
+
+    if( err.status == 404){
+      pdb.post(o, function(error, response) {
+        if (error) {
+          console.log(error);
+          return;
+        } else if(response && response.ok) {
+          console.log('new gadget '+o._id);
+          // init - read devices
+          beedb.getDevices();
+        }
+      });
+
+    }
+
+  });
+
+},
+
+getDevices: function() {
+
+  var options = {limit : 365, include_docs: true,
+   startkey: 'GADGET_' + "\ufff0",
+   endkey: 'GADGET_',
+   descending: true };
+   pdb.allDocs(options, function (err, response) {
+    console.log(response);
+    if (response && response.rows.length > 0) {
+      this.settings.allDevices = [];
+      response.rows.forEach(function(o) {
+        console.log('mame '+o.doc.hwname);
+        this.settings.allDevices.push({
+          hwid: o.doc.hwid,
+          hwname: o.doc.hwname,
+          hwtime: o.doc.hwtime
+        });
+      });
+    }
+        // handle err or response
+      });
+
+ },
+
 eraseDb: function() {
   pdb.destroy().then(function (response) {
       app7.dialog.alert(i18next.t("All history data from the app are deleted"),i18next.t("Erase DB"));
@@ -178,4 +235,8 @@ eraseDb: function() {
 
 
 }
+
+// init - read devices
+beedb.getDevices();
+
 

@@ -20,8 +20,12 @@ var demo = {
             if( el !== null ) {
 	            //el.dataset.deviceId = device.id;
     	        //el.dataset.deviceName = device.name;
-        	    el.addEventListener('click', this.connect, false);
+                console.log('on demo touchstart');
+        	    el.addEventListener('touchstart', demo.connect, false);
             }
+
+            deviceList.insertBefore(listItem, deviceList.firstChild);
+
 
     },
 
@@ -46,7 +50,7 @@ var demo = {
         weightProgress.setAttribute("style","width: " + perc + "%")
         weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';
 
-    	demo.timeoutVar = setTimeout(demo.showValues, 2000);
+    	this.timeoutVar = setTimeout(this.showValues, 2000);
 
     },
 
@@ -66,7 +70,7 @@ var demo = {
                 app.showDetailPage();
                 $("#detailName").text("DEMO VALUES");
 
-                demo.showValues();
+                this.showValues();
 
     },
 

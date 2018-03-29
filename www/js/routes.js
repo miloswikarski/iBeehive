@@ -10,6 +10,12 @@ var onInitFn = {
     beedb.readAll();
   },
 
+  myDevices: function() {
+          beedb.settings.allDevices.forEach(function(o) {
+              console.log(o);
+          });
+  },
+
   about: function() {
     cordova.getAppVersion.getVersionNumber().then(function (version) {
       $("#version").append("<p>Version: " + version + "</p>");
@@ -36,8 +42,8 @@ var onInitFn = {
     $("#eraseDb").click(beedb.eraseDb);
 
 
-    if( beedb.settings.demo == 1 ) {
-      jQuery('#switch-demo').trigger('click').attr("checked", "checked"); 
+    if( Number(beedb.settings.demo) === 1 ) {
+      jQuery('#switch-demo').attr("checked", "checked"); 
     }
     jQuery('#switch-demo').on('change', function () {
       if( document.querySelector('#switch-demo').checked ){
@@ -45,11 +51,11 @@ var onInitFn = {
       } else {
         beedb.settings.demo = 0;
       }
-      window.localStorage.setItem('settingsDemo', beedb.settings.demo);
+      window.localStorage.setItem('settingsDemo', Number(beedb.settings.demo));
     });
 
-    if( beedb.settings.graphs == 1 ) {
-      jQuery('#switch-graph').trigger('click').attr("checked", "checked"); 
+    if( Number(beedb.settings.graphs) === 1 ) {
+      jQuery('#switch-graph').attr("checked", "checked"); 
     }
     jQuery('#switch-graph').on('change', function () {
       if( document.querySelector('#switch-graph').checked ){
@@ -57,7 +63,7 @@ var onInitFn = {
       } else {
         beedb.settings.graphs = 0;
       }
-      window.localStorage.setItem('settingsGraphs', beedb.settings.graphs);
+      window.localStorage.setItem('settingsGraphs', Number(beedb.settings.graphs));
     });
 
     for( var i=0; i<100; i++){
@@ -155,6 +161,19 @@ var routes = [
       },
     }
   },
+
+
+  // tabulka zariadeni
+  {
+    path: '/mydevices/',
+    templateUrl: './pages/mydevices.html',
+    on: {
+      pageInit: function (e, page) {
+        onInitFn.myDevices();
+      },
+    }
+  },
+
 
 
   // Default route (404 page). MUST BE THE LAST
