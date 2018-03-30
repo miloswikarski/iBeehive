@@ -47,8 +47,14 @@ var demo = {
 
     },
 
-    connect: function() {
-        console.log('... demo ccc');
+    connect: function(e) {
+
+                beedb.saveDevice({
+                    _id: "GADGET_0",
+                    hwid: 0,
+                    hwname: "DEMO",
+                    hwtime: Number(Date.now().toString()),
+                });
     	$("#tempOutTitle").text("");
         $("#tempOut").text("");
         $("#tempOut").append("<div class=\"loader\"></div>");

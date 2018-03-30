@@ -24,6 +24,10 @@ if ( !window.localStorage.getItem('beehavedb') ){
       graphs: window.localStorage.getItem('settingsGraphs') || 0,
       minweight: window.localStorage.getItem('settingsMinweight') || 0,
       maxweight: window.localStorage.getItem('settingsMaxweight') || 100,
+      time1: window.localStorage.getItem('settingsTime1') || "",
+      time2: window.localStorage.getItem('settingsTime2') || "",
+      time3: window.localStorage.getItem('settingsTime3') || "",
+      time4: window.localStorage.getItem('settingsTime4') || "",
       curT1: 0,
       curT2: 0,
       curW: 0,
@@ -51,11 +55,11 @@ if( this.settings.graphs == 0 ) {
 
 },
 
-readAll: function() {
-
+readAll: function( devId ) {
+  devId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
   var options = {limit : 365, include_docs: true,
-     startkey: beedb.settings.curId.toString() + '_' + "\ufff0",
-     endkey: beedb.settings.curId.toString() + '_',
+     startkey: devId + '_' + "\ufff0",
+     endkey: devId + '_',
      descending: true };
   pdb.allDocs(options, function (err, response) {
     console.log(response);
@@ -198,11 +202,11 @@ saveDevice: function(o) {
 
 getDevices: function() {
 
-  var options = {limit : 365, include_docs: true,
+  var options = {limit : 256, include_docs: true,
    startkey: 'GADGET_' + "\ufff0",
    endkey: 'GADGET_',
    descending: true };
-   pdb.allDocs(options, function (err, response) {
+   pdb.allDocs(options).then( function (response) {
     console.log(response);
     if (response && response.rows.length > 0) {
       this.settings.allDevices = [];
@@ -215,7 +219,8 @@ getDevices: function() {
         });
       });
     }
-        // handle err or response
+      }).catch( function(err){
+        console.log(err);
       });
 
  },

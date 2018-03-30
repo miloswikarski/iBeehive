@@ -53,6 +53,13 @@ var app7 = new Framework7({
 });
 
 
+//open www url
+$$('.external').on('click', function (e) {
+    var url = $$(this).attr("href");
+    window.open(url, "_system");
+});
+
+
 // Init/Create main view
 var mainView = app7.views.create('.view-main', {
   url: '/'
