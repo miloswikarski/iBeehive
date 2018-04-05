@@ -44,7 +44,7 @@ var onInitFn = {
 
   about: function() {
     cordova.getAppVersion.getVersionNumber().then(function (version) {
-      $("#version").append("<p>Version: " + version + "</p>");
+      $("#version").append("<p>Version: " + version + "</p><p>Cloud DB: <b>" + window.localStorage.getItem('beehavedb') + "</b></p>");
     });
   },
 

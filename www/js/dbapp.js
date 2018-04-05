@@ -8,9 +8,9 @@ if ( !window.localStorage.getItem('beehavedb') ){
   window.localStorage.setItem('beehavedb','bee' + Math.random().toString(36).substring(2));
   //create and init remote db
   // 
-  var rdb = new PouchDB( dburl + window.localStorage.getItem('beehavedb') );
+//  var rdb = new PouchDB( dburl + window.localStorage.getItem('beehavedb') );
   //var rdb = new PouchDB( dburl + 'ibeehive' );
-  rdb.info();
+//  rdb.info();
 }
   //var pdb = new PouchDB(window.localStorage.getItem('beedb'));
 
@@ -119,16 +119,22 @@ savedata: function(event) {
     } else if(response && response.ok) {
       console.log(response);
       
-      app7.dialog.alert(i18next.t("valuesSaved"),i18next.t("actualValues"));
+      app7.dialog.alert(i18next.t("valuesSaved") + "...",i18next.t("actualValues"));
 
-
-      pdb.sync(window.localStorage.getItem('beehavedb'),dburl+'ibeehive',
+      //First synchro must be initialized by manual saving.
+      //ToDo: analyse whether rather synchro on the app start
+      //
+      pdb.sync(dburl + window.localStorage.getItem('beehavedb'),
       {
         live: true,
         retry: true,
         cache: false
       }).on('error', function (err) {
+        console.log('error sync...');
        console.log(err);
+     }).on('complete', function(res) {
+        console.log('completed sync');
+        console.log(res);
      });
     }
   });
