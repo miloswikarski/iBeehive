@@ -57,6 +57,8 @@ if( this.settings.graphs == 0 ) {
 
 readAll: function( devId ) {
   devId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
+  console.log('reading devId ', devId );
+  //ToDo: limit... paging maybe neccessary
   var options = {limit : 365, include_docs: true,
      startkey: devId + '_' + "\ufff0",
      endkey: devId + '_',
@@ -71,6 +73,7 @@ readAll: function( devId ) {
       <tr><th>'+i18next.t('date')+'</th><th>'+i18next.t('weight')+' [kg]</th><th>Δ</th><th>T1 [°C]</th><th>T2 [°C]</th></tr>\
       </thead>';
       var hDate, oldWeight=0;
+      var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
       response.rows.forEach(function(o) {
 
           if( oldWeight === 0 ){
@@ -80,7 +83,8 @@ readAll: function( devId ) {
 //            if( o.doc.hwid != beedb.settings.curId ){ //filter for current
   //            return;
     //        }
-            hDate = new Date(o.doc.hwtime).toISOString().slice(0,16);
+            //hDate = new Date(o.doc.hwtime).toISOString().slice(0,16);
+            hDate = (new Date( (new Date(o.doc.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
             var delta = (o.doc.weight - oldWeight).toFixed(1);
             var dcolor = delta < 0 ? ' class="btn-success"':' class="btn-danger"';
             html = html + "<tr><td>" + hDate + '</td><td class="btn-primary">'
@@ -90,7 +94,7 @@ readAll: function( devId ) {
             oldWeight = o.doc.weight;
           });
 
-      console.log(html);
+      //console.log(html);
 
       jQuery("#historyBody").html(html + '</table>');
 
@@ -164,6 +168,10 @@ saveHistory: function(o) {
           return;
         } else if(response && response.ok) {
           console.log('new '+o._id);
+          if($('#newData').html() == "") {
+            $("#newData").html("<i class=\"fa fa-certificate\"></i> " + i18next.t("NEW") + " <i class=\"fa fa-certificate\"></i>");
+            setTimeout(function(){ $("#newData").html("");}, 400);
+          }
           //console.log(response);
         }
       });
@@ -233,7 +241,7 @@ getDevices: function() {
 
 eraseDb: function() {
   pdb.destroy().then(function (response) {
-      app7.dialog.alert(i18next.t("All history data from the app are deleted"),i18next.t("Erase DB"));
+      app7.dialog.alert(i18next.t("AllDataDeleted"),i18next.t("Erase DB"));
 
       pdb = null;
       pdb = new PouchDB( window.localStorage.getItem('beehavedb') );

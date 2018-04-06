@@ -67,6 +67,8 @@ var demo = {
                 resultDiv.innerHTML = "";
                 $("#detailName").text("RANDOM VALUES");
 
+                beedb.settings.curId = 0;
+
                 this.showValues();
 
     },

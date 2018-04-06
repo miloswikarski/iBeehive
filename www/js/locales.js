@@ -8,14 +8,14 @@
         resources: { // evtl. load via xhr https://github.com/i18next/i18next-xhr-backend
           "en": {
             translation: {
-                "BLE core": "BLE core",
+                "BLE core": "Bluetooth core",
                 "iBeehive loading": "iBeehive loading...",
                 "NetworkError":"Loading error occured. Check your network connection.",
                 "ConnectingServer":"Connecting iBeehive server",
                 "OK":"OK",
                 "title": " iBeehive",
-                "iBeehive radar active.": "iBeehive radar active...",
-                "iBeehive radar stopped.": "iBeehive radar stopped.",
+                "iBeehiveRadarActive": "iBeehive radar active...",
+                "iBeehiveRadarStopped": "iBeehive radar stopped.",
                 "Error occured.":"Error occured.",
                 "scanning": "scanning",
                 "Weight": "Weight",
@@ -48,7 +48,23 @@
                 "date":"Date",
                 "weight":"Weight",
                 "valuesSaved":"Actual values saved",
-                "back":"Back"
+                "back":"Back",
+                "BTnotEnabled":"Bluetooth is not enabled! Devices not connected.",
+                "DeviceConnectError":"Device connection failed. Please go back and try again. Error message: ",
+                "Data sent":"Data sent",
+                "NEW":"NEW",
+                "Erase DB":"Erase Database",
+                "AllDataDeleted":"All history data from the app are deleted",
+                "devsettings":"Device settings",
+                "synchroDateTitle":"Date and time sync with iBeehive",
+                "devPageTitle":"Device",
+                "configureDevice":"Device configuration",
+                "deviceMenu":"Device menu",
+                "MyDevices":"My devices",
+                "mydevicestitle":"All devices I connected",
+                "AdvancedSettings":"Advanced settings",
+                "Erase history":"Erase history database from this application",
+                "eraseDb":"DESTROY DATABASE"
 
 
 
@@ -78,14 +94,14 @@
         },
         "sk": {
             translation: {
-                "BLE core": "BLE systém",
+                "BLE core": "Bluetooth",
                 "iBeehive loading": "iBeehive nahráva...",
                 "NetworkError":"Nastala chyba siete, skontrolujte pripojenie na internet.",
                 "ConnectingServer":"Pripája sa na server iBeehive",
                 "OK":"OK",
                 "title": " iBeehive",
-                "iBeehive radar active.": "iBeehive radar aktívny...",
-                "iBeehive radar stopped.": "iBeehive radar zastavený...",
+                "iBeehiveRadarActive": "iBeehive radar aktívny...",
+                "iBeehiveRadarStopped": "iBeehive radar zastavený...",
                 "Error occured.":"Nastala chyba",
                 "scanning": "Skenujem",
                 "Weight": "Hmotnosť",
@@ -126,7 +142,24 @@
                 "configure": "Konfigurácia",
                 "about": "O aplikácii",
                 "thanksTitle": "Ďakujeme, že používate produkt iBeehive!",
-                "Are you sure you want to exit?": "Skutočne chcete ukončiť aplikáciu?"
+                "Are you sure you want to exit?": "Skutočne chcete ukončiť aplikáciu?",
+                "BTnotEnabled":"Bluetooth nie je zapnutý. Zariadenia nie sú pripojené.",
+                "DeviceConnectError":"Zariadenie nepripojené. Prosím stlačte Naspäť a skúste znova. Chybová správa: ",
+                "Data sent":"Údaje zaslané",
+                "NEW":"NOVÉ",
+                "Erase DB":"Zmazať databázu",
+                "AllDataDeleted":"Všetky údaje o meraniach sú z tejto aplikácie vymazané.",
+                "devsettings":"Nastavenia zariadenia",
+                "synchroDateTitle":"Synchronizácia dátumu a času s iBeehive",
+                "devPageTitle":"Zariadenie",
+                "configureDevice":"Konfigurácia zariadenia",
+                "deviceMenu":"Menu zariadenia",
+                "MyDevices":"Moje zariadenia",
+                "mydevicestitle":"Všetky niekedy pripojené zariadenia",
+                "AdvancedSettings":"Rozšírené nastavenia",
+                "Erase history":"Vymazať dáta histórie z aplikácie",
+                "eraseDb":"VYMAZAŤ DATABÁZU"
+
 
 
 

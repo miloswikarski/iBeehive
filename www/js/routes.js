@@ -292,7 +292,7 @@ var routes = [
         if( page.route.query.devId ){
           onInitFn.historyDb(page.route.query.devId);
         } else {
-        onInitFn.historyDb();
+          onInitFn.historyDb();
         }
       },
     }

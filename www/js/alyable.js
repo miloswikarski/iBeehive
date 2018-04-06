@@ -121,7 +121,7 @@ var chartOptions = {
         rescanInterval: 0,    
 
         refreshDeviceList: function() { /**/
-            if( deviceList === null ){
+            if( typeof deviceList === 'undefined' ){
                 return;
             }
 
@@ -148,19 +148,19 @@ var chartOptions = {
 
             //        if (cordova.platformId === 'android') { // Android filtering is broken
                 ble.startScan([], app.onDiscoverDevice, app.onError);
-                $("#mainStatus").text(i18next.t("iBeehive radar active."));
+                $("#mainStatus").text(i18next.t("iBeehiveRadarActive"));
             //        } else {
             //            ble.startScan([alyadevice.serviceUUID], app.onDiscoverDevice, app.onError);
             //        }
             },
             repeatScan: function() {
-                $("#mainStatus").text(i18next.t("iBeehive radar active."));
+                $("#mainStatus").text(i18next.t("iBeehiveRadarActive"));
                 ble.startScan([], app.onDiscoverDevice, app.onError);
             },
 
             restartScanner: function() { 
                 ble.stopScan( function(){
-                    $("#mainStatus").text(i18next.t("iBeehive radar stopped."));
+                    $("#mainStatus").text(i18next.t("iBeehiveRadarStopped"));
                     $("#notFoundInfo").show();
                     $("#iFound").hide();
                     app.refreshDeviceList();
@@ -228,7 +228,7 @@ var chartOptions = {
             },
             function() {
                 ble.enable(app.emptyFunction, function(){
-                    app7.dialog.alert(i18next.t("Bluetooth is not enabled! Devices not connected."),i18next.t("BLE core"));
+                    app7.dialog.alert(i18next.t("BTnotEnabled"),i18next.t("BLE core"));
                 });
 
             }
@@ -309,6 +309,8 @@ var chartOptions = {
                     //linked.hidden = true;
                     console.log('error connect to dev');
                     console.log(e);
+                    app7.dialog.alert(i18next.t("DeviceConnectError") + e.errorMessage,i18next.t("BLE core"));
+
                 },
                 onConnect = function(peripheral) {
 
@@ -456,6 +458,8 @@ determineWriteType: function(peripheral) {
             temp2: Number(allInfo.substring(17,20))/10,
             weight: Number(allInfo.substring(10,14))/10
         };
+
+//        console.log(allInfo,o.hwid,o.hwtime,o.temp1,o.temp2,o.weight);
 
         beedb.saveHistory(o);
 
@@ -690,7 +694,7 @@ determineWriteType: function(peripheral) {
                 </span>\
                 </div>\
                 <div class="card-body d-flex w-100 justify-content-between">\
-                <h2 class="card-title center">' + device.name + '</h2>\
+                <h2 class="card-title center">' + device.name.slice(5) + '</h2>\
                 <a href="/' + urlDetail + '/">\
                 <button id="btn_' + device.id.replace(/[^a-zA-Z0-9]/g, "") +
                 '" class="btn btn-secondary my-2 my-sm-0">\
