@@ -17,7 +17,12 @@ function stringToBytes(string) {
 
 // this is Nordic's UART service
 var alyadevice = {
-    serviceUUID: '94e2ed81-5c2a-4f18-a414-e5393ab997e5',
+    serviceUUID: '94e2ed81-5c2a-4f18-a414-e5393ab997e5', // data - save, t1, t2, w
+    serviceTxRx: '12345d81-5c2a-4f18-a414-e5393ab997e5', // TX, RX, na zapis t= B= ...
+
+//    serviceSet:  '54321d81-5c2a-4f18-a414-e5393ab997e5', // Set Date, 4casy
+
+    serviceRead: '1e400001-b5a3-f393-e0a9-e50e24dcca9e', // Batt, Firmw, Sw, Manf, Model#
 
     nettoVahaUUID: '18c0c807-589e-4b89-8ee3-8c1de9a80248',
     tempInUUID: '3511d30e-9911-479e-a7be-43d4220ab1b2',
@@ -45,7 +50,7 @@ TX characteristic f18832d8-8639-49da-becf-4d0f956dc727
 RX characteristic 08a53bd2-0b16-4ece-b3c2-9d27c79967ae 
 */
 
-//    rxCharacteristic: 'f18832d8-8639-49da-becf-4d0f956dc727', // transmit is from the phone's perspective
+    rxCharacteristic: 'f18832d8-8639-49da-becf-4d0f956dc727', // transmit is from the phone's perspective
     txCharacteristic: '08a53bd2-0b16-4ece-b3c2-9d27c79967ae'  // receive is from the phone's perspective
 };
 
@@ -471,11 +476,11 @@ determineWriteType: function(peripheral) {
         var success = function() {
 
             //read after write, the same char
-            ble.read(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.txCharacteristic,
+            ble.read(beedb.settings.curId, alyadevice.serviceTxRx, alyadevice.rxCharacteristic,
 
                 function(event){ 
-
-                    app7.dialog.alert(i18next.t("Data sent"),i18next.t("BLE core"));
+                    var text = bytesToString(event);
+                    app7.dialog.alert(i18next.t("Data sent") + " " + text,i18next.t("BLE core"));
 
                 },
                 function(e){
@@ -488,9 +493,12 @@ determineWriteType: function(peripheral) {
             console.log("err " + JSON.stringify(e));
         };
 
+        console.log('.....');
+        console.log(data);
+
         ble.writeWithoutResponse(
             beedb.settings.curId,
-            alyadevice.serviceUUID,
+            alyadevice.serviceTxRx,
             alyadevice.txCharacteristic,
             data, success, failure
             );
