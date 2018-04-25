@@ -64,7 +64,9 @@
                 "mydevicestitle":"All devices I connected",
                 "AdvancedSettings":"Advanced settings",
                 "Erase history":"Erase history database from this application",
-                "eraseDb":"DESTROY DATABASE"
+                "eraseDb":"DESTROY DATABASE",
+                "aboutDevice":"About this device",
+                "devinfoTitle":"Device specifications"
 
 
 
@@ -158,7 +160,9 @@
                 "mydevicestitle":"Všetky niekedy pripojené zariadenia",
                 "AdvancedSettings":"Rozšírené nastavenia",
                 "Erase history":"Vymazať dáta histórie z aplikácie",
-                "eraseDb":"VYMAZAŤ DATABÁZU"
+                "eraseDb":"VYMAZAŤ DATABÁZU",
+                "aboutDevice":"O zariadení",
+                "devinfoTitle":"Technickhé špecifikácie zariadenia"
 
 
 

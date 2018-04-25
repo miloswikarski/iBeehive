@@ -29,6 +29,14 @@ var alyadevice = {
     tempOutUUID: 'e7e2aec2-5335-49b9-ad90-3aad5eac7eb8',
     savedUUID: '07c28844-d666-4a1c-8eff-8cbfb83aadab',
 
+    //chars
+          sr1: '00002a26-0000-1000-8000-00805f9b34fb',
+          sr2: '00002a29-0000-1000-8000-00805f9b34fb',
+          sr3: '00002a19-0000-1000-8000-00805f9b34fb',
+          sr4: '00002a28-0000-1000-8000-00805f9b34fb',
+          sr5: '00002a24-0000-1000-8000-00805f9b34fb',
+
+
 /*
 SERVICE UUID 94e2ed81-5c2a-4f18-a414-e5393ab997e5
 VAHA 18c0c807-589e-4b89-8ee3-8c1de9a80248

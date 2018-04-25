@@ -25,10 +25,13 @@ var onInitFn = {
    startkey: 'GADGET_' + "\ufff0",
    endkey: 'GADGET_',
    descending: true };
+   var hDate;
+   var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
    pdb.allDocs(options).then( function (response) {
     if (response && response.rows.length > 0) {
       response.rows.forEach(function(o) {
-        hDate = new Date(o.doc.hwtime).toISOString().slice(0,16) || "...";
+        hDate = (new Date( (new Date(o.doc.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
+
         $("#gadgetList").append('\
                 <li class="link list-group-item">\
                 <a href="/history/?devId=' + o.doc.hwid + '">' + hDate + 
@@ -46,6 +49,40 @@ var onInitFn = {
     cordova.getAppVersion.getVersionNumber().then(function (version) {
       $("#version").append("<p>Version: " + version + "</p><p>Cloud DB: <b>" + window.localStorage.getItem('beehavedb') + "</b></p>");
     });
+  },
+  aboutDevice: function() {
+
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr1,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p> " + text + "</p>");
+                },
+                null);
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr2,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p> " + text + "</p>");
+                },
+                null);
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr3,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p> " + text + "</p>");
+                },
+                null);
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr4,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p> " + text + "</p>");
+                },
+                null);
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr5,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p> " + text + "</p>");
+                },
+                null);
+
   },
 
   devset: function() {
@@ -235,6 +272,17 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.about();
+      },
+    }
+  },
+  // About Device page
+  {
+    path: '/aboutDevice/',
+    url: './pages/aboutDevice.html',
+    name: 'about',
+    on: {
+      pageInit: function (e, page) {
+        onInitFn.aboutDevice();
       },
     }
   },
