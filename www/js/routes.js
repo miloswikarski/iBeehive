@@ -161,7 +161,7 @@ var onInitFn = {
         beedb.settings.time2 = "";
       }
       window.localStorage.setItem('settingsTime2', beedb.settings.time2);
-      app.writeData( "2=" + beedb.settings.time1.replace(/:/,'') + '00' );
+      app.writeData( "2=" + beedb.settings.time2.replace(/:/,'') + '00' );
     });
     //3
     if( beedb.settings.time3 !== "" ) {
@@ -175,7 +175,7 @@ var onInitFn = {
         beedb.settings.time3 = "";
       }
       window.localStorage.setItem('settingsTime3', beedb.settings.time3);
-      app.writeData( "3=" + beedb.settings.time1.replace(/:/,'') + '00' );
+      app.writeData( "3=" + beedb.settings.time3.replace(/:/,'') + '00' );
     });
     //4
     if( beedb.settings.time4 !== "" ) {

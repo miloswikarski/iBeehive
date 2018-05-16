@@ -317,6 +317,10 @@ var chartOptions = {
         //console.log(e);
         //console.log(e.target.dataset.deviceId);
         
+        beedb.settings.curW = -999; // vynuluj hodnoty aby ihned ukazal
+        beedb.settings.curT1 = -999;
+        beedb.settings.curT2 = -999;
+
         var deviceId = e.target.dataset.deviceId,
         onErrorConnect = function(e) {
                     //linked.hidden = true;
@@ -504,7 +508,7 @@ determineWriteType: function(peripheral) {
         console.log('.....');
         console.log(data);
 
-        ble.writeWithoutResponse(
+        ble.write(
             beedb.settings.curId,
             alyadevice.serviceTxRx,
             alyadevice.txCharacteristic,
@@ -547,22 +551,22 @@ determineWriteType: function(peripheral) {
 
 
         //if (app.writeWithoutResponse) {
-            ble.writeWithoutResponse(
+    /*        ble.writeWithoutResponse(
                 deviceId,
                 alyadevice.serviceUUID,
                 alyadevice.txCharacteristic,
                 data, success, failure
                 );
-            /*
+            
         } else {
-            ble.write(
+         */   ble.write(
                 deviceId,
                 alyadevice.serviceUUID,
                 alyadevice.txCharacteristic,
                 data, success, failure
             );
-        }
-        */
+        //}
+        
 
     },
 
