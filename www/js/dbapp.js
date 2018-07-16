@@ -70,7 +70,8 @@ readAll: function( devId ) {
       //options.skip = 1;
 //      var display = document.getElementById('historyBody');
       var html = '<table class="table table-bordered table-striped"><thead>\
-      <tr><th>'+i18next.t('date')+'</th><th>'+i18next.t('weight')+' [kg]</th><th>Δ</th><th>T1 [°C]</th><th>T2 [°C]</th></tr>\
+      <tr><th>'+i18next.t('date')+'</th><th>'+i18next.t('weight')+' [kg]</th><th>Δ</th><th>T1 [°C]</th><th>T2 [°C]</th>\
+      <th><i class="fa fa-trash">&nbsp;</i></th></tr>\
       </thead>';
       var hDate, oldWeight=0;
       var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
@@ -87,9 +88,9 @@ readAll: function( devId ) {
             hDate = (new Date( (new Date(o.doc.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
             var delta = (o.doc.weight - oldWeight).toFixed(1);
             var dcolor = delta < 0 ? ' class="btn-success"':' class="btn-danger"';
-            html = html + "<tr><td>" + hDate + '</td><td class="btn-primary">'
+            html = html + '<tr><td>' + hDate + '</td><td class="btn-primary">'
             + o.doc.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
-             + o.doc.temp1.toString() + "</td><td>"+ o.doc.temp2.toString()  + "</td></tr>";
+             + o.doc.temp1.toString() + "</td><td>"+ o.doc.temp2.toString()  + '</td><td><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash">&nbsp;</i></a></td></tr>';
 
             oldWeight = o.doc.weight;
           });

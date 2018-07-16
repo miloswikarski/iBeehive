@@ -20,6 +20,15 @@ var onInitFn = {
     beedb.readAll(devId);
   },
 
+  deleteOneDb: function(id,rev,d) {
+    $("#title").append("<h4>"+d+"</h4>");
+    $("#delBtn").click(function(){
+      pdb.remove(id,rev);
+      app7.views.main.router.back('/mydevices/',{ignoreCache:true, force:true});
+      app7.dialog.alert(i18next.t("deleted"),i18next.t("deleteRecord"));
+    });
+  },
+
   myDevices: function() {
    var options = {limit : 256, include_docs: true,
    startkey: 'GADGET_' + "\ufff0",
@@ -342,6 +351,19 @@ var routes = [
         } else {
           onInitFn.historyDb();
         }
+      },
+    }
+  },
+
+
+  // mazanie zaznamu
+  {
+    path: '/delete/',
+    templateUrl: './pages/delete.html',
+    on: {
+      pageInit: function (e, page) {
+        console.log(page);
+          onInitFn.deleteOneDb(page.route.query.id, page.route.query.rev, page.route.query.d);
       },
     }
   },

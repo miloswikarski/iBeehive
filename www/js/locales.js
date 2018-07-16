@@ -38,6 +38,7 @@
                 "iBeehiveBleDevice":"iBeehive bluetooth smart device",
                 "notiBeehiveBleDevice":"This device is not iBeehive compatible",
                 "historyValues":"History values",
+                "historyData":"History of measurement",
                 "close":"Close",
                 "actualValues":"Actual values",
                 "aboutTitle":"About iBeehive",
@@ -66,10 +67,11 @@
                 "Erase history":"Erase history database from this application",
                 "eraseDb":"DESTROY DATABASE",
                 "aboutDevice":"About this device",
-                "devinfoTitle":"Device specifications"
-
-
-
+                "devinfoTitle":"Device specifications",
+                "deleteRecord":"Delete record",
+                "reallyDelete":"Do you want to delete this record?",
+                "deleted":"Record deleted",
+                "delete":"DELETE"
             }
         },
         "de": {
@@ -126,6 +128,7 @@
                 "iBeehiveBleDevice":"iBeehive bluetooth smart zariadenie",
                 "notiBeehiveBleDevice":"Toto zariadenie nie je kompatibilné s iBeehive",
                 "historyValues":"História údajov",
+                "historyData":"História meraní",
                 "close":"Zatvoriť",
                 "actualValues":"Aktuálne hodnoty",
                 "aboutTitle":"O aplikácii iBeehive",
@@ -162,7 +165,11 @@
                 "Erase history":"Vymazať dáta histórie z aplikácie",
                 "eraseDb":"VYMAZAŤ DATABÁZU",
                 "aboutDevice":"O zariadení",
-                "devinfoTitle":"Technickhé špecifikácie zariadenia"
+                "devinfoTitle":"Technickhé špecifikácie zariadenia",
+                "deleteRecord":"Zmazať záznam",
+                "reallyDelete":"Skutočne zmazať záznam z lokálnej databázy?",
+                "deleted":"Záznam bol zmazaný",
+                "delete":"ZMAZAŤ"
 
 
 
