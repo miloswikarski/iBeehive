@@ -467,10 +467,13 @@ determineWriteType: function(peripheral) {
     onGetSaved: function(data) {
         var allInfo = bytesToString(data);
 
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds HERE PLUS
+        var hDate = (new Date( (new Date(Number(allInfo.substring(0,10))*1000)).getTime() + tzoffset)).getTime();
+
         var o = {
             _id: beedb.settings.curId.toString() + '_' + allInfo.substring(0,10),
             hwid: beedb.settings.curId,
-            hwtime: Number(allInfo.substring(0,10))*1000,
+            hwtime: hDate,
             temp1: Number(allInfo.substring(14,17))/10,
             temp2: Number(allInfo.substring(17,20))/10,
             weight: Number(allInfo.substring(10,14))/10
