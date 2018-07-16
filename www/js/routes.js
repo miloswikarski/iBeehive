@@ -23,9 +23,14 @@ var onInitFn = {
   deleteOneDb: function(id,rev,d) {
     $("#title").append("<h4>"+d+"</h4>");
     $("#delBtn").click(function(){
-      pdb.remove(id,rev);
-      app7.views.main.router.back('/mydevices/',{ignoreCache:true, force:true});
-      app7.dialog.alert(i18next.t("deleted"),i18next.t("deleteRecord"));
+      if( pdb.remove(id,rev) ){
+        app7.views.main.router.back();
+        setTimeout(function(){app7.views.main.router.back();},500);
+      //app7.views.main.router.back('/mydevices/',{ignoreCache:true, force:true});
+        app7.dialog.alert(i18next.t("deleted"),i18next.t("deleteRecord"));
+      } else {
+        app7.dialog.alert(i18next.t("Error occured."),i18next.t("deleteRecord"));
+      }
     });
   },
 
