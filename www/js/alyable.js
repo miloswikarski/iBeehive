@@ -37,6 +37,13 @@ var alyadevice = {
           sr5: '00002a24-0000-1000-8000-00805f9b34fb',
 
 
+        setMeasureTime1:  'cccd6018-ec89-4efe-9b95-677e6986fe0f',
+        setMeasureTime2:  '73e3c7ee-3fab-468d-9a15-babdc773663d',
+        setMeasureTime3:  '6fe7d8e6-8e79-4def-9d5d-d7e6cdbeedd3',
+        setMeasureTime4:  '0ddf34cb-7875-4333-a276-7cdc05015596',
+        setDateTime:  '1d1ee309-5e66-46b2-bbfb-c648802f55a8', // na zapis casov
+
+
 /*
 SERVICE UUID 94e2ed81-5c2a-4f18-a414-e5393ab997e5
 VAHA 18c0c807-589e-4b89-8ee3-8c1de9a80248
@@ -329,38 +336,80 @@ var chartOptions = {
                     app7.dialog.alert(i18next.t("DeviceConnectError") + e.errorMessage,i18next.t("BLE core"));
 
                 },
-                onConnect = function(peripheral) {
+        onConnect = function(peripheral) {
 
-//                        alert('conn to ' + deviceId + ' .. ' + JSON.stringify(peripheral));
-//console.log(JSON.stringify(peripheral));
-                //unlinked.hidden = true;
+            //                        alert('conn to ' + deviceId + ' .. ' + JSON.stringify(peripheral));
+            //console.log(JSON.stringify(peripheral));
+                            //unlinked.hidden = true;
 
-                app.determineWriteType(peripheral);
+                            app.determineWriteType(peripheral);
 
-                // subscribe for incoming data
-//                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onErrorData);
+                            // subscribe for incoming data
+            //                ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.rxCharacteristic, app.onData, app.onErrorData);
 
-$("#tempOutTitle").text("");
-$("#tempOut").text("");
-$("#tempOut").append("<div class=\"loader\"></div>");
-$("#tempInTitle").text("");
-$("#tempIn").text("");
-$("#tempIn").append("<div class=\"loader\"></div>");
-$("#nettoVaha").text("");
-$("#nettoVaha").append("<div class=\"loader\"></div>");
-
-
-ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.onTempOut, app.onErrorTempOut);
-ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.onTempIn, app.onErrorTempIn);
-ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.onErrorNettoVaha);
-
-ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.savedUUID, app.onGetSaved, app.onErrorGetSaved);
+            $("#tempOutTitle").text("");
+            $("#tempOut").text("");
+            $("#tempOut").append("<div class=\"loader\"></div>");
+            $("#tempInTitle").text("");
+            $("#tempIn").text("");
+            $("#tempIn").append("<div class=\"loader\"></div>");
+            $("#nettoVaha").text("");
+            $("#nettoVaha").append("<div class=\"loader\"></div>");
 
 
-$("#resultDiv").text("");
-$("#detailName").text(e.target.dataset.deviceName);
-$("#devPageTitle").text(e.target.dataset.deviceName);
-};
+            ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.onTempOut, app.onErrorTempOut);
+            ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.onTempIn, app.onErrorTempIn);
+            ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.onErrorNettoVaha);
+
+            ble.startNotification(deviceId, alyadevice.serviceUUID, alyadevice.savedUUID, app.onGetSaved, app.onErrorGetSaved);
+
+
+            $("#resultDiv").text("");
+            $("#detailName").text(e.target.dataset.deviceName.slice(5));
+            $("#devPageTitle").text(e.target.dataset.deviceName.slice(5));
+
+                //Set date on every connect
+                var dataT = stringToBytes("X=" + Date.now().toString().slice(0,10));
+                ble.write(deviceId,
+                    alyadevice.setDateTime,
+                    alyadevice.txCharacteristic,
+                    dataT, function(event){ console.log(JSON.stringify(event));},
+                    function(e){ console.log("err " + JSON.stringify(e));}
+                );
+                //read actual time1
+                ble.read(deviceId, alyadevice.setMeasureTime1, alyadevice.rxCharacteristic,
+                function(event){ 
+                    console.log(JSON.stringify(event));
+                },
+                function(e){
+                    console.log("err " + JSON.stringify(e));
+                });
+                //read actual time2
+                ble.read(deviceId, alyadevice.setMeasureTime2, alyadevice.rxCharacteristic,
+                function(event){ 
+                    console.log(JSON.stringify(event));
+                },
+                function(e){
+                    console.log("err " + JSON.stringify(e));
+                });
+                //read actual time3
+                ble.read(deviceId, alyadevice.setMeasureTime3, alyadevice.rxCharacteristic,
+                function(event){ 
+                    console.log(JSON.stringify(event));
+                },
+                function(e){
+                    console.log("err " + JSON.stringify(e));
+                });
+                //read actual time4
+                ble.read(deviceId, alyadevice.setMeasureTime4, alyadevice.rxCharacteristic,
+                function(event){ 
+                    console.log(JSON.stringify(event));
+                },
+                function(e){
+                    console.log("err " + JSON.stringify(e));
+                });
+
+    };
 
 ble.connect(deviceId, onConnect, onErrorConnect);
 beedb.settings.curId = deviceId;

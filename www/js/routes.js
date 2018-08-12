@@ -61,7 +61,7 @@ var onInitFn = {
 
   about: function() {
     cordova.getAppVersion.getVersionNumber().then(function (version) {
-      $("#version").append("<p>Version: " + version + "</p><p>Cloud DB: <b>" + window.localStorage.getItem('beehavedb') + "</b></p>");
+      $("#version").append("<p><span data-i18n=\"version\">V</span>: <b>" + version + "</b></p>");//<p>Cloud DB: <b>" + window.localStorage.getItem('beehavedb') + "</b></p>");
     });
   },
   aboutDevice: function() {
@@ -100,7 +100,7 @@ var onInitFn = {
   },
 
   devset: function() {
-    $("#setDateTime").click( function(){
+    $("#setDateTime").click( function(){ //TODO ASI PREROB PODLA NOVEHO
       app.writeData( "X=" + Date.now().toString().slice(0,10) );
     });
 
@@ -156,7 +156,7 @@ var onInitFn = {
       window.localStorage.setItem('settingsTime1', beedb.settings.time1);
       console.log("1=" + beedb.settings.time1.replace(/:/,'') + '00');
       console.log("//TO DO: NULOVANIE AKO? TERAZ TAK, ze PRAZDNY time1");
-      app.writeData( "1=" + beedb.settings.time1.replace(/:/,'') + '00' );
+      app.writeData( "1=" + beedb.settings.time1.replace(/:/,'') + '-1' );
       //TO DO: NULOVANIE AKO? TERAZ TAK, ze PRAZDNY time1
     });
     //2
@@ -175,7 +175,7 @@ var onInitFn = {
         beedb.settings.time2 = "";
       }
       window.localStorage.setItem('settingsTime2', beedb.settings.time2);
-      app.writeData( "2=" + beedb.settings.time2.replace(/:/,'') + '00' );
+      app.writeData( "2=" + beedb.settings.time2.replace(/:/,'') + '-1' );
     });
     //3
     if( beedb.settings.time3 !== "" ) {
@@ -189,7 +189,7 @@ var onInitFn = {
         beedb.settings.time3 = "";
       }
       window.localStorage.setItem('settingsTime3', beedb.settings.time3);
-      app.writeData( "3=" + beedb.settings.time3.replace(/:/,'') + '00' );
+      app.writeData( "3=" + beedb.settings.time3.replace(/:/,'') + '-1' );
     });
     //4
     if( beedb.settings.time4 !== "" ) {
@@ -203,7 +203,7 @@ var onInitFn = {
         beedb.settings.time4 = "";
       }
       window.localStorage.setItem('settingsTime4', beedb.settings.time4);
-      app.writeData( "4=" + beedb.settings.time4.replace(/:/,'') + '00' );
+      app.writeData( "4=" + beedb.settings.time4.replace(/:/,'') + '-1' );
     });
 
   },
