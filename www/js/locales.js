@@ -16,6 +16,7 @@
                 "title": " iBeehive",
                 "iBeehiveRadarActive": "iBeehive radar active...",
                 "iBeehiveRadarStopped": "iBeehive radar stopped.",
+                "Error occured":"Error occured.",
                 "Error occured.":"Error occured.",
                 "scanning": "scanning",
                 "Weight": "Weight",
@@ -71,7 +72,18 @@
                 "deleteRecord":"Delete record",
                 "reallyDelete":"Do you want to delete this record?",
                 "deleted":"Record deleted",
-                "delete":"DELETE"
+                "delete":"DELETE",
+                "Set device name":"Set device name",
+                "setTareTitle":"Tare your weight",
+                "setTareBody":"Set device weight sensor for zero value now",
+                "setTare":"Set tare",
+                "synchroDateBody":"Set device date and time with actual value from your phone or tablet",
+                "setTime":"Set date and time",
+                "setTimeBtn":"SET DATE TIME",
+                "setNameBtn":"SET NAME",
+                "set":"SET",
+                "AutoSaveTime":"Automatic save values every day at:",
+                "namePlaceholder":"Set device name",
             }
         },
         "de": {
@@ -106,6 +118,7 @@
                 "title": " iBeehive",
                 "iBeehiveRadarActive": "iBeehive radar aktívny...",
                 "iBeehiveRadarStopped": "iBeehive radar zastavený...",
+                "Error occured":"Nastala chyba",
                 "Error occured.":"Nastala chyba",
                 "scanning": "Skenujem",
                 "Weight": "Hmotnosť",
@@ -169,11 +182,18 @@
                 "deleteRecord":"Zmazať záznam",
                 "reallyDelete":"Skutočne zmazať záznam z lokálnej databázy?",
                 "deleted":"Záznam bol zmazaný",
-                "delete":"ZMAZAŤ"
-
-
-
-
+                "delete":"ZMAZAŤ",
+                "Set device name":"Nové meno zariadenia",
+                "setTareTitle":"Tára váhy",
+                "setTareBody":"Nastavenie nulovej hodnoty senzora",
+                "setTare":"Nastaviť táru",
+                "synchroDateBody":"Nastaviť dátum a čas podľa hodnoty v telefóne, tablete",
+                "setTime":"Nastavenie dátumu a času",
+                "setTimeBtn":"NASTAVIŤ Dátum/čas",
+                "setNameBtn":"NASTAVIŤ NÁZOV",
+                "set":"NASTAVIŤ",
+                "AutoSaveTime":"Automatické zapisovanie hodnôt denne o:",
+                "namePlaceholder":"Nové meno",
             }
         },
     }

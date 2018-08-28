@@ -17,175 +17,147 @@
 
     <div class="container">
 
-    <ul class="list-group list">
 
-
-          <li class="accordion-item list-group-item">
+    <div class="list accordion-list">
+      <ul>
+          <li class="accordion-item">
             <a href="#" class="item-link item-content">
+              <i class="fa fa-clock-o"></i>&nbsp;
               <div class="item-inner">
-                <b data-i18n="synchroDateTitle">Synchronize date and time</b>
-                <div class="item-content"><span  data-i18n="synchroDateBody">
+                <div class="item-title"><span data-i18n="synchroDateTitle">Synchronize date and time</span></div>
+              </div></a>
+                <div class="accordion-item-content">
+                  <p class="block"  data-i18n="synchroDateBody">
                   Set device date and time with actual value from your phone or tablet
-                  </span>
-                </div>
-              </div>
-            </a>
-            <div class="accordion-item-content" style="">
-              <div class="item-content">
-                <span data-i18n="setTime">Set date and time</span>
-                <div class="item-after">
+                  </p>
                   <button class="btn btn-success" id="setDateTime">
-                    <i class="icon fa fa-clock"></i> SET DATE TIME
+                    <i class="fa fa-clock-o"></i>&nbsp;<span data-i18n="setTimeBtn">SET DATE TIME</span>
                   </button>
                 </div>
-              </div>
-            </div>
           </li>
 
-
-          <li class="accordion-item list-group-item">
+          <li class="accordion-item">
             <a href="#" class="item-link item-content">
+              <i class="fa fa-balance-scale"></i>&nbsp;
               <div class="item-inner">
-                <div class="item-content">
-                  <b data-i18n="setTareTitle">Tare your weight</b>
-                  <span data-i18n="setTareBody">
+                <div class="item-title"><div data-i18n="setTareTitle">Tare your weight</div></div>
+              </div></a>
+                <div class="accordion-item-content">
+                  <p class="block"  data-i18n="setTareBody">
                   Set device weight sensor for zero value now
-                  </span>
-                </div>
-              </div>
-            </a>
-            <div class="accordion-item-content" style="">
-              <div class="item-content">
-                <span data-i18n="setTare">Set tare</span>
-                <div class="item-after">
-                  <button class="btn btn-danger" id="setTare">
-                    <i class="fa fa-weight"></i> SET
+                  </p>
+                  <button class="btn btn-success" id="setTare">
+                    <i class="fa fa-balance-scale"></i>&nbsp;<span data-i18n="setTare">SET TARE</span>
                   </button>
                 </div>
-              </div>
-            </div>
           </li>
 
 
-
-
-          <li class="list-group-item">
-            <!-- SAVE TIME 1 -->
-            <div class="item-content">
-            <div class="item-title">#1 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
-              <div class="item-after">
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-input-wrap">
-                      <input class="text-center" type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime1"/>
-                    </div>
+          <li class="accordion-item">
+            <a href="#" class="item-link item-content">
+              <i class="fa fa-pencil-square-o"></i>&nbsp;
+              <div class="item-inner">
+                <div class="item-title">1 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
+              </div></a>
+              <div class="accordion-item-content">
+                <div class="block item-inner item-cell">
+                  <div class="item-row">
+                    <div class="item-cell"><input type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime1"/></div>
+                    <div class="item-cell text-right"><label class="toggle color-orange">
+                      <input type="checkbox" id="switch-time1">
+                      <span class="toggle-icon"></span>
+                    </label></div>
                   </div>
                 </div>
               </div>
-              <div class="item-after">
-                <label class="toggle color-orange">
-                  <input type="checkbox" id="switch-time1">
-                  <span class="toggle-icon"></span>
-                </label>
-              </div>
-            </div>
-          </li>
+            </li>
 
-
-          <li class="list-group-item">
-            <!-- SAVE TIME 2 -->
-            <div class="item-content">
-            <div class="item-title">#2 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
-              <div class="item-after">
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-input-wrap">
-                      <input class="text-center" type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime2"/>
-                    </div>
+          <li class="accordion-item">
+            <a href="#" class="item-link item-content">
+              <i class="fa fa-pencil-square-o"></i>&nbsp;
+              <div class="item-inner">
+                <div class="item-title">2 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
+              </div></a>
+              <div class="accordion-item-content">
+                <div class="block item-inner item-cell">
+                  <div class="item-row">
+                    <div class="item-cell"><input type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime2"/></div>
+                    <div class="item-cell text-right"><label class="toggle color-orange">
+                      <input type="checkbox" id="switch-time2">
+                      <span class="toggle-icon"></span>
+                    </label></div>
                   </div>
                 </div>
               </div>
-              <div class="item-after">
-                <label class="toggle color-orange">
-                  <input type="checkbox" id="switch-time2">
-                  <span class="toggle-icon"></span>
-                </label>
-              </div>
-            </div>
-          </li>
+            </li>
 
-          <li class="list-group-item">
-            <!-- SAVE TIME 3 -->
-            <div class="item-content">
-            <div class="item-title">#3 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
-              <div class="item-after">
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-input-wrap">
-                      <input class="text-center" type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime3"/>
-                    </div>
+          <li class="accordion-item">
+            <a href="#" class="item-link item-content">
+              <i class="fa fa-pencil-square-o"></i>&nbsp;
+              <div class="item-inner">
+                <div class="item-title">3 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
+              </div></a>
+              <div class="accordion-item-content">
+                <div class="block item-inner item-cell">
+                  <div class="item-row">
+                    <div class="item-cell"><input type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime3"/></div>
+                    <div class="item-cell text-right"><label class="toggle color-orange">
+                      <input type="checkbox" id="switch-time3">
+                      <span class="toggle-icon"></span>
+                    </label></div>
                   </div>
                 </div>
               </div>
-              <div class="item-after">
-                <label class="toggle color-orange">
-                  <input type="checkbox" id="switch-time3">
-                  <span class="toggle-icon"></span>
-                </label>
-              </div>
-            </div>
-          </li>
+            </li>
 
-          <li class="list-group-item">
-            <!-- SAVE TIME 4 -->
-            <div class="item-content">
-            <div class="item-title">#4 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
-              <div class="item-after">
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-input-wrap">
-                      <input class="text-center" type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime4"/>
-                    </div>
+          <li class="accordion-item">
+            <a href="#" class="item-link item-content">
+              <i class="fa fa-pencil-square-o"></i>&nbsp;
+              <div class="item-inner">
+                <div class="item-title">4 <span data-i18n="AutoSaveTime">Automatic save values every dat at:</span></div>
+              </div></a>
+              <div class="accordion-item-content">
+                <div class="block item-inner item-cell">
+                  <div class="item-row">
+                    <div class="item-cell"><input type="text" placeholder="hh:mm" readonly="readonly" id="pickerTime4"/></div>
+                    <div class="item-cell text-right"><label class="toggle color-orange">
+                      <input type="checkbox" id="switch-time4">
+                      <span class="toggle-icon"></span>
+                    </label></div>
                   </div>
                 </div>
               </div>
-              <div class="item-after">
-                <label class="toggle color-orange">
-                  <input type="checkbox" id="switch-time4">
-                  <span class="toggle-icon"></span>
-                </label>
-              </div>
-            </div>
-          </li>
+            </li>
 
-
-
-
-      <li class="list-group-item">
-            <div class="item-content">
-              <div class="item-title item-label" data-i18n="Set device name">Set device name
-              <div class="item-after">
-              <div class="item-input-wrap">
-                <input type="text" placeholder="Set device name" class="" id="setNameVal">
+          <li class="accordion-item">
+            <a href="#" class="item-link item-content">
+              <i class="fa fa-microchip"></i>&nbsp;
+              <div class="item-inner">
+                <div class="item-title"><span data-i18n="Set device name">Set device name</span></div>
+              </div></a>
+                <div class="accordion-item-content">
+                  <div class="block item-inner item-cell">
+                    <div class="item-row">
+                  <div class="item-input-wrap item-cell">
+                <input type="text" data-i18n="namePlaceholder" placeholder="..." class="" id="setNameVal">
                 <span class="input-clear-button"></span>
               </div>
-              </div>
-             <div class="item-after">
-                 <button class="btn btn-primary" id="setName">
-                    <i class="fa fa-device"></i> SET NAME
+                  </div>
+                </div>
+                  <button class="btn btn-success" id="setName">
+                    <i class="fa fa-microchip"></i>&nbsp;<span data-i18n="setNameBtn">SET NAME</span>
                   </button>
-
-              </div>
-            </div>
-            </div>
-
-      </li>
+                </div>
+          </li>
 
 
 
     </ul>
 
+
+
   </div>
+
   </div>
 
 </div>

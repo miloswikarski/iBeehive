@@ -49,7 +49,7 @@ var onInitFn = {
         $("#gadgetList").append('\
                 <li class="link list-group-item">\
                 <a href="/history/?devId=' + o.doc.hwid + '">' + hDate + 
-                '&nbsp;<i class="fa fa-microchip"></i>&nbsp;<span>' + o.doc.hwname + '</span>\
+                '&nbsp;<i class="fa fa-microchip"></i>&nbsp;<span>' + o.doc.hwname.slice(5) + '</span>\
                 </a>\
       </li>');
         });
@@ -99,9 +99,19 @@ var onInitFn = {
 
   },
 
-  devset: function() {
-    $("#setDateTime").click( function(){ //TODO ASI PREROB PODLA NOVEHO
-      app.writeData( "X=" + Date.now().toString().slice(0,10) );
+  devset: function(devId) {
+    devId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
+
+    $("#setDateTime").click( function(){
+                      //Set date on every connect
+                var dataT = stringToBytes(Date.now().toString().slice(0,10));
+                ble.write(devId,
+                    alyadevice.serviceDateTime,
+                    alyadevice.setDateTime,
+                    dataT,
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
     });
 
     $("#setTare").click( function(){
@@ -109,7 +119,7 @@ var onInitFn = {
     });
 
     $("#setName").click( function() {
-      app.writeData( "B=" + $("#setNameVal").val().trim().slice(0,255) )
+      app.writeData( "B=" + $("#setNameVal").val().trim().slice(0,255) );
     });
     var pickerParams = {
       inputEl: '#pickerTime1',
@@ -147,18 +157,139 @@ var onInitFn = {
       jQuery('#switch-time1').attr("checked", "checked"); 
       jQuery('#pickerTime1').val(beedb.settings.time1);
     }
+    jQuery('#pickerTime1').on('focusout', function () {
+      beedb.settings.time1 = picker1.getValue().toString().replace(/,/g,'');
+      window.localStorage.setItem('settingsTime1', beedb.settings.time1);
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime1,
+                    stringToBytes(beedb.settings.time1.replace(/:/,'') + '00'),
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
+      $("#switch-time1").attr("checked", true);
+    });
     jQuery('#switch-time1').on('change', function () {
       if( document.querySelector('#switch-time1').checked ){
         beedb.settings.time1 = picker1.getValue().toString().replace(/,/g,'');
       } else {
         beedb.settings.time1 = "";
       }
+      var saveString = stringToBytes(beedb.settings.time1.replace(/:/,'') + '00');
+      if (beedb.settings.time1 == "") saveString = stringToBytes('-1');
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime1,
+                    saveString,
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
       window.localStorage.setItem('settingsTime1', beedb.settings.time1);
-      console.log("1=" + beedb.settings.time1.replace(/:/,'') + '00');
-      console.log("//TO DO: NULOVANIE AKO? TERAZ TAK, ze PRAZDNY time1");
-      app.writeData( "1=" + beedb.settings.time1.replace(/:/,'') + '-1' );
-      //TO DO: NULOVANIE AKO? TERAZ TAK, ze PRAZDNY time1
     });
+    //2
+    if( beedb.settings.time2 !== "" ) {
+      jQuery('#switch-time2').attr("checked", "checked"); 
+      jQuery('#pickerTime2').val(beedb.settings.time2);
+    }
+    jQuery('#pickerTime2').on('focusout', function () {
+      beedb.settings.time2 = picker2.getValue().toString().replace(/,/g,'');
+      window.localStorage.setItem('settingsTime2', beedb.settings.time2);
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime2,
+                    stringToBytes(beedb.settings.time2.replace(/:/,'') + '00'),
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
+      $("#switch-time2").attr("checked", true);
+    });
+    jQuery('#switch-time2').on('change', function () {
+      if( document.querySelector('#switch-time2').checked ){
+        beedb.settings.time2 = picker2.getValue().toString().replace(/,/g,'');
+      } else {
+        beedb.settings.time2 = "";
+      }
+      var saveString = stringToBytes(beedb.settings.time2.replace(/:/,'') + '00');
+      if (beedb.settings.time2 == "") saveString = stringToBytes('-1');
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime2,
+                    saveString,
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
+      window.localStorage.setItem('settingsTime2', beedb.settings.time2);
+    });
+    //3
+    if( beedb.settings.time3 !== "" ) {
+      jQuery('#switch-time3').attr("checked", "checked"); 
+      jQuery('#pickerTime3').val(beedb.settings.time3);
+    }
+    jQuery('#pickerTime3').on('focusout', function () {
+      beedb.settings.time3 = picker3.getValue().toString().replace(/,/g,'');
+      window.localStorage.setItem('settingsTime3', beedb.settings.time3);
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime3,
+                    stringToBytes(beedb.settings.time3.replace(/:/,'') + '00'),
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
+      $("#switch-time3").attr("checked", true);
+    });
+    jQuery('#switch-time3').on('change', function () {
+      if( document.querySelector('#switch-time3').checked ){
+        beedb.settings.time3 = picker3.getValue().toString().replace(/,/g,'');
+      } else {
+        beedb.settings.time3 = "";
+      }
+      var saveString = stringToBytes(beedb.settings.time3.replace(/:/,'') + '00');
+      if (beedb.settings.time3 == "") saveString = stringToBytes('-1');
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime3,
+                    saveString,
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
+      window.localStorage.setItem('settingsTime3', beedb.settings.time3);
+    });
+    //4
+    if( beedb.settings.time4 !== "" ) {
+      jQuery('#switch-time4').attr("checked", "checked"); 
+      jQuery('#pickerTime4').val(beedb.settings.time4);
+    }
+    jQuery('#pickerTime4').on('focusout', function () {
+      beedb.settings.time4 = picker4.getValue().toString().replace(/,/g,'');
+      window.localStorage.setItem('settingsTime4', beedb.settings.time4);
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime4,
+                    stringToBytes(beedb.settings.time4.replace(/:/,'') + '00'),
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
+      $("#switch-time4").attr("checked", true);
+    });
+    jQuery('#switch-time4').on('change', function () {
+      if( document.querySelector('#switch-time4').checked ){
+        beedb.settings.time4 = picker4.getValue().toString().replace(/,/g,'');
+      } else {
+        beedb.settings.time4 = "";
+      }
+      var saveString = stringToBytes(beedb.settings.time4.replace(/:/,'') + '00');
+      if (beedb.settings.time4 == "") saveString = stringToBytes('-1');
+      ble.write(devId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime4,
+                    saveString,
+                    function(event){ app7.dialog.alert(i18next.t("OK"),i18next.t("configureDevice"));},
+                    function(e){ app7.dialog.alert(i18next.t("Error occured") + " " + JSON.stringify(e),i18next.t("configureDevice"));}
+                );
+      window.localStorage.setItem('settingsTime4', beedb.settings.time4);
+    });
+
+    /*
     //2
     if( beedb.settings.time2 !== "" ) {
       jQuery('#switch-time2').attr("checked", "checked"); 
@@ -175,7 +306,7 @@ var onInitFn = {
         beedb.settings.time2 = "";
       }
       window.localStorage.setItem('settingsTime2', beedb.settings.time2);
-      app.writeData( "2=" + beedb.settings.time2.replace(/:/,'') + '-1' );
+      app.writeData( "2=" + beedb.settings.time2.replace(/:/,'') + '00' );
     });
     //3
     if( beedb.settings.time3 !== "" ) {
@@ -189,7 +320,7 @@ var onInitFn = {
         beedb.settings.time3 = "";
       }
       window.localStorage.setItem('settingsTime3', beedb.settings.time3);
-      app.writeData( "3=" + beedb.settings.time3.replace(/:/,'') + '-1' );
+      app.writeData( "3=" + beedb.settings.time3.replace(/:/,'') + '00' );
     });
     //4
     if( beedb.settings.time4 !== "" ) {
@@ -203,8 +334,9 @@ var onInitFn = {
         beedb.settings.time4 = "";
       }
       window.localStorage.setItem('settingsTime4', beedb.settings.time4);
-      app.writeData( "4=" + beedb.settings.time4.replace(/:/,'') + '-1' );
+      app.writeData( "4=" + beedb.settings.time4.replace(/:/,'') + '00' );
     });
+    */
 
   },
 
@@ -339,7 +471,11 @@ var routes = [
     templateUrl: './pages/devset.html',
     on: {
       pageInit: function (e, page) {
-        onInitFn.devset();
+        if( page.route.query.devId ){
+          onInitFn.devset(page.route.query.devId);
+        } else {
+          onInitFn.devset();
+        }
       },
     }
   },

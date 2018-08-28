@@ -20,7 +20,6 @@ var alyadevice = {
     serviceUUID: '94e2ed81-5c2a-4f18-a414-e5393ab997e5', // data - save, t1, t2, w
     serviceTxRx: '12345d81-5c2a-4f18-a414-e5393ab997e5', // TX, RX, na zapis t= B= ...
 
-//    serviceSet:  '54321d81-5c2a-4f18-a414-e5393ab997e5', // Set Date, 4casy
 
     serviceRead: '1e400001-b5a3-f393-e0a9-e50e24dcca9e', // Batt, Firmw, Sw, Manf, Model#
 
@@ -36,11 +35,15 @@ var alyadevice = {
           sr4: '00002a28-0000-1000-8000-00805f9b34fb',
           sr5: '00002a24-0000-1000-8000-00805f9b34fb',
 
+        serviceCasMerania:  '54321d81-5c2a-4f18-a414-e5393ab997e5', // Read Date char
 
         setMeasureTime1:  'cccd6018-ec89-4efe-9b95-677e6986fe0f',
         setMeasureTime2:  '73e3c7ee-3fab-468d-9a15-babdc773663d',
         setMeasureTime3:  '6fe7d8e6-8e79-4def-9d5d-d7e6cdbeedd3',
         setMeasureTime4:  '0ddf34cb-7875-4333-a276-7cdc05015596',
+
+        serviceDateTime:  '6c648c88-c0d1-4c07-a9e5-03956368e622', // Set Date char
+
         setDateTime:  '1d1ee309-5e66-46b2-bbfb-c648802f55a8', // na zapis casov
 
 
@@ -369,45 +372,63 @@ var chartOptions = {
             $("#devPageTitle").text(e.target.dataset.deviceName.slice(5));
 
                 //Set date on every connect
-                var dataT = stringToBytes("X=" + Date.now().toString().slice(0,10));
+                var dataT = stringToBytes(Date.now().toString().slice(0,10));
                 ble.write(deviceId,
+                    alyadevice.serviceDateTime,
                     alyadevice.setDateTime,
-                    alyadevice.txCharacteristic,
                     dataT, function(event){ console.log(JSON.stringify(event));},
                     function(e){ console.log("err " + JSON.stringify(e));}
                 );
                 //read actual time1
-                ble.read(deviceId, alyadevice.setMeasureTime1, alyadevice.rxCharacteristic,
-                function(event){ 
-                    console.log(JSON.stringify(event));
+                ble.read(deviceId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime1,
+                function(data){ 
+                    var d = bytesToString(data);
+                    if (d.length == 5 ) d = "0" + d;
+                    beedb.settings.time1 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
                     console.log("err " + JSON.stringify(e));
                 });
                 //read actual time2
-                ble.read(deviceId, alyadevice.setMeasureTime2, alyadevice.rxCharacteristic,
-                function(event){ 
-                    console.log(JSON.stringify(event));
+                ble.read(deviceId, 
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime2,
+                function(data){ 
+                    var d = bytesToString(data);
+                    if (d.length == 5 ) d = "0" + d;
+                    beedb.settings.time2 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
                     console.log("err " + JSON.stringify(e));
                 });
                 //read actual time3
-                ble.read(deviceId, alyadevice.setMeasureTime3, alyadevice.rxCharacteristic,
-                function(event){ 
-                    console.log(JSON.stringify(event));
+                ble.read(deviceId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime3,
+                function(data){ 
+                    var d = bytesToString(data);
+                    if (d.length == 5 ) d = "0" + d;
+                    beedb.settings.time3 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
                     console.log("err " + JSON.stringify(e));
                 });
                 //read actual time4
-                ble.read(deviceId, alyadevice.setMeasureTime4, alyadevice.rxCharacteristic,
-                function(event){ 
-                    console.log(JSON.stringify(event));
+                ble.read(deviceId,
+                    alyadevice.serviceCasMerania,
+                    alyadevice.setMeasureTime4,
+                function(data){ 
+                    var d = bytesToString(data);
+                    if (d.length == 5 ) d = "0" + d;
+                    beedb.settings.time4 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
                     console.log("err " + JSON.stringify(e));
                 });
+
+                console.log("done");
 
     };
 
