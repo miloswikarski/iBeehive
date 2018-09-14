@@ -1,9 +1,12 @@
 var onInitFn = {
 
   devDetail: function() {
+    deviceId = (typeof deviceId !== 'undefined') ?  deviceId : beedb.settings.curId.toString();
     $("#disconnectButton").click(app.disconnectByGlobalId);
     $("#goBack").click(app.disconnectByGlobalId);
     $("#saveButton").click(beedb.savedata);
+
+
   },
   demoDetail: function() {
     $("#disconnectButton").click(function(){
@@ -65,46 +68,15 @@ var onInitFn = {
     });
   },
   aboutDevice: function() {
-
-            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr1,
-                function(event){
-                  var text = bytesToString(event);
-                  $("#devinfo").append("<p> " + text + "</p>");
-                },
-                null);
-            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr2,
-                function(event){
-                  var text = bytesToString(event);
-                  $("#devinfo").append("<p> " + text + "</p>");
-                },
-                null);
-            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr3,
-                function(event){
-                  var text = bytesToString(event);
-                  $("#devinfo").append("<p> " + text + "</p>");
-                },
-                null);
-            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr4,
-                function(event){
-                  var text = bytesToString(event);
-                  $("#devinfo").append("<p> " + text + "</p>");
-                },
-                null);
-            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr5,
-                function(event){
-                  var text = bytesToString(event);
-                  $("#devinfo").append("<p> " + text + "</p>");
-                },
-                null);
-
+    // davam priamo do menu
   },
 
   devset: function(devId) {
     devId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
 
     $("#setDateTime").click( function(){
-                      //Set date on every connect
-                var dataT = stringToBytes(Date.now().toString().slice(0,10));
+                //var dataT = stringToBytes(Date.now().toString().slice(0,10));
+                var dataT = stringToBytes((Date.now()-(new Date()).getTimezoneOffset()*60000).toString().slice(0,10));
                 ble.write(devId,
                     alyadevice.serviceDateTime,
                     alyadevice.setDateTime,
@@ -116,6 +88,10 @@ var onInitFn = {
 
     $("#setTare").click( function(){
       app.writeData( "t=" );
+    });
+
+    $("#setTare0").click( function(){
+      app.writeData( "T=0" );
     });
 
     $("#setName").click( function() {
@@ -146,12 +122,16 @@ var onInitFn = {
       };
 
     var picker1 = app7.picker.create(pickerParams);
+    picker1.setValue([beedb.settings.time1.slice(0,2),':',beedb.settings.time1.slice(3,5)]);
     pickerParams.inputEl = '#pickerTime2';
     var picker2 = app7.picker.create(pickerParams);
+    picker2.setValue([beedb.settings.time2.slice(0,2),':',beedb.settings.time2.slice(3,5)]);
     pickerParams.inputEl = '#pickerTime3';
     var picker3 = app7.picker.create(pickerParams);
+    picker3.setValue([beedb.settings.time3.slice(0,2),':',beedb.settings.time3.slice(3,5)]);
     pickerParams.inputEl = '#pickerTime4';
     var picker4 = app7.picker.create(pickerParams);
+    picker4.setValue([beedb.settings.time4.slice(0,2),':',beedb.settings.time4.slice(3,5)]);
     //1
     if( beedb.settings.time1 !== "" ) {
       jQuery('#switch-time1').attr("checked", "checked"); 
@@ -425,7 +405,7 @@ var routes = [
   {
     path: '/aboutDevice/',
     url: './pages/aboutDevice.html',
-    name: 'about',
+    name: 'aboutDevice',
     on: {
       pageInit: function (e, page) {
         onInitFn.aboutDevice();

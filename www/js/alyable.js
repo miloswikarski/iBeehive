@@ -372,7 +372,7 @@ var chartOptions = {
             $("#devPageTitle").text(e.target.dataset.deviceName.slice(5));
 
                 //Set date on every connect
-                var dataT = stringToBytes(Date.now().toString().slice(0,10));
+                var dataT = stringToBytes((Date.now()-(new Date()).getTimezoneOffset()*60000).toString().slice(0,10));
                 ble.write(deviceId,
                     alyadevice.serviceDateTime,
                     alyadevice.setDateTime,
@@ -427,6 +427,44 @@ var chartOptions = {
                 function(e){
                     console.log("err " + JSON.stringify(e));
                 });
+
+
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr2,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p>Vendor: " + text + "</p>");
+                },
+                function(e){ console.log("err " + JSON.stringify(e));}
+                );
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr3,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p>Battery: " + text + "</p>");
+                },
+                function(e){ console.log("err " + JSON.stringify(e));}
+                );
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr1,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p>FW: " + text + "</p>");
+                },
+                function(e){ console.log("err " + JSON.stringify(e));}
+                );
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr4,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p>SW: " + text + "</p>");
+                },
+                function(e){ console.log("err " + JSON.stringify(e));}
+                );
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr5,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p>Model: " + text + "</p>");
+                },
+                function(e){ console.log("err " + JSON.stringify(e));}
+                );
+
 
                 console.log("done");
 
@@ -527,7 +565,7 @@ determineWriteType: function(peripheral) {
             $("#weightChart").hide();
         }
         beedb.settings.curW = parseFloat(bytesToString(data))|| 0.0;
-        var perc = beedb.settings.curW / ( ( beedb.settings.maxweight - beedb.settings.minweight )/100 )
+        var perc = beedb.settings.curW / ( ( beedb.settings.maxweight - beedb.settings.minweight )/150 )
         if( typeof weightProgress !== "undefined") {
             weightProgress.setAttribute("style","width: " + perc + "%")
             weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';

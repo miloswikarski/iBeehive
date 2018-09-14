@@ -1,0 +1,4 @@
+meno zariadenia 3 bodky zmenit na meno zariadenia
+databaza, zmazat po 1 zariadeni
+About device aby tam bol aj firmware
+
