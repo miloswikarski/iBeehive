@@ -23,7 +23,7 @@ if ( !window.localStorage.getItem('beehavedb') ){
       demo: window.localStorage.getItem('settingsDemo') || 1,
       graphs: window.localStorage.getItem('settingsGraphs') || 0,
       minweight: window.localStorage.getItem('settingsMinweight') || 0,
-      maxweight: window.localStorage.getItem('settingsMaxweight') || 100,
+      maxweight: window.localStorage.getItem('settingsMaxweight') || 150,
       time1: window.localStorage.getItem('settingsTime1') || "",
       time2: window.localStorage.getItem('settingsTime2') || "",
       time3: window.localStorage.getItem('settingsTime3') || "",

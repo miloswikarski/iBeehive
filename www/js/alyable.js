@@ -565,7 +565,7 @@ determineWriteType: function(peripheral) {
             $("#weightChart").hide();
         }
         beedb.settings.curW = parseFloat(bytesToString(data))|| 0.0;
-        var perc = beedb.settings.curW / ( ( beedb.settings.maxweight - beedb.settings.minweight )/150 )
+        var perc = beedb.settings.curW / 1.5; // AKO VYRATANE: PERCENTO ZO 150
         if( typeof weightProgress !== "undefined") {
             weightProgress.setAttribute("style","width: " + perc + "%")
             weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';
