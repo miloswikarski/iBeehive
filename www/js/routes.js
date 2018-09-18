@@ -37,6 +37,37 @@ var onInitFn = {
     });
   },
 
+  deleteOneAllDb: function(d) {
+    $("#title").append("<h4>ALL DEVICE "+d+" DATA</h4>");
+    $("#delBtn").click(function(){
+
+          devId = (typeof d !== 'undefined') ?  d : beedb.settings.curId.toString();
+          console.log('deleting devId ', devId );
+          var options = {limit : 10, include_docs: true,
+             startkey: devId + '_' + "\ufff0",
+             endkey: devId + '_',
+             descending: false
+              };
+          pdb.allDocs(options).then( function (response) {
+            if (response && response.rows.length > 0) {
+              response.rows.forEach(function(o) {
+                pdb.remove(o.doc._id, o.doc._rev);
+              });
+              app7.dialog.alert(i18next.t("deleted"),i18next.t("deleteRecord"));
+
+            } else {
+              console.log(err);
+                app7.dialog.alert(i18next.t("Error occured."),i18next.t("deleteRecord"));
+
+            }
+          }).catch( function(err){
+            console.log(err);
+          });
+
+    });
+  },
+
+
   myDevices: function() {
    var options = {limit : 256, include_docs: true,
    startkey: 'GADGET_' + "\ufff0",
@@ -484,7 +515,11 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         console.log(page);
-          onInitFn.deleteOneDb(page.route.query.id, page.route.query.rev, page.route.query.d);
+          if( page.route.query.devid ){
+            onInitFn.deleteOneAllDb(page.route.query.devid);
+          } else {
+            onInitFn.deleteOneDb(page.route.query.id, page.route.query.rev, page.route.query.d);
+          }
       },
     }
   },

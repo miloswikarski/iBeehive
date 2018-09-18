@@ -73,29 +73,38 @@ readAll: function( devId ) {
       <tr><th>'+i18next.t('date')+'</th><th>'+i18next.t('weight')+' [kg]</th><th>Δ</th><th>T1 [°C]</th><th>T2 [°C]</th>\
       <th><i class="fa fa-trash"></i></th></tr>\
       </thead>';
-      var hDate, oldWeight=0;
+      var hDate, obj1, riadok = 1;
       var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
       response.rows.forEach(function(o) {
 
-          if( oldWeight === 0 ){
-            oldWeight = o.doc.weight;
-          }
+          if( riadok == 1 ){
+            obj1 = o.doc;
+            riadok = 2;
+          } else {
+              hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
+              var delta = (obj1.weight - o.doc.weight).toFixed(1);
+              var dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
+              html = html + '<tr><td>' + hDate + '</td><td class="btn-primary">'
+              + obj1.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
+               + obj1.temp1.toString() + "</td><td>"+ obj1.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + obj1._id + '&rev=' + obj1._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
+            obj1 = o.doc;
+        }
+      });
 
-//            if( o.doc.hwid != beedb.settings.curId ){ //filter for current
-  //            return;
-    //        }
-            //hDate = new Date(o.doc.hwtime).toISOString().slice(0,16);
-            hDate = (new Date( (new Date(o.doc.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
-            var delta = (o.doc.weight - oldWeight).toFixed(1);
-            var dcolor = delta < 0 ? ' class="btn-success"':' class="btn-danger"';
-            html = html + '<tr><td>' + hDate + '</td><td class="btn-primary">'
-            + o.doc.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
-             + o.doc.temp1.toString() + "</td><td>"+ o.doc.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
+      if( obj1 ){
+              hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
+              var delta = (obj1.weight).toFixed(1);
+              var dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
+              html = html + '<tr><td>' + hDate + '</td><td class="btn-primary">'
+              + obj1.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
+               + obj1.temp1.toString() + "</td><td>"+ obj1.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + obj1._id + '&rev=' + obj1._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
 
-            oldWeight = o.doc.weight;
-          });
+      }
 
-      //console.log(html);
+
+      html = html + '</table>';
+      // + '<p><button class="btn btn-danger"><a href="/delete/?devid=' + encodeURI(devId) + '"><i class="fa fa-trash"></i></a></button></p>';
+
 
       jQuery("#historyBody").html(html + '</table>');
 
