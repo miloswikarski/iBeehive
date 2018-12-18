@@ -43,25 +43,28 @@ var onInitFn = {
 
           devId = (typeof d !== 'undefined') ?  d : beedb.settings.curId.toString();
           console.log('deleting devId ', devId );
+          app.writeData( "I=" );
           var options = {limit : 10, include_docs: true,
              startkey: devId + '_' + "\ufff0",
              endkey: devId + '_',
-             descending: false
+             descending: true
               };
-          pdb.allDocs(options).then( function (response) {
-            if (response && response.rows.length > 0) {
-              response.rows.forEach(function(o) {
-                pdb.remove(o.doc._id, o.doc._rev);
-              });
-              app7.dialog.alert(i18next.t("deleted"),i18next.t("deleteRecord"));
+            pdb.allDocs(options, function (err, response) {
+              if (response && response.rows.length > 0) {
+                response.rows.forEach(function(o) {
+                  pdb.remove(o.doc._id, o.doc._rev);
+                });
+                app7.views.main.router.back();
+                setTimeout(function(){app7.views.main.router.back();},500);
+//                app7.dialog.alert(i18next.t("deleted"),i18next.t("devicedeleted"));
 
-            } else {
-              console.log(err);
-                app7.dialog.alert(i18next.t("Error occured."),i18next.t("deleteRecord"));
+              } else {
+                console.log(response);
+                app7.views.main.router.back();
+                setTimeout(function(){app7.views.main.router.back();},500);
+                  app7.dialog.alert(i18next.t("Error occured."),i18next.t("deleteRecord"));
 
-            }
-          }).catch( function(err){
-            console.log(err);
+              }
           });
 
     });

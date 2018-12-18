@@ -70,43 +70,54 @@ readAll: function( devId ) {
       //options.skip = 1;
 //      var display = document.getElementById('historyBody');
       var html = '<table class="table table-bordered table-striped"><thead>\
-      <tr><th>'+i18next.t('date')+'</th><th>'+i18next.t('weight')+' [kg]</th><th>Δ</th><th>T1 [°C]</th><th>T2 [°C]</th>\
+      <tr><th>'+i18next.t('date')+'</th><th>'+i18next.t('weight')+' [kg]</th><th>24h Δ</th><th>T1 [°C]</th><th>T2 [°C]</th>\
       <th><i class="fa fa-trash"></i></th></tr>\
       </thead>';
       var hDate, obj1, riadok = 1;
       var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-      response.rows.forEach(function(o) {
+       var times = [];
+       response.rows.forEach(function(o){
+         const d = new Date(o.doc.hwtime);
+         const t = Math.floor(o.doc.hwtime/1000);
+         const hDate = (new Date( (new Date(o.doc.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
+         times[ t ] = { "hDate": hDate, "weight": o.doc.weight };
+         
+       });
+       console.log(times);
 
-          if( riadok == 1 ){
-            obj1 = o.doc;
-            riadok = 2;
-          } else {
-              hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
-              var delta = (obj1.weight - o.doc.weight).toFixed(1);
+        response.rows.sort(function(a, b){
+          return a.doc.hwtime == b.doc.hwtime ? 0 : +(a.doc.hwtime < b.doc.hwtime) || -1;
+        }).forEach(function(o) {
+
+              const t = Math.floor(o.doc.hwtime/1000);
+            var delta = "?";
+             if( times[Math.floor((o.doc.hwtime - 24*60*60000)/1000)] ){
+                delta = Math.round(times[t].weight - times[Math.floor((o.doc.hwtime - 24*3600000)/1000)].weight,1);
+             }
+//              hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
+           //   var delta = (obj1.weight - o.doc.weight).toFixed(1);
               var dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
-              html = html + '<tr><td>' + hDate + '</td><td class="btn-primary">'
-              + obj1.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
-               + obj1.temp1.toString() + "</td><td>"+ obj1.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + obj1._id + '&rev=' + obj1._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
-            obj1 = o.doc;
-        }
+              html = html + '<tr><td>' + times[t].hDate + '</td><td class="btn-primary">'
+              + o.doc.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
+               + o.doc.temp1.toString() + "</td><td>"+ o.doc.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
       });
 
-      if( obj1 ){
-              hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
-              var delta = (obj1.weight).toFixed(1);
-              var dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
-              html = html + '<tr><td>' + hDate + '</td><td class="btn-primary">'
-              + obj1.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
-               + obj1.temp1.toString() + "</td><td>"+ obj1.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + obj1._id + '&rev=' + obj1._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
+      // if( obj1 ){
+      //         console.log(obj1.hwtime);
+      //         hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
+      //         var delta = (obj1.weight).toFixed(1);
+      //         var dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
+      //         html = html + '<tr><td>' + hDate + '</td><td class="btn-primary">'
+      //         + obj1.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
+      //          + obj1.temp1.toString() + "</td><td>"+ obj1.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + obj1._id + '&rev=' + obj1._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
 
-      }
-
-
-      html = html + '</table>';
-      // + '<p><button class="btn btn-danger"><a href="/delete/?devid=' + encodeURI(devId) + '"><i class="fa fa-trash"></i></a></button></p>';
+      // }
 
 
-      jQuery("#historyBody").html(html + '</table>');
+      html = html + '<tfoot><tr>' 
+      + '<td><a onclick="app7.methods.shareFn();" class="link nounderline icon-only"><i class="icon fa fa-share"></i></a></td>'
+      + '<td colspan="4">&nbsp;</td><td><button class="btn btn-danger"><a href="/delete/?devid=' + encodeURI(devId) + '">' + i18next.t("delete all") + ' <i class="fa fa-trash"></i></a></button></td></tr></tfoot></table>';
+      jQuery("#historyBody").html(html);
 
     }
         // handle err or response
@@ -117,7 +128,7 @@ readAll: function( devId ) {
 savedata: function(event) {
 
   var o = {};
-  o._id = beedb.settings.curId.toString() + '_' + Date.now().toString().slice(0,10),
+  o._id = beedb.settings.curId.toString() + '_' + Date.now().toString(),
   o.hwid = beedb.settings.curId;
   o.hwtime = Number(Date.now().toString());
   o.temp1 = Number(beedb.settings.curT1);
@@ -133,6 +144,11 @@ savedata: function(event) {
     } else if(response && response.ok) {
       console.log(response);
       
+      // o._id = beedb.settings.curId.toString() + '_' + Date.now().toString(),
+      // o.weight = Math.random(44);
+      // o.hwtime = o.hwtime - (60*60000*24);
+      // pdb.post(o,function(error,response){ console.log('savedx',o.hwtime.toString())});
+
       app7.dialog.alert(i18next.t("valuesSaved") + "...",i18next.t("actualValues"));
 
       //First synchro must be initialized by manual saving.

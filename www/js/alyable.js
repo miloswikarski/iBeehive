@@ -35,6 +35,26 @@ var alyadevice = {
           sr4: '00002a28-0000-1000-8000-00805f9b34fb',
           sr5: '00002a24-0000-1000-8000-00805f9b34fb',
 
+
+        // //#define BATTERY_LEVEL_UUID          "00002A19-0000-1000-8000-00805f9b34fb'
+        // sr3:          'bacf03cf-487f-4636-b53f-b2cb3b664db8',
+         
+        // //#define DIS_MANUF_UUID              '00002a29-0000-1000-8000-00805f9b34fb'
+        // sr2:              'ea5eb2b2-dbd7-4063-9ae7-847b7be7d157',
+         
+        // //#define DIS_MODEL_UUID              '00002a24-0000-1000-8000-00805f9b34fb'
+        // sr5:              '83e1e608-78f2-4fa6-84b4-4445b564959c',
+         
+        // // #define DIS_HWREV_UUID              '00002a26-0000-1000-8000-00805f9b34fb'
+        // sr1:              'ee09dece-18e7-4ffb-96b9-0b7cba6740d6',
+        // //#define DIS_SWREV_UUID              '00002a28-0000-1000-8000-00805f9b34fb'
+        // sr4:              'a84aefde-3405-4a0b-82c8-08177403081d',
+         
+        //#define DIS_SERIAL_NUMBER           '68620c3b-8c2d-49b9-85ee-ff202303b191'
+        srserial: '68620c3b-8c2d-49b9-85ee-ff202303b191',
+
+
+
         serviceCasMerania:  '54321d81-5c2a-4f18-a414-e5393ab997e5', // Read Date char
 
         setMeasureTime1:  'cccd6018-ec89-4efe-9b95-677e6986fe0f',
@@ -440,6 +460,10 @@ var chartOptions = {
                 function(event){
                   var text = bytesToString(event);
                   $("#devinfo").append("<p>Battery: " + text + "</p>");
+                  var batHtml = app.getBatIcon( text );
+                  $("#batIcon").html(batHtml);
+                  console.log("BAT " + text);
+
                 },
                 function(e){ console.log("err " + JSON.stringify(e));}
                 );
@@ -457,16 +481,20 @@ var chartOptions = {
                 },
                 function(e){ console.log("err " + JSON.stringify(e));}
                 );
-            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr5,
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr4,
                 function(event){
                   var text = bytesToString(event);
-                  $("#devinfo").append("<p>Model: " + text + "</p>");
+                  $("#devinfo").append("<p>SW: " + text + "</p>");
                 },
                 function(e){ console.log("err " + JSON.stringify(e));}
                 );
-
-
-                console.log("done");
+            // ble.read(deviceId, alyadevice.serviceRead, alyadevice.srserial,
+            //     function(event){
+            //       var text = bytesToString(event);
+            //       $("#devinfo").append("<p>Serial #: " + text + "</p>");
+            //     },
+            //     function(e){ console.log("err " + JSON.stringify(e));}
+            //     );
 
     };
 
@@ -801,6 +829,33 @@ determineWriteType: function(peripheral) {
                 sigHtml = '<span class="fa-stack fa-lg">\
                 <i class="fa fa-signal fa-stack-1x" style="opacity:.3"></i>\
                 <i class="fa fa-signal fa-stack-1x" style="overflow:hidden; width:1.0em; margin-left:0.5em;"></i>\
+                </span>';
+            } 
+
+            return sigHtml;
+        },
+
+
+        getBatIcon: function( batValue ) {
+            var bat = Number(batValue);
+            var sigHtml = '<span class="fa-stack fa-lg">\
+            <i class="fa fa-battery-full"></i>\
+            </span>';
+            if( bat < 76 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-battery-three-quarters"></i>\
+                </span>';
+            } else if( bat < 51 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-battery-half"></i>\
+                </span>';
+            } else if( bat < 26 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-battery-quarter"></i>\
+                </span>';
+            } else if( bat < 10 ){
+                sigHtml = '<span class="fa-stack fa-lg">\
+                <i class="fa fa-battery-empty"></i>\
                 </span>';
             } 
 

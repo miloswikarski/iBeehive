@@ -22,6 +22,41 @@ var app7 = new Framework7({
     helloWorld: function () {
       app7.dialog.alert('Hello World!');
     },
+
+    shareFn: function () {
+        devId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
+        var options = {limit : 365, include_docs: true,
+           startkey: devId + '_' + "\ufff0",
+           endkey: devId + '_',
+           descending: true };
+        pdb.allDocs(options, function (err, response) {
+          if (response && response.rows.length > 0) {
+            var hDate;
+            var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+            var alldata = "";
+            response.rows.sort(function(a, b){
+              return a.doc.hwtime == b.doc.hwtime ? 0 : +(a.doc.hwtime < b.doc.hwtime) || -1;
+            }).forEach(function(o) {
+               const d = new Date(o.doc.hwtime);
+               const t = Math.floor(o.doc.hwtime/1000);
+               const hDate = (new Date( (new Date(o.doc.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
+               alldata = alldata + hDate + ";" + o.doc.weight.toString() + ";" + o.doc.temp1.toString()  + ";" + o.doc.temp2.toString() + ";\n"; 
+               
+             });
+             console.log(alldata);
+          navigator.share(beedb.settings.curId.toString() + "\n" + 
+           "Date;Weight;Temp1;Temp2;\n" 
+           + alldata
+            ,"Share","plain/csv");
+
+
+           };
+
+         });
+
+
+    },
+
     onBackKeyDown: function() { // Handle the Android back button
         var leftp = app7.panel.left && app7.panel.left.opened;
         var rightp = app7.panel.right && app7.panel.right.opened;
