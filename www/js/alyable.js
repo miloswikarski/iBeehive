@@ -556,6 +556,9 @@ determineWriteType: function(peripheral) {
         if( beedb.settings.curT1 === bytesToString(data) ){
             return false;
         }
+        if( "null" === bytesToString(data) ){
+            return false;
+        }
         $("#tempOutTitle").text(i18next.t("External temperature"));
         $("#tempOut").text(bytesToString(data)).append("<sup>°C</sup>");
         if( Number(beedb.settings.graphs == 1) ){
@@ -568,6 +571,9 @@ determineWriteType: function(peripheral) {
     },
     onTempIn: function(data) { // data received from Arduino
         if( beedb.settings.curT2 === bytesToString(data) ){
+            return false;
+        }
+        if( "null" === bytesToString(data) ){
             return false;
         }
         $("#tempInTitle").text(i18next.t("Internal temperature") );
@@ -584,6 +590,10 @@ determineWriteType: function(peripheral) {
         if( beedb.settings.curW === parseFloat(bytesToString(data)) ){
             return false;
         }
+        if( "null" === bytesToString(data) ){
+            return false;
+        }
+        
         //$("#nettoVahaTitle").text(i18next.t("Weight") );
         $("#nettoVaha").text(bytesToString(data)).append("<small> kg</small>");
         if( Number(beedb.settings.graphs) === 1 ){
