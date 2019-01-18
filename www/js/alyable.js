@@ -559,7 +559,7 @@ determineWriteType: function(peripheral) {
         if( "null" === bytesToString(data) ){
             return false;
         }
-        $("#tempOutTitle").text(i18next.t("External temperature"));
+        $("#tempOutTitle").text(i18next.t("T2"));
         $("#tempOut").text(bytesToString(data)).append("<sup>°C</sup>");
         if( Number(beedb.settings.graphs == 1) ){
             $("#tempChart").show();
@@ -576,7 +576,7 @@ determineWriteType: function(peripheral) {
         if( "null" === bytesToString(data) ){
             return false;
         }
-        $("#tempInTitle").text(i18next.t("Internal temperature") );
+        $("#tempInTitle").text(i18next.t("T1") );
         $("#tempIn").text(bytesToString(data)).append("<sup>°C</sup>");
         if( Number(beedb.settings.graphs) === 1 ){
             $("#tempChart").show();
@@ -768,7 +768,7 @@ determineWriteType: function(peripheral) {
         navigator.notification.alert(
             reason.errorMessage,
             function(){},
-            i18next.t("Internal temperature reading error"),
+            i18next.t("T1 reading error"),
             i18next.t('OK')
             );
     },
@@ -776,7 +776,7 @@ determineWriteType: function(peripheral) {
         navigator.notification.alert(
             reason.errorMessage,
             function(){},
-            i18next.t("External temperature reading error"),
+            i18next.t("T2 reading error"),
             i18next.t('OK')
             );
     },

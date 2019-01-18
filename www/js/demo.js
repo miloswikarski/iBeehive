@@ -30,9 +30,9 @@ var demo = {
     	var randomVal2 = Math.floor(randomVal + (Math.random() * 300 ))/10;
     	var randomW = (Math.floor(Math.random() * 1200 ) )/10;
 
-        $("#tempOutTitle").text(i18next.t("External temperature"));
+        $("#tempOutTitle").text(i18next.t("T2"));
         $("#tempOut").text( randomVal.toString()).append("<sup>°C</sup>");
-        $("#tempInTitle").text(i18next.t("Internal temperature") );
+        $("#tempInTitle").text(i18next.t("T1") );
         $("#tempIn").text( randomVal2.toString()).append("<sup>°C</sup>");
 
         $("#nettoVaha").text(randomW.toString()).append("<small> kg</small>");
