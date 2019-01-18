@@ -89,17 +89,27 @@ readAll: function( devId ) {
           return a.doc.hwtime == b.doc.hwtime ? 0 : +(a.doc.hwtime < b.doc.hwtime) || -1;
         }).forEach(function(o) {
 
-              const t = Math.floor(o.doc.hwtime/1000);
+            const t = Math.floor(o.doc.hwtime/1000);
             var delta = "?";
+            var dcolor = ' class="btn-danger"';
              if( times[Math.floor((o.doc.hwtime - 24*60*60000)/1000)] ){
-                delta = Math.round(times[t].weight - times[Math.floor((o.doc.hwtime - 24*3600000)/1000)].weight,1);
+                delta = (times[t].weight - times[Math.floor((o.doc.hwtime - 24*3600000)/1000)].weight);
+                dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
+                delta = delta.toFixed(1);
              }
 //              hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
            //   var delta = (obj1.weight - o.doc.weight).toFixed(1);
-              var dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
+            var t2x = parseFloat(o.doc.temp2);
+            if( t2x > 60 ){
+                t2x = 60 - t2x;
+            }
+            var t1x = parseFloat(o.doc.temp1);
+            if( t1x > 60 ){
+                t1x = 60 - t1x;
+            }        
               html = html + '<tr><td>' + times[t].hDate + '</td><td class="btn-primary">'
-              + o.doc.weight.toString() +"</td><td" + dcolor + ">" + delta.toString() + "</td><td>"
-               + o.doc.temp1.toString() + "</td><td>"+ o.doc.temp2.toString()  + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
+              + o.doc.weight.toString() +"</td><td" + dcolor + ">" + "</td><td>"
+               + t1x.toFixed(1) + "</td><td>"+ t2x.toFixed(1) + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
       });
 
       // if( obj1 ){

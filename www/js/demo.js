@@ -31,17 +31,17 @@ var demo = {
     	var randomW = (Math.floor(Math.random() * 1200 ) )/10;
 
         $("#tempOutTitle").text(i18next.t("T2"));
-        $("#tempOut").text( randomVal.toString()).append("<sup>°C</sup>");
+        $("#tempOut").text( randomVal.toFixed(1)).append("<sup>°C</sup>");
         $("#tempInTitle").text(i18next.t("T1") );
-        $("#tempIn").text( randomVal2.toString()).append("<sup>°C</sup>");
+        $("#tempIn").text( randomVal2.toFixed(1)).append("<sup>°C</sup>");
 
-        $("#nettoVaha").text(randomW.toString()).append("<small> kg</small>");
+        $("#nettoVaha").text(randomW.toFixed(1)).append("<small> kg</small>");
         beedb.settings.curT1 = randomVal;
         beedb.settings.curT2 = randomVal2;
         beedb.settings.curW = randomW || 0.0;
         var perc = beedb.settings.curW / ( ( beedb.settings.maxweight - beedb.settings.minweight )/100 )
         weightProgress.setAttribute("style","width: " + perc + "%")
-        weightProgress.innerHTML = perc.toFixed(0).toString() + ' % max';
+        weightProgress.innerHTML = perc.toFixed(0) + ' % max';
 
     	demo.timeoutVar = setTimeout(demo.showValues, 2000);
 

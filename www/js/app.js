@@ -68,7 +68,9 @@ var app7 = new Framework7({
             return false;
         } else if (app7.views.main.router.url == '/') {
             app7.dialog.confirm(i18next.t('Are you sure you want to exit?'), "iBeehive", function() {
-                navigator.app.exitApp();
+              var deviceId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
+              app.disconnectById(deviceId);
+              navigator.app.exitApp();
             },
             function() {
             });
