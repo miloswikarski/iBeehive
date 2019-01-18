@@ -481,10 +481,10 @@ var chartOptions = {
                 },
                 function(e){ console.log("err " + JSON.stringify(e));}
                 );
-            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr4,
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr5,
                 function(event){
                   var text = bytesToString(event);
-                  $("#devinfo").append("<p>SW: " + text + "</p>");
+                  $("#devinfo").append("<p>Model: " + text + "</p>");
                 },
                 function(e){ console.log("err " + JSON.stringify(e));}
                 );
