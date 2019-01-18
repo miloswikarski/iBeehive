@@ -559,19 +559,19 @@ determineWriteType: function(peripheral) {
         if( "null" === bytesToString(data) ){
             return false;
         }
-        var t2x = parseFloat(bytesToString(data));
+        var t2x = parseFloat(bytesToString(data)) || bytesToString(data);
         if( t2x > 60 ){
             t2x = 60 - t2x;
         }
         $("#tempOutTitle").text(i18next.t("T2"));
-        $("#tempOut").text(t2x.toFixed(1)).append("<sup>°C</sup>");
+        $("#tempOut").text(isNaN(t2x)?t2x:t2x.toFixed(1)).append("<sup>°C</sup>");
         if( Number(beedb.settings.graphs == 1) ){
             $("#tempChart").show();
             app.setChart(chartData.datasets[1].data,bytesToString(data));
         } else {
             $("#tempChart").hide();
         }
-        beedb.settings.curT2 = t2x.toFixed(1);
+        beedb.settings.curT2 = isNaN(t2x)?t2x:t2x.toFixed(1);
     },
     onTempIn: function(data) { // data received from Arduino
         if( beedb.settings.curT2 === bytesToString(data) ){
@@ -580,19 +580,19 @@ determineWriteType: function(peripheral) {
         if( "null" === bytesToString(data) ){
             return false;
         }
-        var t1x = parseFloat(bytesToString(data));
+        var t1x = parseFloat(bytesToString(data)) || bytesToString(data);
         if( t1x > 60 ){
             t1x = 60 - t1x;
         }
         $("#tempInTitle").text(i18next.t("T1") );
-        $("#tempIn").text(t1x.toFixed(1)).append("<sup>°C</sup>");
+        $("#tempIn").text(isNaN(t1x)?t1x:t1x.toFixed(1)).append("<sup>°C</sup>");
         if( Number(beedb.settings.graphs) === 1 ){
             $("#tempChart").show();
             app.setChart(chartData.datasets[0].data,bytesToString(data));
         } else {
             $("#tempChart").hide();
         }
-        beedb.settings.curT1 = t1x.toFixed(1);
+        beedb.settings.curT1 = isNaN(t1x)?t1x:t1x.toFixed(1);
     },
     onNettoVaha: function(data) { // data received from Arduino
         if( beedb.settings.curW === parseFloat(bytesToString(data)) ){
@@ -603,7 +603,7 @@ determineWriteType: function(peripheral) {
         }
         
         //$("#nettoVahaTitle").text(i18next.t("Weight") );
-        $("#nettoVaha").text(parseFloat(bytesToString(data)).toFixed(1)).append("<small> kg</small>");
+        $("#nettoVaha").text(isNaN(bytesToString(data))?bytesToString(data):parseFloat(bytesToString(data)).toFixed(1)||bytesToString(data)).append("<small> kg</small>");
         if( Number(beedb.settings.graphs) === 1 ){
             $("#weightChart").show();
             app.setWeightChart(chartWeightData.datasets[0].data,bytesToString(data));

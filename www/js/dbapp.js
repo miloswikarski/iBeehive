@@ -99,17 +99,17 @@ readAll: function( devId ) {
              }
 //              hDate = (new Date( (new Date(obj1.hwtime)).getTime() - tzoffset)).toISOString().slice(0, -8).replace("T", " ") || "";
            //   var delta = (obj1.weight - o.doc.weight).toFixed(1);
-            var t2x = parseFloat(o.doc.temp2);
+            var t2x = isNaN(o.doc.temp2)?o.doc.temp2:parseFloat(o.doc.temp2);
             if( t2x > 60 ){
                 t2x = 60 - t2x;
             }
-            var t1x = parseFloat(o.doc.temp1);
+            var t1x = isNaN(o.doc.temp1)?o.doc.temp1:parseFloat(o.doc.temp1);
             if( t1x > 60 ){
                 t1x = 60 - t1x;
             }        
               html = html + '<tr><td>' + times[t].hDate + '</td><td class="btn-primary">'
               + o.doc.weight.toString() +"</td><td" + dcolor + ">" + "</td><td>"
-               + t1x.toFixed(1) + "</td><td>"+ t2x.toFixed(1) + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
+               + (isNaN(t1x)?t1x:t1x.toFixed(1) ) + "</td><td>"+ (isNaN(t2x)?t2x:t2x.toFixed(1) ) + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
       });
 
       // if( obj1 ){
