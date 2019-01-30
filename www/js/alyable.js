@@ -604,7 +604,9 @@ determineWriteType: function(peripheral) {
         }
         
         //$("#nettoVahaTitle").text(i18next.t("Weight") );
-        $("#nettoVaha").text(isNaN(bytesToString(data))?bytesToString(data):parseFloat(bytesToString(data)).toFixed(1)||bytesToString(data)).append("<small> kg</small>");
+        var vaha = parseFloat(bytesToString(data)) || bytesToString(data);
+        console.log('vaha',vaha);
+        $("#nettoVaha").text(isNaN(vaha)?vaha:vaha.toFixed(1)||vaha).append("<small> kg</small>");
         if( Number(beedb.settings.graphs) === 1 ){
             $("#weightChart").show();
             app.setWeightChart(chartWeightData.datasets[0].data,bytesToString(data));
