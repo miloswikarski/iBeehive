@@ -596,17 +596,23 @@ determineWriteType: function(peripheral) {
         beedb.settings.curT1 = isNaN(t1x)?t1x:t1x.toFixed(1);
     },
     onNettoVaha: function(data) { // data received from Arduino
-        if( beedb.settings.curW === parseFloat(bytesToString(data)) ){
-            return false;
-        }
+        console.log('vahaxx', beedb.settings.curW , parseFloat(bytesToString(data)) );
+        // if( beedb.settings.curW === parseFloat(bytesToString(data)) ){
+        //     if( !$("#nettoVaha").hasClass("loader")){
+        //         return false;
+        //     }
+        // }
         if( "null" === bytesToString(data) ){
             return false;
         }
         
         //$("#nettoVahaTitle").text(i18next.t("Weight") );
-        var vaha = parseFloat(bytesToString(data)) || bytesToString(data);
-        console.log('vaha',vaha);
-        $("#nettoVaha").text(isNaN(vaha)?vaha:vaha.toFixed(1)||vaha).append("<small> kg</small>");
+        if( bytesToString(data) === "^^^ " || bytesToString(data) === "vvv "  ){
+            $("#nettoVaha").text(bytesToString(data)).append("<small> kg</small>");
+        } else {
+            var vaha = parseFloat(bytesToString(data));// || bytesToString(data);
+            $("#nettoVaha").text(isNaN(vaha)?vaha:vaha.toFixed(1)||vaha).append("<small> kg</small>");
+        }
         if( Number(beedb.settings.graphs) === 1 ){
             $("#weightChart").show();
             app.setWeightChart(chartWeightData.datasets[0].data,bytesToString(data));

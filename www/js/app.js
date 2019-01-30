@@ -9,6 +9,7 @@ var theme = 'auto';
 var app7 = new Framework7({
   id: 'sk.alya.ibeehive',
   root: '#app',
+  isDetail: false,
   theme: theme,
   data: function () {
     return {

@@ -425,7 +425,10 @@ var routes = [
     name: 'home',
     on: {
       pageInit: function (e, page) {
-        app.disconnectByGlobalId();
+        if( app7.isDetail ){
+          app.disconnectByGlobalId();
+          app7.isDetail = false;
+        }
       }
     }
   },
@@ -437,6 +440,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.about();
+          app7.isDetail = false;
       },
     }
   },
@@ -448,6 +452,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.aboutDevice();
+          app7.isDetail = false;
       },
     }
   },
@@ -459,6 +464,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.devDetail();
+          app7.isDetail = true;
       },
     }
   },
@@ -470,6 +476,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.demoDetail();
+          app7.isDetail = false;
       },
     }
   },
@@ -480,6 +487,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.config();
+          app7.isDetail = false;
       },
     }
   },
@@ -490,6 +498,7 @@ var routes = [
     templateUrl: './pages/devset.html',
     on: {
       pageInit: function (e, page) {
+          app7.isDetail = false;
         if( page.route.query.devId ){
           onInitFn.devset(page.route.query.devId);
         } else {
@@ -506,6 +515,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         console.log(page);
+          app7.isDetail = false;
         if( page.route.query.devId ){
           onInitFn.historyDb(page.route.query.devId);
         } else {
@@ -523,6 +533,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         console.log(page);
+          app7.isDetail = false;
           if( page.route.query.devid ){
             onInitFn.deleteOneAllDb(page.route.query.devid);
           } else {
@@ -540,6 +551,7 @@ var routes = [
     on: {
       pageInit: function (e, page) {
         onInitFn.myDevices();
+          app7.isDetail = false;
       },
     }
   },
