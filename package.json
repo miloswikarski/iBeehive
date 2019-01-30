@@ -14,6 +14,7 @@
     "cordova-ios": "^4.5.4",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-ble-central": "^1.1.4",
+    "cordova-plugin-bluetooth-peripheral-usage-description": "^1.0.0",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-dialogs": "^2.0.1",
@@ -34,7 +35,10 @@
         "BLUETOOTH_USAGE_DESCRIPTION": " "
       },
       "cordova-plugin-app-version": {},
-      "nl.madebymark.share": {}
+      "nl.madebymark.share": {},
+      "cordova-plugin-bluetooth-peripheral-usage-description": {
+        "TEXT": "BLE used for connecting to Alya devices"
+      }
     },
     "platforms": [
       "ios",

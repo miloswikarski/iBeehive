@@ -396,8 +396,8 @@ var chartOptions = {
                 ble.write(deviceId,
                     alyadevice.serviceDateTime,
                     alyadevice.setDateTime,
-                    dataT, function(event){ console.log(JSON.stringify(event));},
-                    function(e){ console.log("err " + JSON.stringify(e));}
+                    dataT, function(event){ console.log(event);},
+                        function(e){console.log(e);}
                 );
                 //read actual time1
                 ble.read(deviceId,
@@ -409,7 +409,7 @@ var chartOptions = {
                     beedb.settings.time1 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
-                    console.log("err " + JSON.stringify(e));
+                    console.log(e);
                 });
                 //read actual time2
                 ble.read(deviceId, 
@@ -421,7 +421,7 @@ var chartOptions = {
                     beedb.settings.time2 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
-                    console.log("err " + JSON.stringify(e));
+                    console.log(e);
                 });
                 //read actual time3
                 ble.read(deviceId,
@@ -433,7 +433,7 @@ var chartOptions = {
                     beedb.settings.time3 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
-                    console.log("err " + JSON.stringify(e));
+                    console.log(e);
                 });
                 //read actual time4
                 ble.read(deviceId,
@@ -445,7 +445,7 @@ var chartOptions = {
                     beedb.settings.time4 = d.substring(0,2) + ":" + d.substring(2,4) ;
                 },
                 function(e){
-                    console.log("err " + JSON.stringify(e));
+                    console.log(e);
                 });
 
 
@@ -454,7 +454,7 @@ var chartOptions = {
                   var text = bytesToString(event);
                   $("#devinfo").append("<p>Vendor: " + text + "</p>");
                 },
-                function(e){ console.log("err " + JSON.stringify(e));}
+                function(e){ console.log(e);}
                 );
             ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr3,
                 function(event){
@@ -463,38 +463,39 @@ var chartOptions = {
                   var batHtml = app.getBatIcon( text );
                   $("#batIcon").html(batHtml);
                   console.log("BAT " + text);
+                  console.log(batHtml);
 
                 },
-                function(e){ console.log("err " + JSON.stringify(e));}
+                function(e){ console.log(e);}
                 );
             ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr1,
                 function(event){
                   var text = bytesToString(event);
                   $("#devinfo").append("<p>FW: " + text + "</p>");
                 },
-                function(e){ console.log("err " + JSON.stringify(e));}
+                function(e){ console.log(e);}
                 );
             ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr4,
                 function(event){
                   var text = bytesToString(event);
                   $("#devinfo").append("<p>SW: " + text + "</p>");
                 },
-                function(e){ console.log("err " + JSON.stringify(e));}
+                function(e){ console.log(e);}
                 );
             ble.read(deviceId, alyadevice.serviceRead, alyadevice.sr5,
                 function(event){
                   var text = bytesToString(event);
                   $("#devinfo").append("<p>Model: " + text + "</p>");
                 },
+                function(e){ console.log(e);}
+                );
+            ble.read(deviceId, alyadevice.serviceRead, alyadevice.srserial,
+                function(event){
+                  var text = bytesToString(event);
+                  $("#devinfo").append("<p>Serial #: " + text + "</p>");
+                },
                 function(e){ console.log("err " + JSON.stringify(e));}
                 );
-            // ble.read(deviceId, alyadevice.serviceRead, alyadevice.srserial,
-            //     function(event){
-            //       var text = bytesToString(event);
-            //       $("#devinfo").append("<p>Serial #: " + text + "</p>");
-            //     },
-            //     function(e){ console.log("err " + JSON.stringify(e));}
-            //     );
 
     };
 
@@ -653,13 +654,13 @@ determineWriteType: function(peripheral) {
 
                 },
                 function(e){
-                    console.log("err " + JSON.stringify(e));
+                    console.log(e);
                 });
         };
 
         var failure = function(e) {
             app7.dialog.alert(i18next.t("Failed writing data"),i18next.t("BLE core"));
-            console.log("err " + JSON.stringify(e));
+            console.log(e);
         };
 
         console.log('.....');
@@ -685,9 +686,9 @@ determineWriteType: function(peripheral) {
             //read after write, the same char
             ble.read(deviceId, alyadevice.serviceUUID, alyadevice.txCharacteristic,
 
-                function(event){ alert("read " + JSON.stringify(event));},
+                function(event){ alert("read " + (JSON.stringify(event)||''));},
                 function(e){
-                    console.log("err " + JSON.stringify(e));
+                    console.log(e);
                 });
 
             $("#mainStatus").text(i18next.t("Sent") + ": " + messageInput.value );
@@ -743,14 +744,17 @@ determineWriteType: function(peripheral) {
     },
     disconnectByGlobalId: function() {
 
-        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.emptyFunction, app.emptyFunction);
-        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.emptyFunction, app.emptyFunction);
-        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.emptyFunction);
+        if( typeof beedb.settings.curId !== 'undefined'){
+            ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.tempOutUUID, app.emptyFunction, app.emptyFunction);
+            ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.tempInUUID, app.emptyFunction, app.emptyFunction);
+            ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.nettoVahaUUID, app.onNettoVaha, app.emptyFunction);
 
-        ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.savedUUID, app.emptyFunction, app.emptyFunction);
+            ble.stopNotification(beedb.settings.curId, alyadevice.serviceUUID, alyadevice.savedUUID, app.emptyFunction, app.emptyFunction);
 
 
-        ble.disconnect(beedb.settings.curId, app.showMainPage, app.onError);
+            ble.disconnect(beedb.settings.curId, app.showMainPage, app.onError);
+
+        }
     },
     emptyFunction: function(){
 
@@ -855,27 +859,27 @@ determineWriteType: function(peripheral) {
 
 
         getBatIcon: function( batValue ) {
-            var bat = Number(batValue);
-            var sigHtml = '<span class="fa-stack fa-lg">\
-            <i class="fa fa-battery-full"></i>\
-            </span>';
-            if( bat < 76 ){
+            var bat = Number(batValue); 
+            var sigHtml = '\
+            <i class="fa fa-lg fa-battery-full pull-right"></i>\
+            ';
+            if( bat < 10 ){
+                sigHtml = '\
+                <i class="fa fa-lg fa-battery-empty pull-right" style="color: red;"></i>\
+                ';
+            } else if( bat < 26 ){
                 sigHtml = '<span class="fa-stack fa-lg">\
-                <i class="fa fa-battery-three-quarters"></i>\
+                <i class="fa fa-battery-quarter"></i>\
                 </span>';
             } else if( bat < 51 ){
                 sigHtml = '<span class="fa-stack fa-lg">\
                 <i class="fa fa-battery-half"></i>\
                 </span>';
-            } else if( bat < 26 ){
+            } else if( bat < 76 ){
                 sigHtml = '<span class="fa-stack fa-lg">\
-                <i class="fa fa-battery-quarter"></i>\
+                <i class="fa fa-battery-three-quarters"></i>\
                 </span>';
-            } else if( bat < 10 ){
-                sigHtml = '<span class="fa-stack fa-lg">\
-                <i class="fa fa-battery-empty"></i>\
-                </span>';
-            } 
+            }
 
             return sigHtml;
         },

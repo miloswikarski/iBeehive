@@ -64,6 +64,8 @@
                 "synchroDateTitle":"Date and time sync with iBeehive",
                 "devPageTitle":"Device",
                 "configureDevice":"Device configuration",
+                "configure": "Configure",
+                "about": "About",
                 "deviceMenu":"Device menu",
                 "MyDevices":"My devices",
                 "mydevicestitle":"All devices I connected",

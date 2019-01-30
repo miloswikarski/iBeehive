@@ -423,6 +423,11 @@ var routes = [
     path: '/',
     url: './index.html',
     name: 'home',
+    on: {
+      pageInit: function (e, page) {
+        app.disconnectByGlobalId();
+      }
+    }
   },
   // About page
   {

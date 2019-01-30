@@ -76,7 +76,7 @@ var app7 = new Framework7({
             });
         } else {
               var deviceId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
-              app.disconnectById(deviceId);
+              //app.disconnectById(deviceId);
             mainView.router.back();
         }
 

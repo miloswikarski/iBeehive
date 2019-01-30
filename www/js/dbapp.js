@@ -64,7 +64,7 @@ readAll: function( devId ) {
      endkey: devId + '_',
      descending: true };
   pdb.allDocs(options, function (err, response) {
-    console.log(response);
+    console.log('rows',response.rows);
     if (response && response.rows.length > 0) {
     //  options.startkey = response.rows[response.rows.length - 1].id;
       //options.skip = 1;
@@ -83,7 +83,7 @@ readAll: function( devId ) {
          times[ t ] = { "hDate": hDate, "weight": o.doc.weight };
          
        });
-       console.log(times);
+       console.log('times',times);
 
         response.rows.sort(function(a, b){
           return a.doc.hwtime == b.doc.hwtime ? 0 : +(a.doc.hwtime < b.doc.hwtime) || -1;
@@ -92,7 +92,7 @@ readAll: function( devId ) {
             const t = Math.floor(o.doc.hwtime/1000);
             var delta = "?";
             var dcolor = ' class="btn-danger"';
-             if( times[Math.floor((o.doc.hwtime - 24*60*60000)/1000)] ){
+             if( typeof times[Math.floor((o.doc.hwtime - 24*60*60000)/1000)] !== 'undefined' ){
                 delta = (times[t].weight - times[Math.floor((o.doc.hwtime - 24*3600000)/1000)].weight);
                 dcolor = delta <= 0 ? ' class="btn-danger"':' class="btn-success"';
                 delta = delta.toFixed(1);
@@ -106,9 +106,10 @@ readAll: function( devId ) {
             var t1x = isNaN(o.doc.temp1)?o.doc.temp1:parseFloat(o.doc.temp1);
             if( t1x > 60 ){
                 t1x = 60 - t1x;
-            }        
+            }
+            var wei = isNaN(o.doc.weight)?o.doc.weight:o.doc.weight===null?'-':o.doc.weight.toFixed(1);        
               html = html + '<tr><td>' + times[t].hDate + '</td><td class="btn-primary">'
-              + o.doc.weight.toString() +"</td><td" + dcolor + ">" + "</td><td>"
+              + wei +"</td><td" + dcolor + ">" + delta + "</td><td>"
                + (isNaN(t1x)?t1x:t1x.toFixed(1) ) + "</td><td>"+ (isNaN(t2x)?t2x:t2x.toFixed(1) ) + '</td><td><button class="btn btn-danger"><a href="/delete/?id=' + o.doc._id + '&rev=' + o.doc._rev + '&d=' + encodeURI(hDate) + '"><i class="fa fa-trash"></i></a></button></td></tr>';
       });
 
