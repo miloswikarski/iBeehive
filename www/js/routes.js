@@ -44,7 +44,7 @@ var onInitFn = {
           devId = (typeof d !== 'undefined') ?  d : beedb.settings.curId.toString();
           console.log('deleting devId ', devId );
           app.writeData( "I=" );
-          var options = {limit : 10, include_docs: true,
+          var options = {limit : 1000, include_docs: true,
              startkey: devId + '_' + "\ufff0",
              endkey: devId + '_',
              descending: true
