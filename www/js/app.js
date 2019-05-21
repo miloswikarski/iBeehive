@@ -24,8 +24,8 @@ var app7 = new Framework7({
       app7.dialog.alert('Hello World!');
     },
 
-    shareFn: function () {
-        devId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
+    shareFn: function ( devId ) {
+        //devId = (typeof devId !== 'undefined') ?  devId : beedb.settings.curId.toString();
         var options = {limit : 365, include_docs: true,
            startkey: devId + '_' + "\ufff0",
            endkey: devId + '_',

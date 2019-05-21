@@ -126,7 +126,7 @@ readAll: function( devId ) {
 
 
       html = html + '<tfoot><tr>' 
-      + '<td><a onclick="app7.methods.shareFn();" class="link nounderline icon-only"><i class="icon fa fa-share"></i></a></td>'
+      + '<td><a onclick="app7.methods.shareFn(\''+encodeURI(devId)+'\');" class="link nounderline icon-only"><i class="icon fa fa-share"></i></a></td>'
       + '<td colspan="4">&nbsp;</td><td><button class="btn btn-danger"><a href="/delete/?devid=' + encodeURI(devId) + '">' + i18next.t("delete all") + ' <i class="fa fa-trash"></i></a></button></td></tr></tfoot></table>';
       jQuery("#historyBody").html(html);
 
